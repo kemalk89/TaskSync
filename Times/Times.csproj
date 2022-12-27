@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Times.Domain\Times.Domain.csproj" />
+    <ProjectReference Include="..\Times.Infrastructure\Times.Infrastructure.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

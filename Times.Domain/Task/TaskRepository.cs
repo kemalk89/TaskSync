@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace Times.Domain.Task;
 
-public class TaskEntity
+public interface TaskRepository
 {
-    public string Title { get; set; }
-    public string Description { get; set; }
+    
 }

@@ -16,6 +16,15 @@ dotnet sln Times.sln add Times/Times.csproj
 dotnet sln Times.sln add Times.Domain/Times.Domain.csproj
 dotnet sln Times.sln add Times.Common/Times.Common.csproj
 dotnet sln Times.sln add Times.Infrastructure/Times.Infrastructure.csproj
+
+dotnet add Times/Times.csproj reference Times.Domain/Times.Domain.csproj
+dotnet add Times/Times.csproj reference Times.Infrastructure/Times.Infrastructure.csproj
+dotnet add Times.Infrastructure/Times.Infrastructure.csproj reference Times.Domain/Times.Domain.csproj
+
+dotnet add Times.Infrastructure package Npgsql.EntityFrameworkCore.PostgreSQL
+dotnet add Times.Infrastructure package Microsoft.EntityFrameworkCore.Design
+
+dotnet ef migrations add InitialCreate --project Times.Infrastructure
 ```
 
 * Times - Contains the React UI and the REST API
@@ -26,6 +35,7 @@ dotnet sln Times.sln add Times.Infrastructure/Times.Infrastructure.csproj
 # Development
 ## Editor Settings
 In this solution we are going to use file-scoped namespaces which is a new feature since C# 10.
+In Visual Studio Code we can enable that in settings: `csharpextensions.useFileScopedNamespace`.
 ## Run the app
 Follow one of the options below and in your browser visit https://localhost:44448/
 #### Option 1 - CLI

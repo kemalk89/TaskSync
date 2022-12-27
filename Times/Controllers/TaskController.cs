@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Times.Domain.Task;
+using Times.Infrastructure.Entities;
 
 namespace Times.Controllers;
 
