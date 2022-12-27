@@ -23,8 +23,6 @@ dotnet add Times.Infrastructure/Times.Infrastructure.csproj reference Times.Doma
 
 dotnet add Times.Infrastructure package Npgsql.EntityFrameworkCore.PostgreSQL
 dotnet add Times.Infrastructure package Microsoft.EntityFrameworkCore.Design
-
-dotnet ef migrations add InitialCreate --project Times.Infrastructure
 ```
 
 * Times - Contains the React UI and the REST API
@@ -44,4 +42,10 @@ dotnet run --project Times
 ```
 #### Option 2 - Visual Studio Code
 Hit `F5`.
+
+# Database Development
+```sh
+dotnet ef migrations add InitialCreate --project Times.Infrastructure
+dotnet ef database update --project Times.Infrastructure
+```
 
