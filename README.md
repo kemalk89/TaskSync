@@ -31,6 +31,11 @@ dotnet add Times.Infrastructure package Microsoft.EntityFrameworkCore.Design
 * Times.Tests - Contains the Unit-Tests
 
 # Development
+## Database
+To spin up the database run:
+```sh
+docker compose up -d
+```
 ## Editor Settings
 In this solution we are going to use file-scoped namespaces which is a new feature since C# 10.
 In Visual Studio Code we can enable that in settings: `csharpextensions.useFileScopedNamespace`.
