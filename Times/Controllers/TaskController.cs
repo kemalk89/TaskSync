@@ -4,14 +4,16 @@ using Times.Infrastructure.Entities;
 namespace Times.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/api/[controller]")]
 public class TaskController : ControllerBase
 {
 
-    public IEnumerable<TaskEntity> GetTasks()
+    [HttpGet]
+    public IEnumerable<TaskEntity> Tasks()
     {
         return Enumerable.Range(1, 5).Select(i => new TaskEntity
         {
+            Id = i,
             Title = "Task " + i,
             Description = "Task Description " + i
         })
