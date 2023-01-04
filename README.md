@@ -23,6 +23,7 @@ dotnet add Times.Infrastructure/Times.Infrastructure.csproj reference Times.Doma
 
 dotnet add Times.Infrastructure package Npgsql.EntityFrameworkCore.PostgreSQL
 dotnet add Times.Infrastructure package Microsoft.EntityFrameworkCore.Design
+dotnet add Times package Swashbuckle.AspNetCore -v 6.2.3
 ```
 
 * Times - Contains the React UI and the REST API
@@ -40,7 +41,7 @@ docker compose up -d
 In this solution we are going to use file-scoped namespaces which is a new feature since C# 10.
 In Visual Studio Code we can enable that in settings: `csharpextensions.useFileScopedNamespace`.
 ## Run the app
-Follow one of the options below and in your browser visit https://localhost:44448/
+To run the app you have following options:
 #### Option 1 - CLI
 ```sh
 dotnet run --project Times
@@ -48,6 +49,9 @@ dotnet run --project Times
 #### Option 2 - Visual Studio Code
 Hit `F5`.
 
+Finally you can visit following pages:
+* Frontend: https://localhost:44448/
+* Swagger-UI: https://localhost:7190/swagger/index.html
 # Database Development
 ```sh
 dotnet ef migrations add InitialCreate --project Times.Infrastructure
