@@ -24,6 +24,7 @@ dotnet add Times.Infrastructure/Times.Infrastructure.csproj reference Times.Doma
 dotnet add Times.Infrastructure package Npgsql.EntityFrameworkCore.PostgreSQL
 dotnet add Times.Infrastructure package Microsoft.EntityFrameworkCore.Design
 dotnet add Times package Swashbuckle.AspNetCore -v 6.2.3
+dotnet add Times package Serilog.AspNetCore
 ```
 
 * Times - Contains the React UI and the REST API
