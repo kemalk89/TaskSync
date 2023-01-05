@@ -1,6 +1,6 @@
-namespace Times.Infrastructure.Entities;
+namespace Times.Domain.Ticket;
 
-public class TaskEntity
+public class Ticket
 {
     public int Id { get; set; }
     public string Title { get; set; }

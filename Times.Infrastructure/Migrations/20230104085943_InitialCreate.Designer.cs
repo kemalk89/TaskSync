@@ -11,7 +11,7 @@ using Times.Infrastructure;
 namespace Times.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20221227080357_InitialCreate")]
+    [Migration("20230104085943_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,7 +24,7 @@ namespace Times.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Times.Infrastructure.Entities.TaskEntity", b =>
+            modelBuilder.Entity("Times.Infrastructure.Entities.TicketEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace Times.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tickets");
                 });
 #pragma warning restore 612, 618
         }

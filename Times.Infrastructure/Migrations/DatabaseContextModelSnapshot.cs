@@ -21,7 +21,7 @@ namespace Times.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Times.Infrastructure.Entities.TaskEntity", b =>
+            modelBuilder.Entity("Times.Infrastructure.Entities.TicketEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,7 +39,7 @@ namespace Times.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tickets");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,9 +1,22 @@
+using Times.Domain.Ticket;
+using Times.Infrastructure;
+using Times.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen();
+
+////////////////////////////////////////////////////////////////
+// start: dependency injection
+// TODO introduce Startup.cs later...
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddDbContext<DatabaseContext>();
+// end: dependency injection
+////////////////////////////////////////////////////////////////
 
 var app = builder.Build();
 
@@ -23,7 +36,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
 
 app.MapControllerRoute(
     name: "default",
