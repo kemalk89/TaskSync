@@ -1,3 +1,4 @@
 **/obj
 **/bin
 Times/Logs
+**/node_modules

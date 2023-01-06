@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Times.Domain.Ticket;
-using Times.Infrastructure.Entities;
 
 namespace Times.Controllers;
 
@@ -36,9 +35,12 @@ public class TicketController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<TicketResponse> CreateTicket([FromBody] CreateTicketRequest req)
+    public async Task<ActionResult<TicketResponse>> CreateTicket([FromBody] CreateTicketRequest req)
     {
         var ticket = await _ticketService.CreateTicketAsync(req.Title, req.Description);
-        return new TicketResponse(ticket);
+        return CreatedAtAction(
+            nameof(GetTicketById),
+            new { id = ticket.Id },
+            new TicketResponse(ticket));
     }
 }
