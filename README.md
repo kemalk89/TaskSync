@@ -48,11 +48,12 @@ To run the app you have following options:
 dotnet run --project Times
 ```
 #### Option 2 - Visual Studio Code
-Hit `F5`.
+Hit <kbd>F5</kbd>.
 
 Finally you can visit following pages:
 * Frontend: https://localhost:44448/
 * Swagger-UI: https://localhost:7190/swagger/index.html
+* Database-UI: http://localhost:8081/?pgsql=db&username=postgres&db=times&ns=public (pw: example)
 # Database Development
 ```sh
 dotnet ef migrations add InitialCreate --project Times.Infrastructure

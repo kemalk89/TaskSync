@@ -25,10 +25,14 @@ public class TicketController : ControllerBase
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<TicketResponse> GetTicketById([FromRoute] int id)
+    public async Task<ActionResult<TicketResponse>> GetTicketById([FromRoute] int id)
     {
         var ticket = await _ticketService.GetTicketByIdAsync(id);
-        return new TicketResponse(ticket);
+        if (ticket == null)
+        {
+            return NotFound();
+        }
+        return Ok(new TicketResponse(ticket));
     }
 
     [HttpPost]

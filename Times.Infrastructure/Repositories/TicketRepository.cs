@@ -12,7 +12,7 @@ public class TicketRepository : ITicketRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Ticket> CreateAsync(string title, string description)
+    public async Task<Ticket> CreateAsync(string title, string? description)
     {
         var entity = new TicketEntity
         {

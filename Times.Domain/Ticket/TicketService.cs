@@ -9,7 +9,7 @@ public class TicketService : ITicketService
         _ticketRepository = taskRepository;
     }
 
-    public async Task<Ticket> CreateTicketAsync(string title, string description)
+    public async Task<Ticket> CreateTicketAsync(string title, string? description)
     {
         var ticket = await _ticketRepository.CreateAsync(title, description);
         return ticket;
