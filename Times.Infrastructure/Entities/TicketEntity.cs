@@ -2,7 +2,7 @@ using Times.Domain.Ticket;
 
 namespace Times.Infrastructure.Entities;
 
-public class TicketEntity
+public class TicketEntity : AuditedEntity
 {
     public int Id { get; set; }
     public string Title { get; set; }
