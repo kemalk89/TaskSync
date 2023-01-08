@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Times.Domain.Ticket;
 using Times.Infrastructure;
@@ -29,7 +30,8 @@ try
     // TODO introduce Startup.cs later...
     builder.Services.AddScoped<ITicketService, TicketService>();
     builder.Services.AddScoped<ITicketRepository, TicketRepository>();
-    builder.Services.AddDbContext<DatabaseContext>();
+    builder.Services.AddDbContext<DatabaseContext>(
+        o => o.UseNpgsql(configuration.GetConnectionString("db")));
     // end: dependency injection
     ////////////////////////////////////////////////////////////////
 

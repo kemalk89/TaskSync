@@ -21,6 +21,8 @@ dotnet add Times/Times.csproj reference Times.Domain/Times.Domain.csproj
 dotnet add Times/Times.csproj reference Times.Infrastructure/Times.Infrastructure.csproj
 dotnet add Times.Infrastructure/Times.Infrastructure.csproj reference Times.Domain/Times.Domain.csproj
 
+dotnet add Times package Npgsql.EntityFrameworkCore.PostgreSQL
+dotnet add Times package Microsoft.EntityFrameworkCore.Design
 dotnet add Times.Infrastructure package Npgsql.EntityFrameworkCore.PostgreSQL
 dotnet add Times.Infrastructure package Microsoft.EntityFrameworkCore.Design
 dotnet add Times package Swashbuckle.AspNetCore -v 6.2.3
@@ -56,7 +58,7 @@ Finally you can visit following pages:
 * Database-UI: http://localhost:8081/?pgsql=db&username=postgres&db=times&ns=public (pw: example)
 # Database Development
 ```sh
-dotnet ef migrations add InitialCreate --project Times.Infrastructure
-dotnet ef database update --project Times.Infrastructure
+dotnet ef migrations add InitialCreate --project Times.Infrastructure --startup-project Times
+dotnet ef database update --project Times.Infrastructure --startup-project Times
 ```
 
