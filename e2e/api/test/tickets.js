@@ -49,13 +49,26 @@ describe('Tickets API', () => {
             assert.ok(res.body.errors.Title, 'The field "title" should be required');
         });
 
-        it('should return 404 if related project cannot be found', async () => {
+        it('should return 400 if projectId is invalid', async () => {
             const res = await req
                 .post('/api/ticket')
                 .trustLocalhost(true)
                 .send({
                     title: 'Test Ticket',
                     projectId: -1
+                })
+                .expect(400);
+
+            assert.ok(res.body.errors.ProjectId, 'Only positive numbers allowed.');
+        });
+
+        it('should return 404 if related project cannot be found', async () => {
+            const res = await req
+                .post('/api/ticket')
+                .trustLocalhost(true)
+                .send({
+                    title: 'Test Ticket',
+                    projectId: 999999
                 })
                 .expect(404);
 
