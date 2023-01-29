@@ -1,4 +1,6 @@
+using Times.Domain.Project;
 using Times.Domain.Ticket;
+using Times.Domain.Ticket.Command;
 using Times.Infrastructure.Entities;
 
 namespace Times.Infrastructure.Repositories;
@@ -6,18 +8,21 @@ namespace Times.Infrastructure.Repositories;
 public class TicketRepository : ITicketRepository
 {
     private readonly DatabaseContext _dbContext;
+    private readonly IProjectRepository _projectRepository;
 
-    public TicketRepository(DatabaseContext dbContext)
+    public TicketRepository(DatabaseContext dbContext, IProjectRepository projectRepository)
     {
         _dbContext = dbContext;
+        _projectRepository = projectRepository;
     }
 
-    public async Task<Ticket> CreateAsync(string title, string? description)
+    public async Task<Ticket?> CreateAsync(CreateTicketCommand cmd)
     {
         var entity = new TicketEntity
         {
-            Title = title,
-            Description = description
+            Title = cmd.Title,
+            Description = cmd.Description,
+            ProjectId = cmd.ProjectId
         };
 
         await _dbContext.Tickets.AddAsync(entity);
@@ -27,7 +32,8 @@ public class TicketRepository : ITicketRepository
         {
             Id = entity.Id,
             Title = entity.Title,
-            Description = entity.Description
+            Description = entity.Description,
+            ProjectId = entity.Project.Id
         };
     }
 
@@ -49,11 +55,6 @@ public class TicketRepository : ITicketRepository
             return null;
         }
 
-        return new Ticket
-        {
-            Id = entity.Id,
-            Title = entity.Title,
-            Description = entity.Description
-        };
+        return entity.ToTicket();
     }
 }

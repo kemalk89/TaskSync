@@ -1,13 +1,13 @@
 using Times.Domain.Ticket;
 
-namespace Times.Controllers;
+namespace Times.Controllers.Response;
 
 public class TicketResponse
 {
 
     public int Id { get; set; }
     public string Title { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public TicketResponse(Ticket ticket)
     {

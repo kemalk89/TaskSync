@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Times.Controllers.Request;
+using Times.Controllers.Response;
+using Times.Domain;
 using Times.Domain.Ticket;
 
 namespace Times.Controllers;
@@ -8,7 +11,7 @@ namespace Times.Controllers;
 public class TicketController : ControllerBase
 {
 
-    ITicketService _ticketService;
+    private readonly ITicketService _ticketService;
 
     public TicketController(ITicketService ticketService)
     {
@@ -37,10 +40,18 @@ public class TicketController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<TicketResponse>> CreateTicket([FromBody] CreateTicketRequest req)
     {
-        var ticket = await _ticketService.CreateTicketAsync(req.Title, req.Description);
-        return CreatedAtAction(
-            nameof(GetTicketById),
-            new { id = ticket.Id },
-            new TicketResponse(ticket));
+        try
+        {
+            var ticket = await _ticketService.CreateTicketAsync(req.ToCommand());
+            return CreatedAtAction(
+                nameof(GetTicketById),
+                new { id = ticket.Id },
+                new TicketResponse(ticket));
+        }
+        catch (DomainException e)
+        {
+            return NotFound(e.Message);
+        }
+
     }
 }

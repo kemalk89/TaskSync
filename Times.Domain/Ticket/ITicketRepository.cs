@@ -1,8 +1,10 @@
+using Times.Domain.Ticket.Command;
+
 namespace Times.Domain.Ticket;
 
 public interface ITicketRepository
 {
-    Task<Ticket> CreateAsync(string title, string? description);
+    Task<Ticket?> CreateAsync(CreateTicketCommand cmd);
     Task<Ticket?> GetByIdAsync(int id);
     Task<IEnumerable<Ticket>> GetAllAsync();
 }

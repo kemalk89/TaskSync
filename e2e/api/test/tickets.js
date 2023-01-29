@@ -6,10 +6,19 @@ describe('Tickets API', () => {
     const req = request(API_BASE_URL);
 
     it('should create a new ticket', async () => {
+        const createdProject = await req
+            .post('/api/project')
+            .trustLocalhost(true)
+            .send({
+                title: 'Testproject'
+            })
+            .expect(201);
+
         const createdTicket = await req
             .post('/api/ticket')
             .trustLocalhost(true)
             .send({
+                projectId: createdProject.body.id,
                 title: 'Test Ticket'
             })
             .expect(201);
@@ -38,6 +47,19 @@ describe('Tickets API', () => {
                 .expect(400);
 
             assert.ok(res.body.errors.Title, 'The field "title" should be required');
+        });
+
+        it('should return 404 if related project cannot be found', async () => {
+            const res = await req
+                .post('/api/ticket')
+                .trustLocalhost(true)
+                .send({
+                    title: 'Test Ticket',
+                    projectId: -1
+                })
+                .expect(404);
+
+            assert.ok(res.text, 'Trying to create a ticket for project with ID -1. This project does not exist.');
         });
     });
 });
