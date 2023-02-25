@@ -1,36 +1,29 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import { api } from "../../api/api";
 import { formatDateTime } from "../../utils/date";
 
 export const ProjectViewPage = () => {
   let { projectId } = useParams();
-  const [project, setProject] = useState();
 
-  useEffect(() => {
-    const fetchProject = async () => {
-      const response = await fetch("/api/project/" + projectId);
-      if (response.status === 200) {
-        const responseBody = await response.json();
-        setProject(responseBody);
-      } else {
-        // ERR
-      }
-    };
+  const fetchProject = useQuery({
+    queryKey: ["project"],
+    queryFn: () => api.fetchProject(projectId),
+  });
 
-    fetchProject();
-  }, [projectId]);
-
-  if (!project) {
+  if (fetchProject.isLoading) {
     return <div>...</div>;
   }
 
   return (
     <div>
-      <h1>{project.title}</h1>
+      <h1>{fetchProject.data.title}</h1>
       <p>
-        <small>created at {formatDateTime(project.createdDate)}</small>
+        <small>
+          created at {formatDateTime(fetchProject.data.createdDate)}
+        </small>
       </p>
-      <p>{project.description}</p>
+      <p>{fetchProject.data.description}</p>
     </div>
   );
 };
