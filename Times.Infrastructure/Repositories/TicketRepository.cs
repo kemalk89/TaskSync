@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Times.Domain.Project;
+using Times.Domain.Shared;
 using Times.Domain.Ticket;
 using Times.Domain.Ticket.Command;
 using Times.Infrastructure.Entities;
@@ -18,32 +20,54 @@ public class TicketRepository : ITicketRepository
 
     public async Task<Ticket?> CreateAsync(CreateTicketCommand cmd)
     {
-        var entity = new TicketEntity
+        var project = _dbContext.Projects.Find(cmd.ProjectId);
+        if (project != null)
         {
-            Title = cmd.Title,
-            Description = cmd.Description,
-            ProjectId = cmd.ProjectId
-        };
+            var entity = new TicketEntity
+            {
+                Title = cmd.Title,
+                Description = cmd.Description,
+                Project = project
+            };
 
-        await _dbContext.Tickets.AddAsync(entity);
-        await _dbContext.SaveChangesAsync();
+            await _dbContext.Tickets.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
 
-        return new Ticket
-        {
-            Id = entity.Id,
-            Title = entity.Title,
-            Description = entity.Description,
-            ProjectId = entity.Project.Id
-        };
+            return new Ticket
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                Description = entity.Description,
+                ProjectId = entity.Project.Id,
+                Project = entity.Project.ToProject(),
+            };
+        }
+
+        return null;
     }
 
-    public Task<IEnumerable<Ticket>> GetAllAsync()
+    public Task<PagedResult<Ticket>> GetAllAsync(int pageNumber, int pageSize)
     {
+        var skip = (pageNumber - 1) * pageSize;
+
         var tickets = _dbContext.Tickets
+            .Include(t => t.Project)
+            .Skip(skip)
+            .Take(pageSize)
             .ToList()
             .Select(t => t.ToTicket());
 
-        return Task.FromResult(tickets);
+        int total = _dbContext.Tickets.Count();
+
+        var paged = new PagedResult<Ticket>
+        {
+            Items = tickets,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            Total = total
+        };
+
+        return Task.FromResult(paged);
     }
 
     public async Task<Ticket?> GetByIdAsync(int id)

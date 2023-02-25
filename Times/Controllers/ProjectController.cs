@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Times.Controllers.Request;
 using Times.Controllers.Response;
 using Times.Domain.Project;
+using Times.Domain.Shared;
 
 namespace Times.Controllers;
 
@@ -18,10 +19,16 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<ProjectResponse>> GetTickets()
+    public async Task<PagedResult<ProjectResponse>> GetProjects([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
     {
-        IEnumerable<Project> items = await _projectService.GetProjectsAsync();
-        return items.Select(item => new ProjectResponse(item));
+        PagedResult<Project> pagedResult = await _projectService.GetProjectsAsync(pageNumber, pageSize);
+        return new PagedResult<ProjectResponse>
+        {
+            PageNumber = pagedResult.PageNumber,
+            PageSize = pagedResult.PageSize,
+            Items = pagedResult.Items.Select(item => new ProjectResponse(item)),
+            Total = pagedResult.Total
+        };
     }
 
     [HttpGet]
@@ -46,5 +53,14 @@ public class ProjectController : ControllerBase
             nameof(GetProjectById),
             new { id = item.Id },
             new ProjectResponse(item));
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<ActionResult> DeleteProject([FromRoute] int id)
+    {
+        await _projectService.DeleteProjectAsync(id);
+
+        return NoContent();
     }
 }

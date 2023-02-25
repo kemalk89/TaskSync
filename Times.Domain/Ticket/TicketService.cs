@@ -1,4 +1,5 @@
 using Times.Domain.Project;
+using Times.Domain.Shared;
 using Times.Domain.Ticket.Command;
 
 namespace Times.Domain.Ticket;
@@ -32,9 +33,9 @@ public class TicketService : ITicketService
         return ticket;
     }
 
-    public async Task<IEnumerable<Ticket>> GetTicketsAsync()
+    public async Task<PagedResult<Ticket>> GetTicketsAsync(int pageNumber, int pageSize)
     {
-        var tickets = await _ticketRepository.GetAllAsync();
+        var tickets = await _ticketRepository.GetAllAsync(pageNumber, pageSize);
         return tickets;
     }
 }

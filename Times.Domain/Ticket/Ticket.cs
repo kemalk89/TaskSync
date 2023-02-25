@@ -1,5 +1,7 @@
 namespace Times.Domain.Ticket;
 
+using Times.Domain.Project;
+
 public class Ticket
 {
     public int Id { get; set; }
@@ -7,5 +9,7 @@ public class Ticket
     public string? Description { get; set; }
 
     public int ProjectId { get; set; }
+
+    public Project Project { get; set; }
 
 }

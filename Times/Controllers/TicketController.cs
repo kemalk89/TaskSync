@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Times.Controllers.Request;
 using Times.Controllers.Response;
 using Times.Domain;
+using Times.Domain.Shared;
 using Times.Domain.Ticket;
 
 namespace Times.Controllers;
@@ -19,10 +20,16 @@ public class TicketController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<TicketResponse>> GetTickets()
+    public async Task<PagedResult<TicketResponse>> GetTickets([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
     {
-        IEnumerable<Ticket> tickets = await _ticketService.GetTicketsAsync();
-        return tickets.Select(t => new TicketResponse(t));
+        PagedResult<Ticket> pagedResult = await _ticketService.GetTicketsAsync(pageNumber, pageSize);
+        return new PagedResult<TicketResponse>
+        {
+            PageNumber = pagedResult.PageNumber,
+            PageSize = pagedResult.PageSize,
+            Items = pagedResult.Items.Select(item => new TicketResponse(item)),
+            Total = pagedResult.Total
+        };
     }
 
     [HttpGet]

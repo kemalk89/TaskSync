@@ -18,7 +18,9 @@ public class TicketEntity : AuditedEntity
         {
             Id = Id,
             Title = Title,
-            Description = Description
+            Description = Description,
+            ProjectId = ProjectId,
+            Project = Project.ToProject()
         };
     }
 }

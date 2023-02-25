@@ -12,7 +12,7 @@ using Times.Infrastructure;
 namespace Times.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230108071419_InitialCreate")]
+    [Migration("20230219160059_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

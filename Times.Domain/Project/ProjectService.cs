@@ -1,3 +1,5 @@
+using Times.Domain.Shared;
+
 namespace Times.Domain.Project;
 
 public class ProjectService : IProjectService
@@ -21,9 +23,14 @@ public class ProjectService : IProjectService
         return project;
     }
 
-    public async Task<IEnumerable<Project>> GetProjectsAsync()
+    public async Task<PagedResult<Project>> GetProjectsAsync(int pageNumber, int pageSize)
     {
-        var projects = await _projectRepository.GetAllAsync();
+        var projects = await _projectRepository.GetAllAsync(pageNumber, pageSize);
         return projects;
+    }
+
+    public async Task DeleteProjectAsync(int id)
+    {
+        await _projectRepository.DeleteByIdAsync(id);
     }
 }

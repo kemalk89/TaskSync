@@ -53,7 +53,7 @@ dotnet run --project Times
 Hit <kbd>F5</kbd>.
 
 Finally you can visit following pages:
-* Frontend: https://localhost:44448/
+* Frontend: https://localhost:7190/
 * Swagger-UI: https://localhost:7190/swagger/index.html
 * Database-UI: http://localhost:8081/?pgsql=db&username=postgres&db=times&ns=public (pw: example)
 # Database Development
