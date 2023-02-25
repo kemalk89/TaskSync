@@ -20,6 +20,8 @@ public class TicketEntity : AuditedEntity
             Title = Title,
             Description = Description,
             ProjectId = ProjectId,
+            CreatedDate = CreatedDate,
+            ModifiedDate = ModifiedDate,
             Project = Project.ToProject()
         };
     }

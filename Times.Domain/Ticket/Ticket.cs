@@ -9,6 +9,8 @@ public class Ticket
     public string? Description { get; set; }
 
     public int ProjectId { get; set; }
+    public DateTimeOffset CreatedDate { get; set; }
+    public DateTimeOffset? ModifiedDate { get; set; }
 
     public Project Project { get; set; }
 

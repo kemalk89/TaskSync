@@ -22,6 +22,9 @@ const remove = async (url) => {
 };
 
 export const api = {
+    fetchTicket: async (ticketId) => {
+        return read(`/api/ticket/${ticketId}`);
+    },
     fetchTickets: async ({ pageNumber, pageSize }) => {
         return read(`/api/ticket?pageNumber=${pageNumber}&pageSize=${pageSize}`);
     },
@@ -30,6 +33,9 @@ export const api = {
     },
     deleteTicket: async (ticketId) => {
         return remove('/api/ticket/' + ticketId);
+    },
+    fetchProject: async (projectId) => {
+        return read(`/api/project/${projectId}`);
     },
     fetchProjects: async ({ pageNumber, pageSize }) => {
         return read(`/api/project?pageNumber=${pageNumber}&pageSize=${pageSize}`);

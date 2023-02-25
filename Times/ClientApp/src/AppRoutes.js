@@ -1,6 +1,7 @@
 
 import { ProjectViewPage } from "./pages/project-view/project-view-page";
 import { ProjectsPage } from "./pages/projects/projects-page";
+import { TicketViewPage } from "./pages/ticket-view/ticket-view-page";
 import { TicketsPage } from "./pages/tickets/tickets-page";
 
 const AppRoutes = [
@@ -19,7 +20,11 @@ const AppRoutes = [
   {
     path: '/tickets',
     element: <TicketsPage />
-  }
+  },
+  {
+    path: '/ticket/:ticketId',
+    element: <TicketViewPage />
+  },
 ];
 
 export default AppRoutes;

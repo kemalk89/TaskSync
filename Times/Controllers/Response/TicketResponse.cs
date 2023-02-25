@@ -8,7 +8,8 @@ public class TicketResponse
     public int Id { get; set; }
     public string Title { get; set; }
     public string? Description { get; set; }
-
+    public DateTimeOffset CreatedDate { get; set; }
+    public DateTimeOffset? ModifiedDate { get; set; }
     public ProjectResponse Project { get; set; }
 
     public TicketResponse(Ticket ticket)
@@ -16,6 +17,8 @@ public class TicketResponse
         Id = ticket.Id;
         Title = ticket.Title;
         Description = ticket.Description;
+        CreatedDate = ticket.CreatedDate;
+        ModifiedDate = ticket.ModifiedDate;
         Project = new ProjectResponse(ticket.Project);
     }
 }

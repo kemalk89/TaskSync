@@ -72,7 +72,10 @@ public class TicketRepository : ITicketRepository
 
     public async Task<Ticket?> GetByIdAsync(int id)
     {
-        TicketEntity? entity = await _dbContext.Tickets.FindAsync(id);
+        TicketEntity? entity = await _dbContext.Tickets
+            .Where(t => t.Id == id)
+            .Include(t => t.Project)
+            .FirstAsync();
 
         if (entity == null)
         {
