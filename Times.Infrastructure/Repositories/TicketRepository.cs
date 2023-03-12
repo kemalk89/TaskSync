@@ -51,6 +51,7 @@ public class TicketRepository : ITicketRepository
         var skip = (pageNumber - 1) * pageSize;
 
         var tickets = _dbContext.Tickets
+            .OrderBy(t => t.Title)
             .Include(t => t.Project)
             .Skip(skip)
             .Take(pageSize)

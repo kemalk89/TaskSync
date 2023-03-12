@@ -38,6 +38,7 @@ public class ProjectRepository : IProjectRepository
         var skip = (pageNumber - 1) * pageSize;
 
         var projects = _dbContext.Projects
+            .OrderBy(item => item.Title)
             .Skip(skip)
             .Take(pageSize)
             .ToList()

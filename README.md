@@ -62,3 +62,10 @@ dotnet ef migrations add InitialCreate --project Times.Infrastructure --startup-
 dotnet ef database update --project Times.Infrastructure --startup-project Times
 ```
 
+# Troubleshooting
+## Microsoft.AspNetCore.SpaProxy.SpaProxyMiddleware: Information: SPA proxy is not ready. Returning temporary landing page
+The cause of this proplem could be that you have installed NodeJs using third-party tools like `nvm`. For some editors like Visual Studio for Mac the commands `node` and `npm` are not available. In Visual Studio Code this issue does not occur. To fix that we have to set `symlinks`:
+```sh
+sudo ln -s $(which node) /usr/local/bin/node
+sudo ln -s $(which npm) /usr/local/bin/npm
+```
