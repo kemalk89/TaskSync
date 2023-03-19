@@ -1,0 +1,21 @@
+@startuml "Component Diagram"
+
+package "Times" {
+  [TimesAPI] 
+  database "Postgresql DB" as DB
+
+  [TimesAPI] --> DB
+}
+
+cloud "Auth0" as auth0 {
+
+}
+
+cloud "SendGrid" as sendgrid {
+
+}
+
+[TimesAPI] --> auth0
+[TimesAPI] --> sendgrid
+
+@enduml
