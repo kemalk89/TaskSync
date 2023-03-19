@@ -47,6 +47,10 @@ export const Pagination = ({ paged, onPageSelected }) => {
     onPageSelected(pageNumber);
   };
 
+    if (totalPages === 0) {
+        return null;
+    }
+
   return (
     <BsPagination>
       <PaginationItem>
