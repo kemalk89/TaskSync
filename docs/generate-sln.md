@@ -20,6 +20,7 @@ dotnet add Times/Times.csproj reference Times.Domain/Times.Domain.csproj
 dotnet add Times/Times.csproj reference Times.Infrastructure/Times.Infrastructure.csproj
 dotnet add Times.Infrastructure/Times.Infrastructure.csproj reference Times.Domain/Times.Domain.csproj
 
+dotnet add Times package Microsoft.AspNetCore.Authentication.JwtBearer
 dotnet add Times package Npgsql.EntityFrameworkCore.PostgreSQL
 dotnet add Times package Microsoft.EntityFrameworkCore.Design
 dotnet add Times.Infrastructure package Npgsql.EntityFrameworkCore.PostgreSQL

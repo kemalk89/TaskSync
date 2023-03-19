@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Times.Controllers.Request;
 using Times.Controllers.Response;
@@ -6,6 +7,7 @@ using Times.Domain.Shared;
 
 namespace Times.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("/api/[controller]")]
 public class ProjectController : ControllerBase

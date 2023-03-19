@@ -1,0 +1,7 @@
+{
+    "auth": {
+        "domain": "dev-ng4mbx4gds2o61r1.eu.auth0.com",
+        "clientId": "1f6NZCEYmu6A1pi7Rw12qGCvBjq5PQeX",
+        "audience": "https://times.api.auth0.de/api"
+    }
+}

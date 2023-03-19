@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 using Times.Domain.Project;
 using Times.Domain.Ticket;
 using Times.Infrastructure;
 using Times.Infrastructure.Repositories;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -37,6 +40,19 @@ try
 
     builder.Services.AddDbContext<DatabaseContext>(
         o => o.UseNpgsql(configuration.GetConnectionString("db")));
+
+    builder.Services
+        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.Authority = configuration["Auth:Authority"];
+            options.Audience = configuration["Auth:Audience"];
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                NameClaimType = ClaimTypes.NameIdentifier
+            };
+            Log.Information(configuration["Auth:Authority"]);
+        });
     // end: dependency injection
     ////////////////////////////////////////////////////////////////
 
@@ -58,6 +74,8 @@ try
     app.UseHttpsRedirection();
     app.UseStaticFiles();
     app.UseRouting();
+    app.UseAuthentication();
+    app.UseAuthorization();
 
     app.MapControllerRoute(
         name: "default",

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@auth0/auth0-react": "^2.0.1",
     "bootstrap": "^5.2.0",
     "date-fns": "^2.29.3",
     "formik": "^2.2.9",

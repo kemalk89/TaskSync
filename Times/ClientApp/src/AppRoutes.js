@@ -1,4 +1,5 @@
 
+import { MyProfilePage } from "./pages/my-profile/my-profile";
 import { ProjectViewPage } from "./pages/project-view/project-view-page";
 import { ProjectsPage } from "./pages/projects/projects-page";
 import { TicketViewPage } from "./pages/ticket-view/ticket-view-page";
@@ -24,6 +25,10 @@ const AppRoutes = [
   {
     path: '/ticket/:ticketId',
     element: <TicketViewPage />
+  },
+  {
+    path: '/profile',
+    element: <MyProfilePage />
   },
 ];
 

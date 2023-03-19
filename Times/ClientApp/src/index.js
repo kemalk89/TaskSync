@@ -1,7 +1,9 @@
+import { Auth0Provider } from '@auth0/auth0-react';
 import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import config from './config.json';
 import App from './App';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -9,6 +11,16 @@ const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
 root.render(
-  <BrowserRouter basename={baseUrl}>
-    <App />
-  </BrowserRouter>);
+  <Auth0Provider
+    domain={config.auth.domain}
+    clientId={config.auth.clientId}
+    authorizationParams={{
+      redirect_uri: window.location.origin,
+      audience: config.auth.audience
+    }}
+  >
+    <BrowserRouter basename={baseUrl}>
+      <App />
+    </BrowserRouter>
+  </Auth0Provider>
+);

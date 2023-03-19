@@ -1,9 +1,25 @@
+let accessToken = null;
+let authConfig = null;
+let accessTokenLoaderFn = undefined;
+
+const initAccesToken = async() => {
+    if (! accessToken) {
+        accessToken = await accessTokenLoaderFn({
+            audience: authConfig.audience
+        });
+        console.log(accessToken);
+    }
+}
+
 const create = async (url, body) => {
+    await initAccesToken();
+
     const res = await fetch(url, {
         body: JSON.stringify(body),
         method: 'POST',
         headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
         }
     });
 
@@ -11,17 +27,32 @@ const create = async (url, body) => {
 };
 
 const read = async (url) => {
-    const res = await fetch(url);
+    await initAccesToken();
+
+    const res = await fetch(url, {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    });
     return await res.json();
 };
 
 const remove = async (url) => {
+    await initAccesToken();
+
     return await fetch(url, {
         method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
     });
 };
 
 export const api = {
+    setAccessTokenLoader: (fn, config) => {
+        authConfig = config;
+        accessTokenLoaderFn = fn;
+    },
     fetchTicket: async (ticketId) => {
         return read(`/api/ticket/${ticketId}`);
     },
