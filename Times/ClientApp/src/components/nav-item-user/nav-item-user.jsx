@@ -20,7 +20,7 @@ export const NavItemUser = () => {
   if (!isAuthenticated) {
     return (
       <NavItem>
-        <NavLink href="/components/">Login</NavLink>
+        <NavLink to="/components/">Login</NavLink>
       </NavItem>
     );
   }

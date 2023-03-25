@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import {
   QueryClient,
   QueryClientProvider,
@@ -14,11 +14,15 @@ import config from './config.json';
 const queryClient = new QueryClient();
 
 const App = () => {
-  const { loginWithRedirect, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+  const navigate = useNavigate();
 
-  if (!isLoading && !isAuthenticated) {
-    loginWithRedirect();
-  }
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, isLoading, navigate]);
 
   api.setAccessTokenLoader(getAccessTokenSilently, config.auth);
 

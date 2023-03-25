@@ -28,6 +28,7 @@ Finally you can visit following pages:
 * Database-UI: http://localhost:8081/?pgsql=db&username=postgres&db=times&ns=public (pw: example)
 # Database Development
 ```sh
+dotnet ef database update 0 --project Times
 dotnet ef migrations remove --project Times.Infrastructure --startup-project Times
 dotnet ef migrations add InitialCreate --project Times.Infrastructure --startup-project Times
 dotnet ef database update --project Times.Infrastructure --startup-project Times

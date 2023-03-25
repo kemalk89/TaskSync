@@ -1,5 +1,9 @@
 @startuml "Component Diagram"
 
+actor User
+actor Admin
+actor Manager
+
 package "Times" {
   [TimesAPI] 
   database "Postgresql DB" as DB
@@ -15,7 +19,10 @@ cloud "SendGrid" as sendgrid {
 
 }
 
+User --> [TimesAPI] : tasks
+Admin --> [TimesAPI] : users,\nroles
+Manager --> [TimesAPI] : projects,\nreports,\nstatistics
 [TimesAPI] --> auth0
-[TimesAPI] --> sendgrid
+[TimesAPI] --> sendgrid 
 
 @enduml

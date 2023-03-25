@@ -15,6 +15,7 @@ public class ProjectEntity : AuditedEntity
             Id = Id,
             Title = Title,
             Description = Description,
+            CreatedBy = CreatedBy,
             CreatedDate = CreatedDate,
             ModifiedDate = ModifiedDate
         };

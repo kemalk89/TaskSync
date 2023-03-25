@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using Times.Infrastructure.Entities;
 
 namespace Times.Infrastructure;
@@ -7,10 +8,12 @@ public class DatabaseContext : DbContext
 {
     public DbSet<TicketEntity> Tickets { get; set; }
     public DbSet<ProjectEntity> Projects { get; set; }
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public DatabaseContext(DbContextOptions<DatabaseContext> options)
+    public DatabaseContext(DbContextOptions<DatabaseContext> options, IHttpContextAccessor httpContextAccessor)
         : base(options)
     {
+        _httpContextAccessor = httpContextAccessor;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,6 +40,12 @@ public class DatabaseContext : DbContext
             var audited = e as AuditedEntity;
             if (audited != null)
             {
+                var authenticatedUserId = _httpContextAccessor.HttpContext.User.Identity?.Name;
+                if (authenticatedUserId == null)
+                {
+                    throw new Exception("No authenticated user");
+                }
+                audited.CreatedBy = authenticatedUserId;
                 audited.CreatedDate = DateTimeOffset.UtcNow;
             }
         }

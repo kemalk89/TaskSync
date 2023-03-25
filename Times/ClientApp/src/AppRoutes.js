@@ -1,4 +1,5 @@
 
+import { LoginPage } from "./pages/login/login-page";
 import { MyProfilePage } from "./pages/my-profile/my-profile";
 import { ProjectViewPage } from "./pages/project-view/project-view-page";
 import { ProjectsPage } from "./pages/projects/projects-page";
@@ -29,6 +30,10 @@ const AppRoutes = [
   {
     path: '/profile',
     element: <MyProfilePage />
+  },
+  {
+    path: '/login',
+    element: <LoginPage />
   },
 ];
 
