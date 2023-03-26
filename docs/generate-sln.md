@@ -21,6 +21,9 @@ dotnet add Times/Times.csproj reference Times.Infrastructure/Times.Infrastructur
 
 dotnet add Times.Infrastructure/Times.Infrastructure.csproj reference Times.Domain/Times.Domain.csproj
 dotnet add Times.Infrastructure package Microsoft.AspNetCore.Http
+dotnet add Times.Infrastructure package RestSharp
+dotnet add Times.Infrastructure package Microsoft.Extensions.Logging
+dotnet add Times.Infrastructure package Newtonsoft.Json
 
 dotnet add Times package Microsoft.AspNetCore.Authentication.JwtBearer
 dotnet add Times package Npgsql.EntityFrameworkCore.PostgreSQL

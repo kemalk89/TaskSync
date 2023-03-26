@@ -20,7 +20,8 @@ export const ProjectViewPage = () => {
       <h1>{fetchProject.data.title}</h1>
       <p>
         <small>
-          created at {formatDateTime(fetchProject.data.createdDate)}
+          created at {formatDateTime(fetchProject.data.createdDate)} by{" "}
+          {fetchProject.data.createdBy.username}
         </small>
       </p>
       <p>{fetchProject.data.description}</p>

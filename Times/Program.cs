@@ -31,12 +31,13 @@ try
 
     ////////////////////////////////////////////////////////////////
     // start: dependency injection
-    // TODO introduce Startup.cs later...
     builder.Services.AddScoped<IProjectService, ProjectService>();
     builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
     builder.Services.AddScoped<ITicketService, TicketService>();
     builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+
+    builder.Services.AddScoped<IUserRepository, Auth0UserRepository>();
 
     builder.Services.AddDbContext<DatabaseContext>(
         o => o.UseNpgsql(configuration.GetConnectionString("db")));

@@ -8,10 +8,12 @@ public class ProjectRepository : IProjectRepository
 {
 
     private readonly DatabaseContext _dbContext;
+    private readonly IUserRepository _userRepository;
 
-    public ProjectRepository(DatabaseContext dbContext)
+    public ProjectRepository(DatabaseContext dbContext, IUserRepository userRepository)
     {
         _dbContext = dbContext;
+        _userRepository = userRepository;
     }
 
     public async Task<Project> CreateAsync(string title, string? description)
@@ -66,7 +68,8 @@ public class ProjectRepository : IProjectRepository
             return null;
         }
 
-        return entity.ToProject();
+        var createdBy = await _userRepository.FindUserByIdAsync(entity.CreatedBy);
+        return entity.ToProject(createdBy);
     }
 
     public async Task DeleteByIdAsync(int id)
