@@ -5,5 +5,5 @@ namespace Times.Infrastructure.Repositories;
 public interface IUserRepository
 {
     Task<User[]> FindUsersAsync(string[] userIds);
-    Task<User> FindUserByIdAsync(string userId);
+    Task<User?> FindUserByIdAsync(string userId);
 }

@@ -10,14 +10,15 @@ namespace Times.Infrastructure.Repositories;
 
 public class Auth0UserRepository : IUserRepository
 {
+    private readonly IAccessTokenProvider _accessTokenProvider;
     private readonly ILogger<Auth0UserRepository> _logger;
     private readonly IConfiguration _config;
-    private string? CachedAccessToken { get; set; }
 
-    public Auth0UserRepository(IConfiguration config, ILogger<Auth0UserRepository> logger)
+    public Auth0UserRepository(IConfiguration config, ILogger<Auth0UserRepository> logger, IAccessTokenProvider accessTokenProvider)
     {
         _config = config;
         _logger = logger;
+        _accessTokenProvider = accessTokenProvider;
     }
 
     public async Task<User[]> FindUsersAsync(string[] userIds)
@@ -38,10 +39,24 @@ public class Auth0UserRepository : IUserRepository
         return result.ToArray();
     }
 
-    public async Task<User> FindUserByIdAsync(string userId)
+    public async Task<User?> FindUserByIdAsync(string userId)
     {
-        var user = await GetUserAsync(userId);
-        return MapToUser(user);
+        var accessToken = await _accessTokenProvider.GetAccessTokenAsync();
+
+        var domain = _config["Auth:MachineToMachineApplication:Domain"];
+
+        var client = new RestClient($"https://{domain}/api/v2");
+        client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
+
+        var request = new RestRequest($"users/{userId}", Method.Get);
+        var response = await client.ExecuteAsync<dynamic>(request);
+        if (response.IsSuccessful)
+        {
+            return MapToUser(response.Data);
+        }
+
+        _logger.LogWarning($"Could not fetch user by id. Status Code: {response.StatusCode}, Message: {response.Data?.GetProperty("message")}");
+        return null;
     }
 
     private User MapToUser(JsonElement user)
@@ -55,23 +70,14 @@ public class Auth0UserRepository : IUserRepository
         };
     }
 
-    private async Task<dynamic> GetUserAsync(string userId)
-    {
-        var accessToken = await GetAccessTokenAsync();
-
-        var domain = _config["Auth:MachineToMachineApplication:Domain"];
-
-        var client = new RestClient($"https://{domain}/api/v2");
-        client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
-
-        var request = new RestRequest($"users/{userId}", Method.Get);
-        var response = await client.ExecuteAsync<dynamic>(request);
-        return response.Data;
-    }
-
     private async Task<dynamic[]> getUsersAsync(string[] userIds)
     {
-        var accessToken = await GetAccessTokenAsync();
+        if (userIds.Length == 0)
+        {
+            return Array.Empty<dynamic>();
+        }
+
+        var accessToken = await _accessTokenProvider.GetAccessTokenAsync();
 
         var domain = _config["Auth:MachineToMachineApplication:Domain"];
 
@@ -82,38 +88,13 @@ public class Auth0UserRepository : IUserRepository
         queryParams += string.Join(" OR ", userIds);
 
         var request = new RestRequest($"users{queryParams}", Method.Get);
-        var response = await client.ExecuteAsync<dynamic[]>(request);
-        return response.Data;
-    }
-
-    private async Task<string> GetAccessTokenAsync()
-    {
-        if (CachedAccessToken == null)
+        var response = await client.ExecuteAsync<dynamic>(request);
+        if (response.IsSuccessful)
         {
-            var domain = _config["Auth:MachineToMachineApplication:Domain"];
-            var clientId = _config["Auth:MachineToMachineApplication:ClientId"];
-            var clientSecret = _config["Auth:MachineToMachineApplication:ClientSecret"];
-
-            var client = new RestClient($"https://{domain}/");
-            var request = new RestRequest("oauth/token", Method.Post);
-            request.AddHeader("content-type", "application/x-www-form-urlencoded");
-            request.AddParameter(
-                "application/x-www-form-urlencoded",
-                $"grant_type=client_credentials&client_id={clientId}&client_secret={clientSecret}&audience=https%3A%2F%2F{domain}%2Fapi%2Fv2%2F",
-                ParameterType.RequestBody);
-
-            var response = await client.ExecuteAsync(request);
-
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                _logger.LogError("Could not get access token from Auth0 because Auth0 returned Unauthorized.");
-                return null;
-            }
-
-            var json = JsonConvert.DeserializeObject<dynamic>(response.Content);
-            CachedAccessToken = json.access_token;
+            return response.Data ?? Array.Empty<dynamic>();
         }
 
-        return CachedAccessToken;
+        _logger.LogWarning($"Could not fetch users by ids. Status Code: {response.StatusCode}, Message: {response.Data?.GetProperty("message")}");
+        return Array.Empty<dynamic>();
     }
 }

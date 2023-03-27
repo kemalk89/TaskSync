@@ -37,6 +37,7 @@ try
     builder.Services.AddScoped<ITicketService, TicketService>();
     builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
+    builder.Services.AddScoped<IAccessTokenProvider, Auth0AccessTokenProvider>();
     builder.Services.AddScoped<IUserRepository, Auth0UserRepository>();
 
     builder.Services.AddDbContext<DatabaseContext>(
