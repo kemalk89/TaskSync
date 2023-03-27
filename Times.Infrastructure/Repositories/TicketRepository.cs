@@ -9,13 +9,15 @@ namespace Times.Infrastructure.Repositories;
 
 public class TicketRepository : ITicketRepository
 {
+    private IUserRepository _userRepository;
     private readonly DatabaseContext _dbContext;
     private readonly IProjectRepository _projectRepository;
 
-    public TicketRepository(DatabaseContext dbContext, IProjectRepository projectRepository)
+    public TicketRepository(DatabaseContext dbContext, IProjectRepository projectRepository, IUserRepository userRepository)
     {
         _dbContext = dbContext;
         _projectRepository = projectRepository;
+        _userRepository = userRepository;
     }
 
     public async Task<Ticket?> CreateAsync(CreateTicketCommand cmd)
@@ -83,6 +85,8 @@ public class TicketRepository : ITicketRepository
             return null;
         }
 
-        return entity.ToTicket();
+        var createdBy = await _userRepository.FindUserByIdAsync(entity.CreatedBy);
+
+        return entity.ToTicket(createdBy);
     }
 }

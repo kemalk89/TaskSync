@@ -19,7 +19,10 @@ export const TicketViewPage = () => {
     <div>
       <h1>{fetchTicket.data.title}</h1>
       <p>
-        <small>created at {formatDateTime(fetchTicket.data.createdDate)}</small>
+        <small>
+          created at {formatDateTime(fetchTicket.data.createdDate)} by{" "}
+          {fetchTicket.data.createdBy.username}
+        </small>
       </p>
       <p>{fetchTicket.data.description}</p>
     </div>
