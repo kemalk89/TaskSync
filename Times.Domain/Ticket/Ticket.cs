@@ -1,7 +1,7 @@
 namespace Times.Domain.Ticket;
 
 using Times.Domain.Project;
-using Times.Domain.Shared;
+using Times.Domain.User;
 
 public class Ticket
 {
@@ -10,7 +10,10 @@ public class Ticket
     public string? Description { get; set; }
 
     public int ProjectId { get; set; }
+    public User? Assignee { get; set; }
+
     public User? CreatedBy { get; set; }
+
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset? ModifiedDate { get; set; }
 

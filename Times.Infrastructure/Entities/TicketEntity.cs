@@ -1,4 +1,5 @@
-using Times.Domain.Shared;
+using System.Reflection;
+using Times.Domain.User;
 using Times.Domain.Ticket;
 
 namespace Times.Infrastructure.Entities;
@@ -13,7 +14,9 @@ public class TicketEntity : AuditedEntity
 
     public ProjectEntity Project { get; set; } = null!;
 
-    public Ticket ToTicket(User? createdBy = null)
+    public string? AssigneeId { get; set; }
+
+    public Ticket ToTicket(User? createdBy = null, User? assignee = null)
     {
         return new Ticket
         {
@@ -21,10 +24,16 @@ public class TicketEntity : AuditedEntity
             Title = Title,
             Description = Description,
             ProjectId = ProjectId,
+            Assignee = assignee,
             CreatedBy = createdBy,
             CreatedDate = CreatedDate,
             ModifiedDate = ModifiedDate,
             Project = Project.ToProject()
         };
+    }
+
+    public bool HasAssignee()
+    {
+        return AssigneeId != null;
     }
 }

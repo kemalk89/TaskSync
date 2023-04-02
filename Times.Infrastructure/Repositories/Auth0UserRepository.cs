@@ -1,10 +1,8 @@
-using System.Net;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using RestSharp;
-using Times.Domain.Shared;
+using Times.Domain.User;
 
 namespace Times.Infrastructure.Repositories;
 
@@ -21,6 +19,24 @@ public class Auth0UserRepository : IUserRepository
         _accessTokenProvider = accessTokenProvider;
     }
 
+    public async Task<User[]> SearchUsersAsync(string searchText)
+    {
+        if (String.IsNullOrEmpty(searchText))
+        {
+            return Array.Empty<User>();
+        }
+
+        var users = await SearchUsersBySearchTextAsync(searchText);
+
+        var result = new List<User>();
+        foreach (Auth0UserResponse u in users)
+        {
+            result.Add(MapToUser(u));
+        }
+
+        return result.ToArray();
+    }
+
     public async Task<User[]> FindUsersAsync(string[] userIds)
     {
         if (userIds.Length == 0)
@@ -28,10 +44,10 @@ public class Auth0UserRepository : IUserRepository
             return Array.Empty<User>();
         }
 
-        var users = await getUsersAsync(userIds);
+        var users = await GetUsersAsync(userIds);
 
         var result = new List<User>();
-        foreach (JsonElement u in users)
+        foreach (Auth0UserResponse u in users)
         {
             result.Add(MapToUser(u));
         }
@@ -41,60 +57,76 @@ public class Auth0UserRepository : IUserRepository
 
     public async Task<User?> FindUserByIdAsync(string userId)
     {
-        var accessToken = await _accessTokenProvider.GetAccessTokenAsync();
-
-        var domain = _config["Auth:MachineToMachineApplication:Domain"];
-
-        var client = new RestClient($"https://{domain}/api/v2");
-        client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
+        var client = await GetRestClient();
 
         var request = new RestRequest($"users/{userId}", Method.Get);
-        var response = await client.ExecuteAsync<dynamic>(request);
+        var response = await client.ExecuteAsync<Auth0UserResponse>(request);
         if (response.IsSuccessful)
         {
-            return MapToUser(response.Data);
+            var data = response.Data;
+            return data == null ? null : MapToUser(data);
         }
 
-        _logger.LogWarning($"Could not fetch user by id. Status Code: {response.StatusCode}, Message: {response.Data?.GetProperty("message")}");
+        _logger.LogWarning($"Could not fetch user by id. Status Code: {response.StatusCode}, Message: {response.ErrorMessage}");
         return null;
     }
 
-    private User MapToUser(JsonElement user)
+    private async Task<Auth0UserResponse[]> GetUsersAsync(string[] userIds)
     {
-        return new User
-        {
-            Id = user.GetProperty("user_id").ToString(),
-            Username = user.GetProperty("name").ToString(),
-            Email = user.GetProperty("email").ToString(),
-            Picture = user.GetProperty("picture").ToString()
-        };
-    }
-
-    private async Task<dynamic[]> getUsersAsync(string[] userIds)
-    {
-        if (userIds.Length == 0)
-        {
-            return Array.Empty<dynamic>();
-        }
-
-        var accessToken = await _accessTokenProvider.GetAccessTokenAsync();
-
-        var domain = _config["Auth:MachineToMachineApplication:Domain"];
-
-        var client = new RestClient($"https://{domain}/api/v2");
-        client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
+        var client = await GetRestClient();
 
         var queryParams = $"?fields=user_id,email,picture,name&include_fields=true&q=";
         queryParams += string.Join(" OR ", userIds);
 
         var request = new RestRequest($"users{queryParams}", Method.Get);
-        var response = await client.ExecuteAsync<dynamic>(request);
+        var response = await client.ExecuteAsync<Auth0UserResponse[]>(request);
         if (response.IsSuccessful)
         {
-            return response.Data ?? Array.Empty<dynamic>();
+            return response.Data ?? Array.Empty<Auth0UserResponse>();
         }
 
-        _logger.LogWarning($"Could not fetch users by ids. Status Code: {response.StatusCode}, Message: {response.Data?.GetProperty("message")}");
-        return Array.Empty<dynamic>();
+        _logger.LogWarning($"Could not fetch users by ids. Status Code: {response.StatusCode}, Message: {response.ErrorMessage}");
+        return Array.Empty<Auth0UserResponse>();
+    }
+
+    private async Task<Auth0UserResponse[]> SearchUsersBySearchTextAsync(string searchText)
+    {
+        var client = await GetRestClient();
+
+        var queryParams = $"?fields=user_id,email,picture,name&include_fields=true&q=";
+        queryParams += $"name:{searchText}";
+
+        var request = new RestRequest($"users{queryParams}*", Method.Get);
+        var response = await client.ExecuteAsync<Auth0UserResponse[]>(request);
+        if (response.IsSuccessful)
+        {
+            return response.Data ?? Array.Empty<Auth0UserResponse>();
+        }
+
+        _logger.LogWarning($"Could not search users. Status Code: {response.StatusCode}, Message: {response.ErrorMessage}");
+        return Array.Empty<Auth0UserResponse>();
+    }
+
+    private async Task<RestClient> GetRestClient()
+    {
+        var accessToken = await _accessTokenProvider.GetAccessTokenAsync();
+
+        var domain = _config["Auth:MachineToMachineApplication:Domain"];
+
+        var client = new RestClient($"https://{domain}/api/v2");
+        client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
+
+        return client;
+    }
+
+    private User MapToUser(Auth0UserResponse user)
+    {
+        return new User
+        {
+            Id = user.user_id,
+            Username = user.name,
+            Email = user.email,
+            Picture = user.picture
+        };
     }
 }

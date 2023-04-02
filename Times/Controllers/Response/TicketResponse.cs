@@ -1,5 +1,5 @@
-using Times.Domain.Shared;
 using Times.Domain.Ticket;
+using Times.Domain.User;
 
 namespace Times.Controllers.Response;
 
@@ -9,6 +9,8 @@ public class TicketResponse
     public int Id { get; set; }
     public string Title { get; set; }
     public string? Description { get; set; }
+    public User? Assignee { get; set; }
+
     public User? CreatedBy { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset? ModifiedDate { get; set; }
@@ -19,6 +21,7 @@ public class TicketResponse
         Id = ticket.Id;
         Title = ticket.Title;
         Description = ticket.Description;
+        Assignee = ticket.Assignee;
         CreatedBy = ticket.CreatedBy;
         CreatedDate = ticket.CreatedDate;
         ModifiedDate = ticket.ModifiedDate;

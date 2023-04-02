@@ -3,6 +3,7 @@ using Times.Domain.Project;
 using Times.Domain.Shared;
 using Times.Domain.Ticket;
 using Times.Domain.Ticket.Command;
+using Times.Domain.User;
 using Times.Infrastructure.Entities;
 
 namespace Times.Infrastructure.Repositories;
@@ -25,23 +26,25 @@ public class TicketRepository : ITicketRepository
         var project = _dbContext.Projects.Find(cmd.ProjectId);
         if (project != null)
         {
-            var entity = new TicketEntity
+            var ticket = new TicketEntity
             {
                 Title = cmd.Title,
                 Description = cmd.Description,
-                Project = project
+                Project = project,
+                AssigneeId = cmd.Assignee?.Id
             };
 
-            await _dbContext.Tickets.AddAsync(entity);
+            await _dbContext.Tickets.AddAsync(ticket);
             await _dbContext.SaveChangesAsync();
 
             return new Ticket
             {
-                Id = entity.Id,
-                Title = entity.Title,
-                Description = entity.Description,
-                ProjectId = entity.Project.Id,
-                Project = entity.Project.ToProject(),
+                Id = ticket.Id,
+                Title = ticket.Title,
+                Description = ticket.Description,
+                Assignee = cmd.Assignee,
+                ProjectId = ticket.Project.Id,
+                Project = ticket.Project.ToProject(),
             };
         }
 
@@ -85,8 +88,18 @@ public class TicketRepository : ITicketRepository
             return null;
         }
 
-        var createdBy = await _userRepository.FindUserByIdAsync(entity.CreatedBy);
+        List<string> userIds = new List<string> { entity.CreatedBy };
 
-        return entity.ToTicket(createdBy);
+        if (entity.HasAssignee())
+        {
+            userIds.Add(entity.AssigneeId);
+        }
+
+        var users = await _userRepository.FindUsersAsync(userIds.ToArray());
+
+        var createdBy = users.FirstOrDefault(u => u.Id == entity.CreatedBy);
+        var assignee = users.FirstOrDefault(u => u.Id == entity.AssigneeId);
+
+        return entity.ToTicket(createdBy, assignee);
     }
 }

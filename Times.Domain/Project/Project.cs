@@ -1,6 +1,6 @@
-using Times.Domain.Shared;
-
 namespace Times.Domain.Project;
+
+using Times.Domain.User;
 
 public class Project
 {

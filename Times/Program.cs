@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
+using Times.Domain.User;
 using Times.Domain.Project;
 using Times.Domain.Ticket;
 using Times.Infrastructure;
@@ -36,6 +37,8 @@ try
 
     builder.Services.AddScoped<ITicketService, TicketService>();
     builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+
+    builder.Services.AddScoped<IUserService, UserService>();
 
     builder.Services.AddScoped<IAccessTokenProvider, Auth0AccessTokenProvider>();
     builder.Services.AddScoped<IUserRepository, Auth0UserRepository>();

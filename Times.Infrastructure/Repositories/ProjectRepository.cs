@@ -1,5 +1,6 @@
 using Times.Domain.Project;
 using Times.Domain.Shared;
+using Times.Domain.User;
 using Times.Infrastructure.Entities;
 
 namespace Times.Infrastructure.Repositories;

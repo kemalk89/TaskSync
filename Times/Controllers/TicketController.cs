@@ -52,10 +52,17 @@ public class TicketController : ControllerBase
         try
         {
             var ticket = await _ticketService.CreateTicketAsync(req.ToCommand());
-            return CreatedAtAction(
-                nameof(GetTicketById),
-                new { id = ticket.Id },
-                new TicketResponse(ticket));
+            if (ticket == null)
+            {
+                return BadRequest("Ticket could not be created.");
+            }
+            else
+            {
+                return CreatedAtAction(
+                    nameof(GetTicketById),
+                    new { id = ticket.Id },
+                    new TicketResponse(ticket));
+            }
         }
         catch (DomainException e)
         {

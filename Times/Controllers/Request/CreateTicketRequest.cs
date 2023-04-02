@@ -8,10 +8,12 @@ public class CreateTicketRequest
     [Range(1, int.MaxValue, ErrorMessage = "Only positive numbers allowed.")]
     public int ProjectId { get; set; }
 
-    public string Title { get; set; }
+    [Required]
+    public string Title { get; set; } = null!;
 
     public string? Description { get; set; }
 
+    public UserRequest? Assignee { get; set; }
 
     public CreateTicketCommand ToCommand()
     {
@@ -19,8 +21,8 @@ public class CreateTicketRequest
         {
             ProjectId = ProjectId,
             Description = Description,
-            Title = Title
+            Title = Title,
+            Assignee = Assignee?.ToUser()
         };
     }
-
 }

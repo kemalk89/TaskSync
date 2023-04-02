@@ -1,5 +1,6 @@
 using Times.Domain.Project;
-using Times.Domain.Shared;
+using Times.Domain;
+using Times.Domain.User;
 
 namespace Times.Controllers.Response;
 

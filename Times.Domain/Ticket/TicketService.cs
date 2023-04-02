@@ -15,7 +15,7 @@ public class TicketService : ITicketService
         _projectRepository = projectRepository;
     }
 
-    public async Task<Ticket> CreateTicketAsync(CreateTicketCommand cmd)
+    public async Task<Ticket?> CreateTicketAsync(CreateTicketCommand cmd)
     {
         var project = await _projectRepository.GetByIdAsync(cmd.ProjectId);
         if (project == null)

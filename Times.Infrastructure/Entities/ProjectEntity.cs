@@ -1,5 +1,5 @@
 using Times.Domain.Project;
-using Times.Domain.Shared;
+using Times.Domain.User;
 
 namespace Times.Infrastructure.Entities;
 
