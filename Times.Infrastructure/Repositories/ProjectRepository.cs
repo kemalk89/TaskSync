@@ -45,7 +45,7 @@ public class ProjectRepository : IProjectRepository
             .Skip(skip)
             .Take(pageSize)
             .ToList()
-            .Select(item => item.ToProject());
+            .Select(item => item.ToDomainObject());
 
         int total = _dbContext.Projects.Count();
 
@@ -70,7 +70,7 @@ public class ProjectRepository : IProjectRepository
         }
 
         var createdBy = await _userRepository.FindUserByIdAsync(entity.CreatedBy);
-        return entity.ToProject(createdBy);
+        return entity.ToDomainObject(createdBy);
     }
 
     public async Task DeleteByIdAsync(int id)

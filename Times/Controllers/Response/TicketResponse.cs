@@ -14,6 +14,7 @@ public class TicketResponse
     public User? CreatedBy { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset? ModifiedDate { get; set; }
+    public TicketStatusResponse? Status { get; set; }
     public ProjectResponse Project { get; set; }
 
     public TicketResponse(Ticket ticket)
@@ -25,6 +26,7 @@ public class TicketResponse
         CreatedBy = ticket.CreatedBy;
         CreatedDate = ticket.CreatedDate;
         ModifiedDate = ticket.ModifiedDate;
+        Status = ticket.Status != null ? new TicketStatusResponse(ticket.Status) : null;
         Project = new ProjectResponse(ticket.Project);
     }
 }

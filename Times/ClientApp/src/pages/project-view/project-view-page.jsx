@@ -21,9 +21,10 @@ export const ProjectViewPage = () => {
       <p>
         <small>
           created at {formatDateTime(fetchProject.data.createdDate)} by{" "}
-          {fetchProject.data.createdBy.username}
+          {fetchProject.data.createdBy?.username}
         </small>
       </p>
+      <h2>Description</h2>
       <p>{fetchProject.data.description}</p>
     </div>
   );

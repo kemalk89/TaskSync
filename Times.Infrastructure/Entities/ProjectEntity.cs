@@ -9,7 +9,7 @@ public class ProjectEntity : AuditedEntity
     public string Title { get; set; } = "";
     public string? Description { get; set; }
 
-    public Project ToProject(User? createdBy = null)
+    public Project ToDomainObject(User? createdBy = null)
     {
         return new Project
         {

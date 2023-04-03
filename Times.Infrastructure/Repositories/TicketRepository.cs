@@ -44,7 +44,7 @@ public class TicketRepository : ITicketRepository
                 Description = ticket.Description,
                 Assignee = cmd.Assignee,
                 ProjectId = ticket.Project.Id,
-                Project = ticket.Project.ToProject(),
+                Project = ticket.Project.ToDomainObject(),
             };
         }
 
@@ -58,6 +58,7 @@ public class TicketRepository : ITicketRepository
         var tickets = _dbContext.Tickets
             .OrderBy(t => t.Title)
             .Include(t => t.Project)
+            .Include(t => t.Status)
             .Skip(skip)
             .Take(pageSize)
             .ToList();
@@ -103,6 +104,7 @@ public class TicketRepository : ITicketRepository
         TicketEntity? entity = await _dbContext.Tickets
             .Where(t => t.Id == id)
             .Include(t => t.Project)
+            .Include(t => t.Status)
             .FirstAsync();
 
         if (entity == null)

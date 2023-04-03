@@ -18,5 +18,6 @@ public class Ticket
     public DateTimeOffset? ModifiedDate { get; set; }
 
     public Project Project { get; set; } = null!;
+    public TicketStatus? Status { get; set; }
 
 }

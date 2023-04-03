@@ -7,6 +7,7 @@ namespace Times.Infrastructure;
 public class DatabaseContext : DbContext
 {
     public DbSet<TicketEntity> Tickets { get; set; }
+    public DbSet<TicketStatusEntity> TicketStatus { get; set; }
     public DbSet<ProjectEntity> Projects { get; set; }
     private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -23,6 +24,29 @@ public class DatabaseContext : DbContext
             .WithMany()
             .HasForeignKey(t => t.ProjectId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // seed data: https://learn.microsoft.com/en-us/ef/core/modeling/data-seeding
+        modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = 1, Name = "Todo" });
+        modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = 2, Name = "In Progress" });
+        modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = 3, Name = "Done" });
+
+        modelBuilder.Entity<ProjectEntity>().HasData(new ProjectEntity
+        {
+            Id = 1,
+            Title = "My First Project",
+            Description = "This is the description of the first project.",
+            CreatedBy = ""
+        });
+
+        modelBuilder.Entity<TicketEntity>().HasData(new TicketEntity
+        {
+            Id = 1,
+            Title = "My First Ticket",
+            Description = "This is the description of the first ticket.",
+            CreatedBy = "",
+            ProjectId = 1,
+            StatusId = 1
+        });
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

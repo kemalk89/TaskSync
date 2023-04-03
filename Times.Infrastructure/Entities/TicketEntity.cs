@@ -11,6 +11,9 @@ public class TicketEntity : AuditedEntity
     public string? Description { get; set; }
 
     public int ProjectId { get; set; }
+    public int? StatusId { get; set; }
+
+    public TicketStatusEntity? Status { get; set; }
 
     public ProjectEntity Project { get; set; } = null!;
 
@@ -28,7 +31,8 @@ public class TicketEntity : AuditedEntity
             CreatedBy = createdBy,
             CreatedDate = CreatedDate,
             ModifiedDate = ModifiedDate,
-            Project = Project.ToProject()
+            Status = Status?.ToDomainObject(),
+            Project = Project.ToDomainObject()
         };
     }
 

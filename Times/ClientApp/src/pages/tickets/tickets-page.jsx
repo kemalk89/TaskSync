@@ -28,6 +28,16 @@ export const TicketsPage = () => {
           return <UserName user={ticket.assignee} />;
         },
       },
+      {
+        title: "Status",
+        fieldName: (ticket) => {
+          if (!ticket.status) {
+            return null;
+          }
+
+          return <span>{ticket.status.name}</span>;
+        },
+      },
     ],
   };
 

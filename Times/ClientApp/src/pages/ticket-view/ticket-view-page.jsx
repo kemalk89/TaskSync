@@ -22,7 +22,7 @@ export const TicketViewPage = () => {
       <p>
         <small>
           created at {formatDateTime(fetchTicket.data.createdDate)} by{" "}
-          {fetchTicket.data.createdBy.username}
+          {fetchTicket.data.createdBy?.username}
         </small>
       </p>
       <p>
@@ -33,6 +33,7 @@ export const TicketViewPage = () => {
           "Unassigned"
         )}
       </p>
+      <p>Status: {fetchTicket.data.status?.name}</p>
       <h2>Description</h2>
       <p>{fetchTicket.data.description}</p>
     </div>

@@ -50,6 +50,16 @@ namespace Times.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedBy = "",
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "This is the description of the first project.",
+                            Title = "My First Project"
+                        });
                 });
 
             modelBuilder.Entity("Times.Infrastructure.Entities.TicketEntity", b =>
@@ -79,6 +89,9 @@ namespace Times.Infrastructure.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
@@ -87,7 +100,55 @@ namespace Times.Infrastructure.Migrations
 
                     b.HasIndex("ProjectId");
 
+                    b.HasIndex("StatusId");
+
                     b.ToTable("Tickets");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedBy = "",
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "This is the description of the first ticket.",
+                            ProjectId = 1,
+                            StatusId = 1,
+                            Title = "My First Ticket"
+                        });
+                });
+
+            modelBuilder.Entity("Times.Infrastructure.Entities.TicketStatusEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TicketStatus");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Todo"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "In Progress"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Done"
+                        });
                 });
 
             modelBuilder.Entity("Times.Infrastructure.Entities.TicketEntity", b =>
@@ -98,7 +159,13 @@ namespace Times.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Times.Infrastructure.Entities.TicketStatusEntity", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
                     b.Navigation("Project");
+
+                    b.Navigation("Status");
                 });
 #pragma warning restore 612, 618
         }
