@@ -1,5 +1,7 @@
 import { Formik } from "formik";
 import { Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
+import { AutoCompleteAsync } from "../../components/autocomplete-async/autocomplete-async";
+import { api } from "../../api/api";
 
 export const TicketForm = ({ formId, saveHandler }) => {
   return (
@@ -8,6 +10,7 @@ export const TicketForm = ({ formId, saveHandler }) => {
         title: "",
         description: "",
         projectId: "",
+        assignee: null,
       }}
       validate={(values) => {
         const errors = {};
@@ -30,6 +33,7 @@ export const TicketForm = ({ formId, saveHandler }) => {
         handleSubmit,
         handleChange,
         handleBlur,
+        setFieldValue,
       }) => (
         <Form onSubmit={handleSubmit} id={formId}>
           <FormGroup>
@@ -55,6 +59,17 @@ export const TicketForm = ({ formId, saveHandler }) => {
               invalid={errors.title && touched.title}
             />
             <FormFeedback>{errors.title}</FormFeedback>
+          </FormGroup>
+          <FormGroup>
+            <Label for="assignee">Assignees</Label>
+            <AutoCompleteAsync
+              labelKey="username"
+              id="assignee"
+              apiFn={api.searchUsers}
+              onChange={(selectedUser) =>
+                setFieldValue("assignee", selectedUser)
+              }
+            />
           </FormGroup>
           <FormGroup>
             <Label for="description">Description</Label>

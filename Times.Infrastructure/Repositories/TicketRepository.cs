@@ -51,7 +51,7 @@ public class TicketRepository : ITicketRepository
         return null;
     }
 
-    public Task<PagedResult<Ticket>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<PagedResult<Ticket>> GetAllAsync(int pageNumber, int pageSize)
     {
         var skip = (pageNumber - 1) * pageSize;
 
@@ -60,20 +60,42 @@ public class TicketRepository : ITicketRepository
             .Include(t => t.Project)
             .Skip(skip)
             .Take(pageSize)
-            .ToList()
-            .Select(t => t.ToTicket());
+            .ToList();
+
+        var assigneeIds = tickets
+            .Where(t => t.HasAssignee())
+            .Select(t => t.AssigneeId);
+
+        User[]? assignees = null;
+        if (assigneeIds.Count() > 0)
+        {
+            assignees = await _userRepository.FindUsersAsync(assigneeIds.ToArray());
+        }
+
+        var result = new List<Ticket>();
+        foreach (var ticket in tickets)
+        {
+            if (ticket.HasAssignee())
+            {
+                User? assignee = assignees?.FirstOrDefault(a => a.Id == ticket.AssigneeId);
+                result.Add(ticket.ToTicket(assignee: assignee));
+            }
+            else
+            {
+                result.Add(ticket.ToTicket());
+            }
+        }
 
         int total = _dbContext.Tickets.Count();
-
         var paged = new PagedResult<Ticket>
         {
-            Items = tickets,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             Total = total
         };
 
-        return Task.FromResult(paged);
+        return paged;
     }
 
     public async Task<Ticket?> GetByIdAsync(int id)

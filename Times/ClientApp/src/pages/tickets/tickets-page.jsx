@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "../../api/api";
 import { TablePage } from "../../components/table-page/table-page";
 import { TicketForm } from "./ticket-form";
+import { UserName } from "../../components/user-name/user-name";
 
 export const TicketsPage = () => {
   const navigate = useNavigate();
@@ -17,6 +18,16 @@ export const TicketsPage = () => {
         },
       },
       { title: "Title", fieldName: "title" },
+      {
+        title: "Assignee",
+        fieldName: (ticket) => {
+          if (!ticket.assignee) {
+            return null;
+          }
+
+          return <UserName user={ticket.assignee} />;
+        },
+      },
     ],
   };
 

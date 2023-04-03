@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { api } from "../../api/api";
 import { formatDateTime } from "../../utils/date";
+import { UserName } from "../../components/user-name/user-name";
 
 export const TicketViewPage = () => {
   let { ticketId } = useParams();
@@ -24,6 +25,15 @@ export const TicketViewPage = () => {
           {fetchTicket.data.createdBy.username}
         </small>
       </p>
+      <p>
+        Assignee:{" "}
+        {fetchTicket.data.assignee ? (
+          <UserName user={fetchTicket.data.assignee} />
+        ) : (
+          "Unassigned"
+        )}
+      </p>
+      <h2>Description</h2>
       <p>{fetchTicket.data.description}</p>
     </div>
   );

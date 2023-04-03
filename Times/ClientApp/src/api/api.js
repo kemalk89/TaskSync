@@ -7,11 +7,10 @@ const initAccesToken = async() => {
         accessToken = await accessTokenLoaderFn({
             audience: authConfig.audience
         });
-        console.log(accessToken);
     }
 }
 
-const create = async (url, body) => {
+const post = async (url, body) => {
     await initAccesToken();
 
     const res = await fetch(url, {
@@ -26,7 +25,7 @@ const create = async (url, body) => {
     return await res.json();
 };
 
-const read = async (url) => {
+const get = async (url) => {
     await initAccesToken();
 
     const res = await fetch(url, {
@@ -54,27 +53,32 @@ export const api = {
         accessTokenLoaderFn = fn;
     },
     fetchTicket: async (ticketId) => {
-        return read(`/api/ticket/${ticketId}`);
+        return get(`/api/ticket/${ticketId}`);
     },
     fetchTickets: async ({ pageNumber, pageSize }) => {
-        return read(`/api/ticket?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        return get(`/api/ticket?pageNumber=${pageNumber}&pageSize=${pageSize}`);
     },
     saveTicket: async (ticket) => {
-        return create('/api/ticket', ticket);
+        return post('/api/ticket', ticket);
     },
     deleteTicket: async (ticketId) => {
         return remove('/api/ticket/' + ticketId);
     },
     fetchProject: async (projectId) => {
-        return read(`/api/project/${projectId}`);
+        return get(`/api/project/${projectId}`);
     },
     fetchProjects: async ({ pageNumber, pageSize }) => {
-        return read(`/api/project?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        return get(`/api/project?pageNumber=${pageNumber}&pageSize=${pageSize}`);
     },
     saveProject: async (project) => {
-        return create('/api/project', project);
+        return post('/api/project', project);
     },
     deleteProject: async (projectId) => {
         return remove('/api/project/' + projectId);
+    },
+    searchUsers: async (searchText) => {
+        return post('/api/user', {
+            searchText
+        });
     }
 };

@@ -8,6 +8,7 @@ import {
   UncontrolledDropdown,
 } from "reactstrap";
 import "./style.css";
+import { UserName } from "../user-name/user-name";
 
 export const NavItemUser = () => {
   const { isLoading, isAuthenticated, user, logout } = useAuth0();
@@ -28,11 +29,7 @@ export const NavItemUser = () => {
   return (
     <UncontrolledDropdown nav inNavbar>
       <DropdownToggle nav caret>
-        <img
-          src={user.picture}
-          className="navItem-userImage rounded-circle"
-          alt=""
-        />{" "}
+        <UserName user={user} />
         {user.name}
       </DropdownToggle>
       <DropdownMenu end>

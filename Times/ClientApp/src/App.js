@@ -7,7 +7,6 @@ import {
 import AppRoutes from './AppRoutes';
 import { Layout } from './components/Layout';
 import { useAuth0 } from "@auth0/auth0-react";
-import './custom.css';
 import { api } from './api/api';
 import config from './config.json';
 

@@ -20,7 +20,7 @@ export const TablePage = ({
   const [itemToDelete, setItemToDelete] = useState();
   const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
   const [formModal, setFormModal] = useState(false);
-  const [page, setPage] = useState({ pageNumber: 1, pageSize: 2 });
+  const [page, setPage] = useState({ pageNumber: 1, pageSize: 50 });
   const queryClient = useQueryClient();
   const formId = uuid();
 
