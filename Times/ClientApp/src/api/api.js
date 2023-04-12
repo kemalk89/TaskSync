@@ -22,7 +22,11 @@ const post = async (url, body) => {
         }
     });
 
-    return await res.json();
+    if (!res.ok) {
+        throw new Error(`Network error on URL ${url}: ${res.status}.`);
+    }
+
+    return res.json();
 };
 
 const get = async (url) => {
@@ -33,18 +37,29 @@ const get = async (url) => {
             'Authorization': `Bearer ${accessToken}`
         }
     });
-    return await res.json();
+
+    if (!res.ok) {
+        throw new Error(`Network error on URL ${url}: ${res.status}.`);
+    }
+
+    return res.json();
 };
 
 const remove = async (url) => {
     await initAccesToken();
 
-    return await fetch(url, {
+    const res = await fetch(url, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${accessToken}`
         }
     });
+
+    if (!res.ok) {
+        throw new Error(`Network error on URL ${url}: ${res.status}.`);
+    }
+
+    return res;
 };
 
 export const api = {

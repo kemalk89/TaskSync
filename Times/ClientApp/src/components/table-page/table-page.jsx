@@ -123,6 +123,7 @@ export const TablePage = ({
       </Modal>
 
       <ItemsTable
+        isLoading={isLoading}
         columns={tableData.columns}
         rows={data?.items}
         actions={actions}
