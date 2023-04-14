@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import './NavMenu.css';
+import { Link, useLocation } from 'react-router-dom';
 import { NavItemUser } from './nav-item-user/nav-item-user';
 import { useAuth0 } from '@auth0/auth0-react';
 
 export const NavMenu = () => {
   const [collapsed, setCollapsed] = useState(true);
+  const location = useLocation();
 
   const toggleNavbar = () => {
     setCollapsed(!collapsed);
@@ -24,13 +24,13 @@ export const NavMenu = () => {
             {isAuthenticated && (
               <>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
+                  <NavLink active={location.pathname === "/"} tag={Link} to="/">Home</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/projects">Projects</NavLink>
+                  <NavLink active={location.pathname.startsWith("/project")} tag={Link} to="/projects">Projects</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/tickets">Tickets</NavLink>
+                  <NavLink active={location.pathname.startsWith("/ticket")} tag={Link} to="/tickets">Tickets</NavLink>
                 </NavItem>
               </>
             )}
