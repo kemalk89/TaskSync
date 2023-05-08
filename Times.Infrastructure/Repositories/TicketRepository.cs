@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Times.Domain.Exceptions;
 using Times.Domain.Project;
 using Times.Domain.Shared;
 using Times.Domain.Ticket;
@@ -23,7 +24,7 @@ public class TicketRepository : ITicketRepository
 
     public async Task<Ticket?> CreateAsync(CreateTicketCommand cmd)
     {
-        var project = _dbContext.Projects.Find(cmd.ProjectId);
+        var project = await _dbContext.Projects.FindAsync(cmd.ProjectId);
         if (project != null)
         {
             var ticket = new TicketEntity
@@ -125,5 +126,26 @@ public class TicketRepository : ITicketRepository
         var assignee = users.FirstOrDefault(u => u.Id == entity.AssigneeId);
 
         return entity.ToTicket(createdBy, assignee);
+    }
+
+    public async Task<TicketStatus> UpdateTicketStatusAsync(int ticketId, int statusId)
+    {
+        var ticket = await _dbContext.Tickets.FindAsync(ticketId);
+        if (ticket == null)
+        {
+            throw new ResourceNotFoundException($"Ticket with id {ticketId} could not be found.");
+        }
+
+        var status = _dbContext.TicketStatus.Find(statusId);
+        if (status == null)
+        {
+            throw new ResourceNotFoundException($"TicketStatus with id {statusId} could not be found.");
+        }
+
+        ticket.Status = status;
+
+        await _dbContext.SaveChangesAsync();
+
+        return status.ToDomainObject();
     }
 }

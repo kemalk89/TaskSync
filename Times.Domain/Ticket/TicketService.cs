@@ -1,3 +1,4 @@
+using Times.Domain.Exceptions;
 using Times.Domain.Project;
 using Times.Domain.Shared;
 using Times.Domain.Ticket.Command;
@@ -37,5 +38,11 @@ public class TicketService : ITicketService
     {
         var tickets = await _ticketRepository.GetAllAsync(pageNumber, pageSize);
         return tickets;
+    }
+
+    public async Task<TicketStatus> UpdateTicketStatusAsync(int ticketId, int statusId)
+    {
+        var newStatus = await _ticketRepository.UpdateTicketStatusAsync(ticketId, statusId);
+        return newStatus;
     }
 }

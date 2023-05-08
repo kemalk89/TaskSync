@@ -89,6 +89,12 @@ try
 
     app.MapFallbackToFile("index.html");
 
+    app.UseExceptionHandler(
+        exceptionHandlerApp => exceptionHandlerApp.Run(
+            async context => await Results.Problem().ExecuteAsync(context)
+        )
+    );
+
     app.Run();
 }
 catch (Exception e)

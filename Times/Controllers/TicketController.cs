@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Times.Controllers.Request;
 using Times.Controllers.Response;
-using Times.Domain;
+using Times.Domain.Exceptions;
 using Times.Domain.Shared;
 using Times.Domain.Ticket;
 
@@ -13,12 +13,14 @@ namespace Times.Controllers;
 [Route("/api/[controller]")]
 public class TicketController : ControllerBase
 {
+    private readonly ILogger<TicketController> _logger;
 
     private readonly ITicketService _ticketService;
 
-    public TicketController(ITicketService ticketService)
+    public TicketController(ITicketService ticketService, ILogger<TicketController> logger)
     {
         _ticketService = ticketService;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -67,6 +69,22 @@ public class TicketController : ControllerBase
         catch (DomainException e)
         {
             return NotFound(e.Message);
+        }
+    }
+
+    [HttpPatch]
+    [Route("{id}/status/{statusId}")]
+    public async Task<ActionResult> UpdateTicketStatus([FromRoute] int id, [FromRoute] int statusId)
+    {
+        try
+        {
+            var newStatus = await _ticketService.UpdateTicketStatusAsync(id, statusId);
+            return Ok(newStatus);
+        }
+        catch (ResourceNotFoundException e)
+        {
+            _logger.LogError(e.Message);
+            return NotFound("Ticket or status not found.");
         }
 
     }

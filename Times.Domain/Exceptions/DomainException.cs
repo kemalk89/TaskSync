@@ -1,4 +1,4 @@
-namespace Times.Domain;
+namespace Times.Domain.Exceptions;
 
 public class DomainException : Exception
 {
