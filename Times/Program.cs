@@ -29,6 +29,7 @@ try
 
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen();
+    builder.Services.AddHealthChecks();
 
     ////////////////////////////////////////////////////////////////
     // start: dependency injection
@@ -78,7 +79,6 @@ try
     }
 
     app.UseHttpsRedirection();
-    app.UseStaticFiles();
     app.UseRouting();
     app.UseAuthentication();
     app.UseAuthorization();
@@ -86,8 +86,6 @@ try
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller}/{action=Index}/{id?}");
-
-    app.MapFallbackToFile("index.html");
 
     app.UseExceptionHandler(
         exceptionHandlerApp => exceptionHandlerApp.Run(
