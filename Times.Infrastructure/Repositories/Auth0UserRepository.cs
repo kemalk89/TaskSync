@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -71,6 +72,34 @@ public class Auth0UserRepository : IUserRepository
         return null;
     }
 
+    public async Task<User[]> FindUsersAsync(int pageNumber = 1, int pageSize = 50)
+    {
+        if (pageSize > 50)
+        {
+            throw new ArgumentOutOfRangeException("Max allowed pageSize is 50!");
+        }
+
+        var client = await GetRestClient();
+
+        var queryParams = $"?page={pageNumber - 1}&per_page={pageSize}&q=";
+
+        var request = new RestRequest($"users{queryParams}", Method.Get);
+        var response = await client.ExecuteAsync<Auth0UserResponse[]>(request);
+        if (response.IsSuccessful && response.Data != null)
+        {
+            var result = new List<User>();
+            foreach (Auth0UserResponse u in response.Data)
+            {
+                result.Add(MapToUser(u));
+            }
+
+            return result.ToArray();
+        }
+
+        return Array.Empty<User>();
+    }
+
+
     private async Task<Auth0UserResponse[]> GetUsersAsync(string[] userIds)
     {
         var client = await GetRestClient();
@@ -129,4 +158,5 @@ public class Auth0UserRepository : IUserRepository
             Picture = user.picture
         };
     }
+
 }

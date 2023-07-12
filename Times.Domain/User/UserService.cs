@@ -1,3 +1,4 @@
+using Times.Domain.Shared;
 using Times.Domain.User.Command;
 
 namespace Times.Domain.User;
@@ -16,4 +17,16 @@ public class UserService : IUserService
         var users = await _userRepository.SearchUsersAsync(searchUserCommand.SearchText);
         return users;
     }
+
+    public async Task<PagedResult<User>> GetUsersAsync(int pageNumber, int pageSize)
+    {
+        var users = await _userRepository.FindUsersAsync(pageNumber, pageSize);
+        return new PagedResult<User>
+        {
+            Items = users,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+    }
+
 }
