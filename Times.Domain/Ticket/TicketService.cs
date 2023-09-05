@@ -16,7 +16,7 @@ public class TicketService : ITicketService
         _projectRepository = projectRepository;
     }
 
-    public async Task<Ticket?> CreateTicketAsync(CreateTicketCommand cmd)
+    public async Task<TicketModel?> CreateTicketAsync(CreateTicketCommand cmd)
     {
         var project = await _projectRepository.GetByIdAsync(cmd.ProjectId);
         if (project == null)
@@ -28,16 +28,21 @@ public class TicketService : ITicketService
         return ticket;
     }
 
-    public async Task<Ticket?> GetTicketByIdAsync(int id)
+    public async Task<TicketModel?> GetTicketByIdAsync(int id)
     {
         var ticket = await _ticketRepository.GetByIdAsync(id);
         return ticket;
     }
 
-    public async Task<PagedResult<Ticket>> GetTicketsAsync(int pageNumber, int pageSize)
+    public async Task<PagedResult<TicketModel>> GetTicketsAsync(int pageNumber, int pageSize)
     {
         var tickets = await _ticketRepository.GetAllAsync(pageNumber, pageSize);
         return tickets;
+    }
+
+    public async Task<PagedResult<TicketModel>> GetTicketsByProjectIdAsync(int projectId, int pageNumber, int pageSize)
+    {
+        return await _ticketRepository.GetByProjectIdAsync(projectId, pageNumber, pageSize);
     }
 
     public async Task<TicketStatus> UpdateTicketStatusAsync(int ticketId, int statusId)

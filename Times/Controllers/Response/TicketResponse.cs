@@ -17,7 +17,7 @@ public class TicketResponse
     public TicketStatusResponse? Status { get; set; }
     public ProjectResponse Project { get; set; }
 
-    public TicketResponse(Ticket ticket)
+    public TicketResponse(TicketModel ticket)
     {
         Id = ticket.Id;
         Title = ticket.Title;

@@ -26,7 +26,7 @@ public class TicketController : ControllerBase
     [HttpGet]
     public async Task<PagedResult<TicketResponse>> GetTickets([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
     {
-        PagedResult<Ticket> pagedResult = await _ticketService.GetTicketsAsync(pageNumber, pageSize);
+        PagedResult<TicketModel> pagedResult = await _ticketService.GetTicketsAsync(pageNumber, pageSize);
         return new PagedResult<TicketResponse>
         {
             PageNumber = pagedResult.PageNumber,

@@ -3,7 +3,7 @@ namespace Times.Domain.Ticket;
 using Times.Domain.Project;
 using Times.Domain.User;
 
-public class Ticket
+public class TicketModel
 {
     public int Id { get; set; }
     public string Title { get; set; } = "";

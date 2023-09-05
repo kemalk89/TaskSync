@@ -19,9 +19,9 @@ public class TicketEntity : AuditedEntity
 
     public string? AssigneeId { get; set; }
 
-    public Ticket ToTicket(User? createdBy = null, User? assignee = null)
+    public TicketModel ToTicket(User? createdBy = null, User? assignee = null)
     {
-        return new Ticket
+        return new TicketModel
         {
             Id = Id,
             Title = Title,

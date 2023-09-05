@@ -22,7 +22,7 @@ public class TicketRepository : ITicketRepository
         _userRepository = userRepository;
     }
 
-    public async Task<Ticket?> CreateAsync(CreateTicketCommand cmd)
+    public async Task<TicketModel?> CreateAsync(CreateTicketCommand cmd)
     {
         var project = await _dbContext.Projects.FindAsync(cmd.ProjectId);
         if (project != null)
@@ -38,7 +38,7 @@ public class TicketRepository : ITicketRepository
             await _dbContext.Tickets.AddAsync(ticket);
             await _dbContext.SaveChangesAsync();
 
-            return new Ticket
+            return new TicketModel
             {
                 Id = ticket.Id,
                 Title = ticket.Title,
@@ -52,80 +52,29 @@ public class TicketRepository : ITicketRepository
         return null;
     }
 
-    public async Task<PagedResult<Ticket>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<PagedResult<TicketModel>> GetByProjectIdAsync(int projectId, int pageNumber, int pageSize)
     {
-        var skip = (pageNumber - 1) * pageSize;
-
-        var tickets = _dbContext.Tickets
-            .OrderBy(t => t.Title)
-            .Include(t => t.Project)
-            .Include(t => t.Status)
-            .Skip(skip)
-            .Take(pageSize)
-            .ToList();
-
-        var assigneeIds = tickets
-            .Where(t => t.HasAssignee())
-            .Select(t => t.AssigneeId);
-
-        User[]? assignees = null;
-        if (assigneeIds.Count() > 0)
-        {
-            assignees = await _userRepository.FindUsersAsync(assigneeIds.ToArray());
-        }
-
-        var result = new List<Ticket>();
-        foreach (var ticket in tickets)
-        {
-            if (ticket.HasAssignee())
-            {
-                User? assignee = assignees?.FirstOrDefault(a => a.Id == ticket.AssigneeId);
-                result.Add(ticket.ToTicket(assignee: assignee));
-            }
-            else
-            {
-                result.Add(ticket.ToTicket());
-            }
-        }
-
-        int total = _dbContext.Tickets.Count();
-        var paged = new PagedResult<Ticket>
-        {
-            Items = result,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            Total = total
-        };
-
-        return paged;
+        return await GetByFilter(
+            pageNumber: pageNumber,
+            pageSize: pageSize,
+            projectId: projectId);
     }
 
-    public async Task<Ticket?> GetByIdAsync(int id)
+    public async Task<PagedResult<TicketModel>> GetAllAsync(int pageNumber, int pageSize)
     {
-        TicketEntity? entity = await _dbContext.Tickets
-            .Where(t => t.Id == id)
-            .Include(t => t.Project)
-            .Include(t => t.Status)
-            .FirstAsync();
+        return await GetByFilter(
+            pageNumber: pageNumber,
+            pageSize: pageSize);
+    }
 
-        if (entity == null)
-        {
-            return null;
-        }
+    public async Task<TicketModel?> GetByIdAsync(int id)
+    {
+        var tickets = await GetByFilter(
+            pageNumber: 1,
+            pageSize: 1,
+            ticketId: id);
 
-        List<string> userIds = new List<string> { entity.CreatedBy };
-
-        if (entity.HasAssignee())
-        {
-            userIds.Add(entity.AssigneeId);
-        }
-
-        var users = await _userRepository.FindUsersAsync(userIds.ToArray());
-
-        var createdBy = users.FirstOrDefault(u => u.Id == entity.CreatedBy);
-        var assignee = users.FirstOrDefault(u => u.Id == entity.AssigneeId);
-
-        return entity.ToTicket(createdBy, assignee);
+        return tickets.Items.FirstOrDefault();
     }
 
     public async Task<TicketStatus> UpdateTicketStatusAsync(int ticketId, int statusId)
@@ -148,4 +97,76 @@ public class TicketRepository : ITicketRepository
 
         return status.ToDomainObject();
     }
+
+    private async Task<PagedResult<TicketModel>> GetByFilter(
+        int pageNumber,
+        int pageSize,
+        int? projectId = null,
+        int? ticketId = null
+    )
+    {
+        var skip = (pageNumber - 1) * pageSize;
+
+        var dbSet = _dbContext.Tickets;
+        IQueryable<TicketEntity> query = dbSet.Where(t => 1 == 1);
+        if (projectId != null)
+        {
+            query = dbSet.Where(t => t.ProjectId == projectId);
+        }
+
+        if (ticketId != null)
+        {
+            query = dbSet.Where(t => t.Id == ticketId);
+        }
+
+        var tickets = query
+            .OrderBy(t => t.CreatedDate)
+            .Include(t => t.Project)
+            .Include(t => t.Status)
+            .Skip(skip)
+            .Take(pageSize)
+            .ToList();
+
+        var assigneeIds = tickets
+            .Where(t => t.HasAssignee())
+            .Select(t => t.AssigneeId);
+
+        var createdByIds = tickets.Select(t => t.CreatedBy);
+
+        var userIds = assigneeIds.Union(createdByIds);
+
+        User[]? users = null;
+        if (userIds.Count() > 0)
+        {
+            users = await _userRepository.FindUsersAsync(userIds.ToArray());
+        }
+
+        var result = new List<TicketModel>();
+        foreach (var ticket in tickets)
+        {
+            User? createdBy = users?.FirstOrDefault(a => a.Id == ticket.CreatedBy);
+
+            if (ticket.HasAssignee())
+            {
+                User? assignee = users?.FirstOrDefault(a => a.Id == ticket.AssigneeId);
+                result.Add(ticket.ToTicket(assignee: assignee, createdBy: createdBy));
+            }
+            else
+            {
+                result.Add(ticket.ToTicket(createdBy: createdBy));
+            }
+        }
+
+        int total = query.Count();
+        var paged = new PagedResult<TicketModel>
+        {
+            Items = result,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            Total = total
+        };
+
+        return paged;
+    }
 }
+

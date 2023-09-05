@@ -5,8 +5,9 @@ namespace Times.Domain.Ticket;
 
 public interface ITicketRepository
 {
-    Task<Ticket?> CreateAsync(CreateTicketCommand cmd);
-    Task<Ticket?> GetByIdAsync(int id);
-    Task<PagedResult<Ticket>> GetAllAsync(int pageNumber, int pageSize);
+    Task<TicketModel?> CreateAsync(CreateTicketCommand cmd);
+    Task<TicketModel?> GetByIdAsync(int id);
+    Task<PagedResult<TicketModel>> GetByProjectIdAsync(int projectId, int pageNumber, int pageSize);
+    Task<PagedResult<TicketModel>> GetAllAsync(int pageNumber, int pageSize);
     Task<TicketStatus> UpdateTicketStatusAsync(int ticketId, int statusId);
 }

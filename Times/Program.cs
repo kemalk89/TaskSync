@@ -46,6 +46,7 @@ try
 
     builder.Services.AddDbContext<DatabaseContext>(
         o => o.UseNpgsql(configuration.GetConnectionString("db")));
+    //.LogTo(s => System.Diagnostics.Debug.WriteLine(s)));
 
     builder.Services.AddHttpContextAccessor();
     builder.Services
