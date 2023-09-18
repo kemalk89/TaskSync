@@ -58,13 +58,11 @@ public class TicketController : ControllerBase
             {
                 return BadRequest("Ticket could not be created.");
             }
-            else
-            {
-                return CreatedAtAction(
-                    nameof(GetTicketById),
-                    new { id = ticket.Id },
-                    new TicketResponse(ticket));
-            }
+            
+            return CreatedAtAction(
+                nameof(GetTicketById),
+                new { id = ticket.Id },
+                new TicketResponse(ticket));
         }
         catch (DomainException e)
         {
@@ -87,5 +85,38 @@ public class TicketController : ControllerBase
             return NotFound("Ticket or status not found.");
         }
 
+    }
+
+    [HttpPost]
+    [Route("{id}/comment")]
+    public async Task<ActionResult<TicketCommentResponse>> AddComment([FromRoute] int id, [FromBody] CreateTicketCommentRequest req)
+    {
+        try
+        {
+            var comment = await _ticketService.AddCommentAsync(id, req.ToCommand());
+            var commentResponse = new TicketCommentResponse(comment);
+            return new ObjectResult(commentResponse) { StatusCode = StatusCodes.Status201Created };
+        }   
+        catch (ResourceNotFoundException e)
+        {
+            return NotFound($"Ticket with id {id} could not be found.");
+        }
+    }
+    
+    [HttpGet]
+    [Route("{id}/comment")]
+    public async Task<PagedResult<TicketCommentResponse>> GetTicketComments(
+        [FromRoute] int id, 
+        [FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 50)
+    {
+        var paged = await _ticketService.GetTicketCommentsAsync(id, pageNumber, pageSize);
+        return new PagedResult<TicketCommentResponse>
+        {
+            PageNumber = paged.PageNumber,
+            PageSize = paged.PageSize,
+            Items = paged.Items.Select(item => new TicketCommentResponse(item)),
+            Total = paged.Total
+        };
     }
 }

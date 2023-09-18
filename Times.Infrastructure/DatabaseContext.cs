@@ -7,6 +7,7 @@ namespace Times.Infrastructure;
 public class DatabaseContext : DbContext
 {
     public DbSet<TicketEntity> Tickets { get; set; }
+    public DbSet<TicketCommentEntity> TicketComments { get; set; }
     public DbSet<TicketStatusEntity> TicketStatus { get; set; }
     public DbSet<ProjectEntity> Projects { get; set; }
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -27,6 +28,12 @@ public class DatabaseContext : DbContext
             .HasForeignKey(t => t.ProjectId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        modelBuilder.Entity<TicketCommentEntity>()
+            .HasOne(entity => entity.Ticket)
+            .WithMany()
+            .HasForeignKey(entity => entity.TicketId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         // seed data: https://learn.microsoft.com/en-us/ef/core/modeling/data-seeding
         modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = 1, Name = "Todo" });
         modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = 2, Name = "In Progress" });
@@ -120,8 +127,7 @@ public class DatabaseContext : DbContext
 
         foreach (var e in modified)
         {
-            var audited = e as AuditedEntity;
-            if (audited != null)
+            if (e is AuditedEntity audited)
             {
                 audited.ModifiedDate = DateTimeOffset.UtcNow;
             }

@@ -1,7 +1,7 @@
 namespace Times.Domain.Ticket;
 
-using Times.Domain.Project;
-using Times.Domain.User;
+using Project;
+using User;
 
 public class TicketModel
 {

@@ -98,6 +98,62 @@ public class TicketRepository : ITicketRepository
         return status.ToDomainObject();
     }
 
+    public async Task<TicketCommentModel> AddTicketCommentAsync(int ticketId, CreateTicketCommentCommand cmd)
+    {
+        var ticket = await _dbContext.Tickets.FindAsync(ticketId);
+        if (ticket == null)
+        {
+            throw new ResourceNotFoundException($"Ticket with id {ticketId} could not be found.");
+        }
+        
+        var comment = new TicketCommentEntity
+        {
+            Comment = cmd.Comment,
+            TicketId = ticketId
+        };
+
+        await _dbContext.TicketComments.AddAsync(comment);
+        await _dbContext.SaveChangesAsync();
+
+        var author = await _userRepository.FindUserByIdAsync(comment.CreatedBy);
+
+        return comment.ToModel(author);
+    }
+
+    public async Task<PagedResult<TicketCommentModel>> GetTicketCommentsAsync(int ticketId, int pageNumber, int pageSize)
+    {
+        var skip = (pageNumber - 1) * pageSize;
+        var query = _dbContext.TicketComments
+            .Where(comment => comment.TicketId == ticketId);
+        
+        var comments = query
+            .Skip(skip)
+            .Take(pageSize)
+            .ToList();
+        
+        var createdByIds = comments.Select(t => t.CreatedBy);
+        var users =  await _userRepository.FindUsersAsync(createdByIds.ToArray());
+        
+        var result = new List<TicketCommentModel>();
+        
+        foreach (var comment in comments)
+        {
+            var author = users?.FirstOrDefault(a => a.Id == comment.CreatedBy);
+            result.Add(comment.ToModel(author));
+        }
+
+        var total = query.Count();
+        var paged = new PagedResult<TicketCommentModel>
+        {
+            Items = result,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            Total = total
+        };
+
+        return paged;
+    }
+
     private async Task<PagedResult<TicketModel>> GetByFilter(
         int pageNumber,
         int pageSize,

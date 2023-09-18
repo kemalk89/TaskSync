@@ -50,4 +50,21 @@ public class TicketService : ITicketService
         var newStatus = await _ticketRepository.UpdateTicketStatusAsync(ticketId, statusId);
         return newStatus;
     }
+
+    public async Task<TicketCommentModel> AddCommentAsync(int id, CreateTicketCommentCommand cmd)
+    {
+        var ticket = await _ticketRepository.GetByIdAsync(id);
+        if (ticket == null)
+        {
+            throw new ResourceNotFoundException($"No ticket found with ID {id}.");
+        }
+
+        var comment = await _ticketRepository.AddTicketCommentAsync(id, cmd);
+        return comment;
+    }
+
+    public async Task<PagedResult<TicketCommentModel>> GetTicketCommentsAsync(int id, int pageNumber, int pageSize)
+    {
+        return await _ticketRepository.GetTicketCommentsAsync(id, pageNumber, pageSize);
+    }
 }
