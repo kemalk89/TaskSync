@@ -3,3 +3,4 @@
 Times/Logs
 **/node_modules
 .vs
+.idea
