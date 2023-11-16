@@ -4,11 +4,11 @@ actor User
 actor Admin
 actor Manager
 
-package "Times" {
-  [TimesAPI] 
+package "TaskSync" {
+  [TaskSyncAPI] 
   database "Postgresql DB" as DB
 
-  [TimesAPI] --> DB
+  [TaskSyncAPI] --> DB
 }
 
 cloud "Auth0" as auth0 {
@@ -19,10 +19,10 @@ cloud "SendGrid" as sendgrid {
 
 }
 
-User --> [TimesAPI] : tasks
-Admin --> [TimesAPI] : users,\nroles
-Manager --> [TimesAPI] : projects,\nreports,\nstatistics
-[TimesAPI] --> auth0
-[TimesAPI] --> sendgrid 
+User --> [TaskSyncAPI] : tasks
+Admin --> [TaskSyncAPI] : users,\nroles
+Manager --> [TaskSyncAPI] : projects,\nreports,\nstatistics
+[TaskSyncAPI] --> auth0
+[TaskSyncAPI] --> sendgrid 
 
 @enduml

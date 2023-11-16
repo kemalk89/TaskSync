@@ -1,6 +1,7 @@
 **/obj
 **/bin
-Times/Logs
+TaskSync/Logs
 **/node_modules
 .vs
+.vscode
 .idea
