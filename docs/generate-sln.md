@@ -4,6 +4,7 @@ mkdir TaskSync
 cd TaskSync
 
 dotnet new sln -n TaskSync
+dotnet new gitignore
 
 dotnet new react -o TaskSync
 dotnet new classlib -o TaskSync.Common -f net6.0

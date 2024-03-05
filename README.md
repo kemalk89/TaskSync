@@ -1,6 +1,8 @@
 # Development
 
 ## How to run project
+For local development we need a developer certificate which can be setup with ``dotnet dev-certs https --trust``.
+
 1. Start infrastructure (database etc) ``docker compose up -d``
 
 2. Start the application
