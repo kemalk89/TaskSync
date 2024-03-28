@@ -20,8 +20,15 @@ In VSCode we can enable that in settings: `csharpextensions.useFileScopedNamespa
 # Database Development
 This scripts allows to update the initial migration script. 
 ```sh
+# If not already done, install dotnet-ef globally
+dotnet tool install --global dotnet-ef
+
 dotnet ef database update 0 --project TaskSync
 dotnet ef migrations remove --project TaskSync.Infrastructure --startup-project TaskSync
 dotnet ef migrations add InitialCreate --project TaskSync.Infrastructure --startup-project TaskSync
 dotnet ef database update --project TaskSync.Infrastructure --startup-project TaskSync
 ```
+
+# Improvement Suggestions
+- Use [SecretManager for development](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows)
+- Update to .NET 8

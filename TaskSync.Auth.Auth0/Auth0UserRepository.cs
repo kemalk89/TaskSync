@@ -3,8 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TaskSync.Domain.User;
 using RestSharp;
+using TaskSync.Infrastructure.Repositories;
 
-namespace TaskSync.Infrastructure.Repositories;
+namespace TaskSync.Auth.Auth0;
 
 public class Auth0UserRepository : IUserRepository
 {

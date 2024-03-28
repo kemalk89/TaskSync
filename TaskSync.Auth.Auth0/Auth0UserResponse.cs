@@ -1,4 +1,4 @@
-namespace TaskSync.Infrastructure.Repositories;
+namespace TaskSync.Auth.Auth0;
 
 public class Auth0UserResponse
 {

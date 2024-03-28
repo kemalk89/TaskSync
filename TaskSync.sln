@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskSync.Infrastructure", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskSync.Common", "TaskSync.Common\TaskSync.Common.csproj", "{BCCF8696-8CE1-4C57-821D-114A02C33CB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskSync.Auth.Auth0", "TaskSync.Auth.Auth0\TaskSync.Auth.Auth0.csproj", "{C898AD45-3A45-47FB-83F5-B3931A8E9FFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{BCCF8696-8CE1-4C57-821D-114A02C33CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCCF8696-8CE1-4C57-821D-114A02C33CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCCF8696-8CE1-4C57-821D-114A02C33CB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C898AD45-3A45-47FB-83F5-B3931A8E9FFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C898AD45-3A45-47FB-83F5-B3931A8E9FFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C898AD45-3A45-47FB-83F5-B3931A8E9FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C898AD45-3A45-47FB-83F5-B3931A8E9FFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,6 @@
-﻿This solution was created via CLI using the following commands:
+﻿> This document is not maintained anymore but kept here for reference purposes.
+
+This solution was created via CLI using the following commands:
 ```sh
 mkdir TaskSync
 cd TaskSync

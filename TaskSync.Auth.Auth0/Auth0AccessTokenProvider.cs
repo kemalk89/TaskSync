@@ -2,8 +2,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
+using TaskSync.Infrastructure.Repositories;
 
-namespace TaskSync.Infrastructure.Repositories;
+namespace TaskSync.Auth.Auth0;
 
 public class Auth0AccessTokenProvider : IAccessTokenProvider
 {

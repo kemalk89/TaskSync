@@ -23,5 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\TaskSync.Domain\TaskSync.Domain.csproj" />
     <ProjectReference Include="..\TaskSync.Infrastructure\TaskSync.Infrastructure.csproj" />
+    <ProjectReference Include="..\TaskSync.Auth.Auth0\TaskSync.Auth.Auth0.csproj" />
   </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@ using TaskSync.Infrastructure;
 using TaskSync.Infrastructure.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using TaskSync.Auth.Auth0;
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -25,14 +26,14 @@ try
 
     var builder = WebApplication.CreateBuilder(args);
 
+    ////////////////////////////////////////////////////////////////
+    // start: dependency injection
     // Add services to the container.
 
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen();
     builder.Services.AddHealthChecks();
 
-    ////////////////////////////////////////////////////////////////
-    // start: dependency injection
     builder.Services.AddScoped<IProjectService, ProjectService>();
     builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
@@ -41,8 +42,7 @@ try
 
     builder.Services.AddScoped<IUserService, UserService>();
 
-    builder.Services.AddScoped<IAccessTokenProvider, Auth0AccessTokenProvider>();
-    builder.Services.AddScoped<IUserRepository, Auth0UserRepository>();
+    builder.Services.AddAuth0();
 
     builder.Services.AddDbContext<DatabaseContext>(
         o => o.UseNpgsql(configuration.GetConnectionString("db")));
