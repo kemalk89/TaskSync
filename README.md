@@ -29,6 +29,10 @@ dotnet ef migrations add InitialCreate --project TaskSync.Infrastructure --start
 dotnet ef database update --project TaskSync.Infrastructure --startup-project TaskSync
 ```
 
+# Build the project
+```sh
+dotnet build TaskSync.sln
+```
+
 # Improvement Suggestions
 - Use [SecretManager for development](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows)
-- Update to .NET 8
