@@ -9,9 +9,11 @@ using TaskSync.Infrastructure.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using TaskSync.Auth.Auth0;
+using TaskSync.Common;
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
+    .AddEnvironmentVariables()
     .AddJsonFile("appsettings.json")
     .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
     .Build();
@@ -19,6 +21,11 @@ var configuration = new ConfigurationBuilder()
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
+
+if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+{
+    DotEnv.Load(msg => Log.Logger.Information(msg));   
+}
 
 try
 {
