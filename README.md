@@ -3,13 +3,14 @@
 ## How to run project
 For local development we need a developer certificate which can be setup with ``dotnet dev-certs https --trust``.
 
-1. Start infrastructure (database etc) ``docker compose up -d``
+1. Create `.env` file by duplicating `.env_template` located in project root
 
-2. Start the application
+2. Start infrastructure (database etc) ``docker compose up -d``
+
+3. Start the application
     - Option 1 - CLI: ``dotnet run --project TaskSync``
-
     - Option 2 - VSCode: Hit <kbd>F5</kbd>
-3. Open the application
+4. Open the application
     - Swagger-UI: https://localhost:7190/swagger/index.html
     - Database-UI: http://localhost:8081/?pgsql=db&username=postgres&db=TaskSync&ns=public (pw: example)
 
@@ -33,6 +34,22 @@ dotnet ef database update --project TaskSync.Infrastructure --startup-project Ta
 ```sh
 dotnet build TaskSync.sln
 ```
+
+# Testing
+## Manual Testing with SwaggerUI
+### Auth0
+Generate token:
+```sh
+curl --request POST \
+--url 'https://dev-ng4mbx4gds2o61r1.eu.auth0.com/oauth/token' \
+--header 'content-type: application/x-www-form-urlencoded' \
+--data grant_type=client_credentials \
+--data client_id=<CLIENT_ID> \
+--data client_secret=<CLIENT_SECRET> \
+--data audience=https://tasksync.api.de/api \
+--data scope=openid
+```
+Copy the token and authorize in Swagger UI.
 
 # Improvement Suggestions
 - Use [SecretManager for development](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows)

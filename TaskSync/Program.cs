@@ -8,24 +8,29 @@ using TaskSync.Infrastructure;
 using TaskSync.Infrastructure.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+
+using Microsoft.OpenApi.Models;
+
 using TaskSync.Auth.Auth0;
 using TaskSync.Common;
 
+if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+{
+    DotEnv.Load(msg => Console.WriteLine(msg));   
+}
+
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
-    .AddEnvironmentVariables()
     .AddJsonFile("appsettings.json")
     .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
+    .AddEnvironmentVariables()
     .Build();
+
+
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
-
-if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-{
-    DotEnv.Load(msg => Log.Logger.Information(msg));   
-}
 
 try
 {
@@ -38,7 +43,33 @@ try
     // Add services to the container.
 
     builder.Services.AddControllersWithViews();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(opt =>
+        {
+            opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
+            });
+            
+            opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+        });
     builder.Services.AddHealthChecks();
 
     builder.Services.AddScoped<IProjectService, ProjectService>();
@@ -60,13 +91,19 @@ try
         .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
-            options.Authority = configuration["Auth:Authority"];
             options.Audience = configuration["Auth:Audience"];
+            options.MetadataAddress = configuration["Auth:MetadataAddress"];
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                NameClaimType = ClaimTypes.NameIdentifier
+                NameClaimType = ClaimTypes.NameIdentifier,
+                ValidateIssuer = true,
+                ValidateAudience = true,
             };
-            Log.Information(configuration["Auth:Authority"]);
+
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                options.RequireHttpsMetadata = false; // Allow HTTP in development
+            }
         });
     // end: dependency injection
     ////////////////////////////////////////////////////////////////

@@ -23,6 +23,12 @@ public static class DotEnv
                 continue;
             }
 
+            if (parts[0].StartsWith("#"))
+            {
+                // ignore comments
+                continue;
+            }
+            
             loggerFn($"Found {parts[0]}");
             
             Environment.SetEnvironmentVariable(parts[0], parts[1]);

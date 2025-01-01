@@ -1,3 +1,5 @@
+using System.Web;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -25,13 +27,14 @@ public class Auth0AccessTokenProvider : IAccessTokenProvider
             var domain = _config["Auth:MachineToMachineApplication:Domain"];
             var clientId = _config["Auth:MachineToMachineApplication:ClientId"];
             var clientSecret = _config["Auth:MachineToMachineApplication:ClientSecret"];
-
-            var client = new RestClient($"https://{domain}/");
+            
+            var auth0ManagementApiAudience  = HttpUtility.UrlEncode($"{domain}/api/v2/");
+            var client = new RestClient(domain);
             var request = new RestRequest("oauth/token", Method.Post);
             request.AddHeader("content-type", "application/x-www-form-urlencoded");
             request.AddParameter(
                 "application/x-www-form-urlencoded",
-                $"grant_type=client_credentials&client_id={clientId}&client_secret={clientSecret}&audience=https%3A%2F%2F{domain}%2Fapi%2Fv2%2F",
+                $"grant_type=client_credentials&client_id={clientId}&client_secret={clientSecret}&audience={auth0ManagementApiAudience}",
                 ParameterType.RequestBody);
 
             var response = await client.ExecuteAsync<dynamic>(request);
@@ -39,7 +42,7 @@ public class Auth0AccessTokenProvider : IAccessTokenProvider
             if (response.IsSuccessful)
             {
                 var json = JsonConvert.DeserializeObject<dynamic>(response.Content);
-                CachedAccessToken = json.access_token;
+                CachedAccessToken = json?.access_token;
             }
             else
             {

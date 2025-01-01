@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TaskSync.Domain.User;
@@ -60,7 +59,7 @@ public class Auth0UserRepository : IUserRepository
     {
         var client = await GetRestClient();
 
-        var request = new RestRequest($"users/{userId}", Method.Get);
+        var request = new RestRequest($"users/{userId}");
         var response = await client.ExecuteAsync<Auth0UserResponse>(request);
         if (response.IsSuccessful)
         {
@@ -142,7 +141,7 @@ public class Auth0UserRepository : IUserRepository
 
         var domain = _config["Auth:MachineToMachineApplication:Domain"];
 
-        var client = new RestClient($"https://{domain}/api/v2");
+        var client = new RestClient($"{domain}/api/v2");
         client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
 
         return client;
