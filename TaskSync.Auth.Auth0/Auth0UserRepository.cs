@@ -82,7 +82,7 @@ public class Auth0UserRepository : IUserRepository
 
         var queryParams = $"?page={pageNumber - 1}&per_page={pageSize}&q=";
 
-        var request = new RestRequest($"users{queryParams}", Method.Get);
+        var request = new RestRequest($"users{queryParams}");
         var response = await client.ExecuteAsync<Auth0UserResponse[]>(request);
         if (response.IsSuccessful && response.Data != null)
         {
@@ -94,6 +94,8 @@ public class Auth0UserRepository : IUserRepository
 
             return result.ToArray();
         }
+        
+        _logger.LogError($"Could not load users from Auth0. HTTP Status Code: {response.StatusCode}. Ensure Client is authorized for Auth0 Management API with permissions: read:users");
 
         return Array.Empty<User>();
     }

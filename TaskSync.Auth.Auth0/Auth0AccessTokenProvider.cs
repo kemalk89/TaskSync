@@ -43,6 +43,7 @@ public class Auth0AccessTokenProvider : IAccessTokenProvider
             {
                 var json = JsonConvert.DeserializeObject<dynamic>(response.Content);
                 CachedAccessToken = json?.access_token;
+                _logger.LogDebug("Successfully retrieved access token from Auth0.");
             }
             else
             {
