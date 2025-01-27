@@ -1,3 +1,5 @@
+![build project](https://github.com/kemalk89/TaskSync/actions/workflows/dotnet.yml/badge.svg)
+
 # Development
 
 ## How to run project
