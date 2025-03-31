@@ -22,6 +22,12 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ProjectMemberEntity>()
+            .HasOne<ProjectEntity>() 
+            .WithMany(p => p.ProjectMembers) 
+            .HasForeignKey(pm => pm.ProjectId)
+            .IsRequired(false);
+        
         modelBuilder.Entity<TicketEntity>()
             .HasOne(t => t.Project)
             .WithMany()

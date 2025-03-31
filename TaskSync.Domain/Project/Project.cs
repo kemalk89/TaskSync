@@ -6,6 +6,8 @@ public class Project
     public string Title { get; set; }
     public string? Description { get; set; }
     public ProjectVisibility? Visibility { get; set; }
+
+    public ICollection<ProjectMember> ProjectMembers = new List<ProjectMember>(); 
     public User.User? CreatedBy { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset? ModifiedDate { get; set; }

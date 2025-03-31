@@ -9,10 +9,25 @@ public class ProjectEntity : AuditedEntity
     public string Title { get; set; } = "";
     public string? Description { get; set; }
     public ProjectVisibility? Visibility { get; set; }
+    public ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = new List<ProjectMemberEntity>();
 
-    public Project ToDomainObject(User? createdBy = null)
+    public string GetProjectManagerId()
     {
-        return new Project
+        var result =  ProjectMembers.FirstOrDefault(m => m.Role == "ProjectManager");
+        return result != null ? result.UserId : string.Empty;
+    }
+    
+    public Project ToDomainObject(
+        User? createdBy = null, 
+        IDictionary<string, User>? projectManagerMap = null)
+    {
+        User? manager = null;
+        if (!string.IsNullOrWhiteSpace(GetProjectManagerId()) && projectManagerMap != null)
+        {
+            projectManagerMap.TryGetValue(GetProjectManagerId(), out manager);
+        }
+        
+        var result = new Project
         {
             Id = Id,
             Title = Title,
@@ -22,5 +37,12 @@ public class ProjectEntity : AuditedEntity
             CreatedDate = CreatedDate,
             ModifiedDate = ModifiedDate
         };
+
+        if (manager != null)
+        {
+            result.ProjectMembers.Add(new ProjectMember { User = manager, Role = "ProjectManager"});
+        }
+        
+        return result;
     }
 }

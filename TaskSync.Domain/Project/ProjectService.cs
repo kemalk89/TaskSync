@@ -1,3 +1,4 @@
+using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
 
@@ -14,9 +15,9 @@ public class ProjectService : IProjectService
         _ticketService = ticketService;
     }
 
-    public async Task<Project> CreateProjectAsync(string title, string? description, ProjectVisibility? visibility)
+    public async Task<Project> CreateProjectAsync(CreateProjectCommand command)
     {
-        var project = await _projectRepository.CreateAsync(title, description, visibility);
+        var project = await _projectRepository.CreateAsync(command);
         return project;
     }
 

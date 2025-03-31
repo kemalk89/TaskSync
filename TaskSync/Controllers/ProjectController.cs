@@ -49,11 +49,11 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProjectResponse>> CreatePost(
+    public async Task<ActionResult<ProjectResponse>> CreateProject(
         [FromBody] CreateProjectRequest req
     )
     {
-        var item = await _projectService.CreateProjectAsync(req.Title, req.Description);
+        var item = await _projectService.CreateProjectAsync(req.toCommand());
         return CreatedAtAction(
             nameof(GetProjectById),
             new { id = item.Id },

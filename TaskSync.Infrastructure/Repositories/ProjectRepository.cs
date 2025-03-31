@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+
 using TaskSync.Domain.Project;
+using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.User;
 using TaskSync.Infrastructure.Entities;
@@ -17,15 +20,21 @@ public class ProjectRepository : IProjectRepository
         _userRepository = userRepository;
     }
 
-    public async Task<Project> CreateAsync(string title, string? description, ProjectVisibility? visibility)
+    public async Task<Project> CreateAsync(CreateProjectCommand command)
     {
         var entity = new ProjectEntity
         {
-            Title = title,
-            Description = description,
-            Visibility = visibility
+            Title = command.Title,
+            Description = command.Description,
+            Visibility = command.Visibility,
         };
 
+        if (!string.IsNullOrWhiteSpace(command.ProjectManagerId))
+        {
+            var projectManager = new ProjectMemberEntity { UserId = command.ProjectManagerId, Role = "ProjectManager" };
+            entity.ProjectMembers.Add(projectManager);
+        }
+        
         await _dbContext.Projects.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
 
@@ -37,17 +46,25 @@ public class ProjectRepository : IProjectRepository
         };
     }
 
-    public Task<PagedResult<Project>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<PagedResult<Project>> GetAllAsync(int pageNumber, int pageSize)
     {
         var skip = (pageNumber - 1) * pageSize;
 
-        var projects = _dbContext.Projects
+        var records = _dbContext.Projects
             .OrderBy(item => item.CreatedDate)
             .Skip(skip)
             .Take(pageSize)
-            .ToList()
-            .Select(item => item.ToDomainObject());
+            .ToList();
 
+        // fetch project managers
+        var projectManagerIds = records
+            .Where(r => !string.IsNullOrWhiteSpace(r.GetProjectManagerId()))
+            .Select(r => r.GetProjectManagerId())
+            .Distinct()
+            .ToArray();
+        var projectManagers = (await this._userRepository.FindUsersAsync(projectManagerIds)).ToDictionary(u => u.Id, u => u);
+        var projects = records.Select(item => item.ToDomainObject(null, projectManagers));
+        
         int total = _dbContext.Projects.Count();
 
         var paged = new PagedResult<Project>
@@ -58,20 +75,32 @@ public class ProjectRepository : IProjectRepository
             Total = total
         };
 
-        return Task.FromResult(paged);
+        return paged;
     }
 
     public async Task<Project?> GetByIdAsync(int id)
     {
-        ProjectEntity? entity = await _dbContext.Projects.FindAsync(id);
+        ProjectEntity? entity = await _dbContext.Projects
+            .Include(p => p.ProjectMembers)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
         if (entity == null)
         {
             return null;
         }
 
+        var projectManagerMap = new Dictionary<string, User>();
+        if (!string.IsNullOrWhiteSpace(entity.GetProjectManagerId()))
+        {
+            var projectManager = await _userRepository.FindUserByIdAsync(entity.GetProjectManagerId());
+            if (projectManager != null)
+            {
+                projectManagerMap.Add(projectManager.Id, projectManager);
+            }
+
+        }
         var createdBy = await _userRepository.FindUserByIdAsync(entity.CreatedBy);
-        return entity.ToDomainObject(createdBy);
+        return entity.ToDomainObject(createdBy, projectManagerMap);
     }
 
     public async Task DeleteByIdAsync(int id)
