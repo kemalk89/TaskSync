@@ -8,6 +8,7 @@ public class ProjectEntity : AuditedEntity
     public int Id { get; set; }
     public string Title { get; set; } = "";
     public string? Description { get; set; }
+    public ProjectVisibility? Visibility { get; set; }
 
     public Project ToDomainObject(User? createdBy = null)
     {
@@ -16,6 +17,7 @@ public class ProjectEntity : AuditedEntity
             Id = Id,
             Title = Title,
             Description = Description,
+            Visibility = Visibility,
             CreatedBy = createdBy,
             CreatedDate = CreatedDate,
             ModifiedDate = ModifiedDate

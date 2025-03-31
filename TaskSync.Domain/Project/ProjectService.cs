@@ -14,9 +14,9 @@ public class ProjectService : IProjectService
         _ticketService = ticketService;
     }
 
-    public async Task<Project> CreateProjectAsync(string title, string? description)
+    public async Task<Project> CreateProjectAsync(string title, string? description, ProjectVisibility? visibility)
     {
-        var project = await _projectRepository.CreateAsync(title, description);
+        var project = await _projectRepository.CreateAsync(title, description, visibility);
         return project;
     }
 

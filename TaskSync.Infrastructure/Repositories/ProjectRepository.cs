@@ -17,12 +17,13 @@ public class ProjectRepository : IProjectRepository
         _userRepository = userRepository;
     }
 
-    public async Task<Project> CreateAsync(string title, string? description)
+    public async Task<Project> CreateAsync(string title, string? description, ProjectVisibility? visibility)
     {
         var entity = new ProjectEntity
         {
             Title = title,
-            Description = description
+            Description = description,
+            Visibility = visibility
         };
 
         await _dbContext.Projects.AddAsync(entity);
