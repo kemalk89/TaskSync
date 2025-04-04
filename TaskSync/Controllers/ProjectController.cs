@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TaskSync.Controllers.Request;
 using TaskSync.Controllers.Response;
 using TaskSync.Domain.Project;
+using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
 
@@ -15,12 +15,10 @@ public class ProjectController : ControllerBase
 {
 
     private readonly IProjectService _projectService;
-    private readonly ITicketService _ticketService;
 
-    public ProjectController(IProjectService projectService, ITicketService ticketService)
+    public ProjectController(IProjectService projectService)
     {
         _projectService = projectService;
-        _ticketService = ticketService;
     }
 
     [HttpGet]
@@ -50,10 +48,10 @@ public class ProjectController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<ProjectResponse>> CreateProject(
-        [FromBody] CreateProjectRequest req
+        [FromBody] CreateProjectCommand req
     )
     {
-        var item = await _projectService.CreateProjectAsync(req.toCommand());
+        var item = await _projectService.CreateProjectAsync(req);
         return CreatedAtAction(
             nameof(GetProjectById),
             new { id = item.Id },
@@ -64,6 +62,8 @@ public class ProjectController : ControllerBase
     [Route("{id}")]
     public async Task<ActionResult> DeleteProject([FromRoute] int id)
     {
+        // TODO Permissions: Who can delete project? 
+
         await _projectService.DeleteProjectAsync(id);
 
         return NoContent();
@@ -85,5 +85,16 @@ public class ProjectController : ControllerBase
             Items = pagedResult.Items.Select(item => new TicketResponse(item)),
             Total = pagedResult.Total
         };
+    }
+
+    [HttpPost]
+    [Route("{projectId}/team")]
+    public async Task<ActionResult> AssignTeamMembers(
+        [FromRoute] int projectId,
+        [FromBody] AssignTeamMembersCommand command)
+    {
+        // TODO Permissions: Who can assign team members?
+        await _projectService.AssignTeamMembersAsync(projectId, command);
+        return NoContent();
     }
 }

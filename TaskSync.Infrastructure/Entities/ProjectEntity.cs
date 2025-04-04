@@ -17,32 +17,32 @@ public class ProjectEntity : AuditedEntity
         return result != null ? result.UserId : string.Empty;
     }
     
+    public IEnumerable<string> GetProjectMemberIds()
+    {
+        return ProjectMembers.Select(m => m.UserId);
+    }   
+    
     public Project ToDomainObject(
         User? createdBy = null, 
-        IDictionary<string, User>? projectManagerMap = null)
+        IDictionary<string, User>? memberMap = null)
     {
-        User? manager = null;
-        if (!string.IsNullOrWhiteSpace(GetProjectManagerId()) && projectManagerMap != null)
-        {
-            projectManagerMap.TryGetValue(GetProjectManagerId(), out manager);
-        }
-        
         var result = new Project
         {
             Id = Id,
             Title = Title,
             Description = Description,
+            ProjectMembers = ProjectMembers.Select(m => new ProjectMember
+            {
+                UserId = m.UserId, 
+                Role = m.Role, 
+                User = memberMap != null && memberMap.TryGetValue(m.UserId, out User? value) ? value : null
+            }).ToList(),
             Visibility = Visibility,
             CreatedBy = createdBy,
             CreatedDate = CreatedDate,
             ModifiedDate = ModifiedDate
         };
 
-        if (manager != null)
-        {
-            result.ProjectMembers.Add(new ProjectMember { User = manager, Role = "ProjectManager"});
-        }
-        
         return result;
     }
 }

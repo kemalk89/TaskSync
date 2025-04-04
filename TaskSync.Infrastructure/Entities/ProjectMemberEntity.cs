@@ -1,6 +1,6 @@
 namespace TaskSync.Infrastructure.Entities;
 
-public class ProjectMemberEntity : AuditedEntity
+public class ProjectMemberEntity
 {
     public int Id { get; set; }
     

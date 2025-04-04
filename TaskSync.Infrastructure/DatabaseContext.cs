@@ -26,6 +26,7 @@ public class DatabaseContext : DbContext
             .HasOne<ProjectEntity>() 
             .WithMany(p => p.ProjectMembers) 
             .HasForeignKey(pm => pm.ProjectId)
+            .OnDelete(DeleteBehavior.Cascade)
             .IsRequired(false);
         
         modelBuilder.Entity<TicketEntity>()

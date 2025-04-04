@@ -1,6 +1,7 @@
 using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
+using TaskSync.Domain.User;
 
 namespace TaskSync.Domain.Project;
 
@@ -8,11 +9,13 @@ public class ProjectService : IProjectService
 {
     private readonly IProjectRepository _projectRepository;
     private readonly ITicketService _ticketService;
+    private readonly IUserService _userService;
 
-    public ProjectService(IProjectRepository projectRepository, ITicketService ticketService)
+    public ProjectService(IProjectRepository projectRepository, ITicketService ticketService, IUserService userService)
     {
         _projectRepository = projectRepository;
         _ticketService = ticketService;
+        _userService = userService;
     }
 
     public async Task<Project> CreateProjectAsync(CreateProjectCommand command)
@@ -52,6 +55,24 @@ public class ProjectService : IProjectService
         }
 
         return await _ticketService.GetTicketsByProjectIdAsync(projectId, pageNumber, pageSize);
+    }
+    
+    public async Task AssignTeamMembersAsync(int projectId, AssignTeamMembersCommand command)
+    {
+        var project = await _projectRepository.GetByIdAsync(projectId);
+        if (project == null)
+        {
+            // TODO Implement return
+            throw new NotImplementedException();
+        }
+
+        command.TeamMembers.ToList().ForEach(m => project.ProjectMembers.Add(new ProjectMember
+        {
+            UserId = m.UserId,
+            Role = m.Role,
+        }));
+
+        await _projectRepository.SaveAsync(project);
     }
 }
 

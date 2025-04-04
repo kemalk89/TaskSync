@@ -90,15 +90,9 @@ public class ProjectRepository : IProjectRepository
         }
 
         var projectManagerMap = new Dictionary<string, User>();
-        if (!string.IsNullOrWhiteSpace(entity.GetProjectManagerId()))
-        {
-            var projectManager = await _userRepository.FindUserByIdAsync(entity.GetProjectManagerId());
-            if (projectManager != null)
-            {
-                projectManagerMap.Add(projectManager.Id, projectManager);
-            }
-
-        }
+        var projectMembers = await _userRepository.FindUsersAsync(entity.GetProjectMemberIds().ToArray());
+        projectMembers.ToList().ForEach(m => projectManagerMap.Add(m.Id, m));    
+        
         var createdBy = await _userRepository.FindUserByIdAsync(entity.CreatedBy);
         return entity.ToDomainObject(createdBy, projectManagerMap);
     }
@@ -109,6 +103,23 @@ public class ProjectRepository : IProjectRepository
         var entity = new ProjectEntity { Id = id };
         _dbContext.Attach(entity);
         _dbContext.Projects.Remove(entity);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task SaveAsync(Project project)
+    {
+        var record = await _dbContext.Projects.FindAsync(project.Id);
+        if (record == null)
+        {
+            // TODO Implement 
+            throw new NotImplementedException();
+        }
+        
+        var projectMembers = project.ProjectMembers
+            .Select(m => new ProjectMemberEntity { UserId = m.UserId, Role = m.Role, ProjectId = record.Id });
+        
+        record.ProjectMembers = projectMembers.ToList();
+
         await _dbContext.SaveChangesAsync();
     }
 }
