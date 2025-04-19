@@ -6,7 +6,7 @@ using TaskSync.Infrastructure.Repositories;
 
 namespace TaskSync.Auth.Auth0;
 
-public class Auth0UserRepository : IUserRepository
+public class Auth0UserRepository : IExternalUserRepository
 {
     private readonly IAccessTokenProvider _accessTokenProvider;
     private readonly ILogger<Auth0UserRepository> _logger;
@@ -41,7 +41,7 @@ public class Auth0UserRepository : IUserRepository
     {
         if (userIds.Length == 0)
         {
-            return Array.Empty<User>();
+            return [];
         }
 
         var users = await GetUsersAsync(userIds);
@@ -60,6 +60,22 @@ public class Auth0UserRepository : IUserRepository
         var client = await GetRestClient();
 
         var request = new RestRequest($"users/{userId}");
+        var response = await client.ExecuteAsync<Auth0UserResponse>(request);
+        if (response.IsSuccessful)
+        {
+            var data = response.Data;
+            return data == null ? null : MapToUser(data);
+        }
+
+        _logger.LogWarning($"Could not fetch user by id. Status Code: {response.StatusCode}, Message: {response.ErrorMessage}");
+        return null;
+    }
+
+    public async Task<User?> FindUserByIdFromExternalSourceAsync(string externalUserId)
+    {
+        var client = await GetRestClient();
+
+        var request = new RestRequest($"users/{externalUserId}");
         var response = await client.ExecuteAsync<Auth0UserResponse>(request);
         if (response.IsSuccessful)
         {
@@ -153,7 +169,7 @@ public class Auth0UserRepository : IUserRepository
     {
         return new User
         {
-            Id = user.user_id,
+            ExternalUserId = user.user_id,
             Username = user.name,
             Email = user.email,
             Picture = user.picture

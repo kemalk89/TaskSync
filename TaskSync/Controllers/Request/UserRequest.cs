@@ -6,7 +6,7 @@ namespace TaskSync.Controllers.Request;
 public class UserRequest
 {
     [Required]
-    public string Id { get; set; } = null!;
+    public int Id { get; set; }
     [Required]
     public string Username { get; set; } = null!;
     public string? Email { get; set; }

@@ -9,7 +9,7 @@ public static class Auth0ServiceCollectionExtensions
     public static IServiceCollection AddAuth0(this IServiceCollection services)
     {
         services.AddScoped<IAccessTokenProvider, Auth0AccessTokenProvider>();
-        services.AddScoped<IUserRepository, Auth0UserRepository>();
+        services.AddScoped<IExternalUserRepository, Auth0UserRepository>();
 
         return services;
     }

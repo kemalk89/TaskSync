@@ -29,7 +29,7 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<IEnumerable<User>> GetUsersAsync(string[] userIds)
+    public async Task<IEnumerable<User>> GetUsersAsync(int[] userIds)
     {
         var users = await _userRepository.FindUsersAsync(userIds);
         return users;

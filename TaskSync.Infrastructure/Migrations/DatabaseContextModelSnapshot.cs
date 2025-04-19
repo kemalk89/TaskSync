@@ -30,9 +30,8 @@ namespace TaskSync.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -58,23 +57,23 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedBy = "",
+                            CreatedBy = 1,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "This is the description of the first project.",
+                            Description = "This is the description of the first project. This project has one member as well.",
                             Title = "My First Project"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedBy = "",
+                            CreatedBy = 2,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "This is the description of the 2nd project.",
+                            Description = "This is the description of the 2nd project. This project has two members.",
                             Title = "My 2nd Project"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the 3rd project.",
                             Title = "My 3rd Project"
@@ -82,7 +81,7 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the 4rd project.",
                             Title = "My 4rd Project"
@@ -104,15 +103,39 @@ namespace TaskSync.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("ProjectMemberEntity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ProjectId = 1,
+                            Role = "Software Developer",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ProjectId = 2,
+                            Role = "ProjectManager",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ProjectId = 2,
+                            Role = "UI / UX",
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("TaskSync.Infrastructure.Entities.TicketCommentEntity", b =>
@@ -127,9 +150,8 @@ namespace TaskSync.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -155,12 +177,11 @@ namespace TaskSync.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AssigneeId")
-                        .HasColumnType("text");
+                    b.Property<int?>("AssigneeId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -181,6 +202,9 @@ namespace TaskSync.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
@@ -193,3642 +217,4006 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 365,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #365.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #365"
+                            Title = "Demo Ticket of type Bug #365",
+                            Type = 0
                         },
                         new
                         {
                             Id = 366,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #366.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #366"
+                            Title = "Demo Ticket of type Story #366",
+                            Type = 2
                         },
                         new
                         {
                             Id = 367,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #367.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #367"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #367",
+                            Type = 2
                         },
                         new
                         {
                             Id = 368,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #368.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #368"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #368",
+                            Type = 2
                         },
                         new
                         {
                             Id = 369,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #369.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #369"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #369",
+                            Type = 2
                         },
                         new
                         {
                             Id = 370,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #370.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #370"
+                            Title = "Demo Ticket of type Task #370",
+                            Type = 1
                         },
                         new
                         {
                             Id = 371,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #371.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket #371"
+                            Title = "Demo Ticket of type Bug #371",
+                            Type = 0
                         },
                         new
                         {
                             Id = 372,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #372.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #372"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #372",
+                            Type = 1
                         },
                         new
                         {
                             Id = 373,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #373.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #373"
+                            Title = "Demo Ticket of type Bug #373",
+                            Type = 0
                         },
                         new
                         {
                             Id = 374,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #374.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #374"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #374",
+                            Type = 0
                         },
                         new
                         {
                             Id = 375,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #375.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #375"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #375",
+                            Type = 2
                         },
                         new
                         {
                             Id = 376,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #376.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket #376"
+                            Title = "Demo Ticket of type Task #376",
+                            Type = 1
                         },
                         new
                         {
                             Id = 377,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #377.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #377"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #377",
+                            Type = 0
                         },
                         new
                         {
                             Id = 378,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #378.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #378"
+                            Title = "Demo Ticket of type Bug #378",
+                            Type = 0
                         },
                         new
                         {
                             Id = 379,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #379.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #379"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #379",
+                            Type = 2
                         },
                         new
                         {
                             Id = 380,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #380.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #380"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #380",
+                            Type = 2
                         },
                         new
                         {
                             Id = 381,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #381.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #381"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #381",
+                            Type = 0
                         },
                         new
                         {
                             Id = 382,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #382.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #382"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #382",
+                            Type = 0
                         },
                         new
                         {
                             Id = 383,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #383.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #383"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #383",
+                            Type = 2
                         },
                         new
                         {
                             Id = 384,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #384.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #384"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #384",
+                            Type = 2
                         },
                         new
                         {
                             Id = 385,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #385.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #385"
+                            Title = "Demo Ticket of type Story #385",
+                            Type = 2
                         },
                         new
                         {
                             Id = 386,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #386.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #386"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #386",
+                            Type = 1
                         },
                         new
                         {
                             Id = 387,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #387.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #387"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #387",
+                            Type = 0
                         },
                         new
                         {
                             Id = 388,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #388.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #388"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #388",
+                            Type = 2
                         },
                         new
                         {
                             Id = 389,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #389.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #389"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #389",
+                            Type = 1
                         },
                         new
                         {
                             Id = 390,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #390.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #390"
+                            Title = "Demo Ticket of type Story #390",
+                            Type = 2
                         },
                         new
                         {
                             Id = 391,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #391.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #391"
+                            Title = "Demo Ticket of type Bug #391",
+                            Type = 0
                         },
                         new
                         {
                             Id = 392,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #392.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #392"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #392",
+                            Type = 1
                         },
                         new
                         {
                             Id = 393,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #393.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #393"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #393",
+                            Type = 0
                         },
                         new
                         {
                             Id = 394,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #394.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #394"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #394",
+                            Type = 2
                         },
                         new
                         {
                             Id = 395,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #395.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #395"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #395",
+                            Type = 2
                         },
                         new
                         {
                             Id = 396,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #396.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket #396"
+                            Title = "Demo Ticket of type Bug #396",
+                            Type = 0
                         },
                         new
                         {
                             Id = 397,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #397.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #397"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #397",
+                            Type = 2
                         },
                         new
                         {
                             Id = 398,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #398.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #398"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #398",
+                            Type = 1
                         },
                         new
                         {
                             Id = 399,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #399.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #399"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #399",
+                            Type = 1
                         },
                         new
                         {
                             Id = 400,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #400.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #400"
+                            Title = "Demo Ticket of type Task #400",
+                            Type = 1
                         },
                         new
                         {
                             Id = 401,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #401.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #401"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #401",
+                            Type = 1
                         },
                         new
                         {
                             Id = 402,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #402.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #402"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #402",
+                            Type = 1
                         },
                         new
                         {
                             Id = 403,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #403.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #403"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #403",
+                            Type = 0
                         },
                         new
                         {
                             Id = 404,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #404.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #404"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #404",
+                            Type = 0
                         },
                         new
                         {
                             Id = 405,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #405.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #405"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #405",
+                            Type = 1
                         },
                         new
                         {
                             Id = 406,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #406.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #406"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #406",
+                            Type = 1
                         },
                         new
                         {
                             Id = 407,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #407.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #407"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #407",
+                            Type = 0
                         },
                         new
                         {
                             Id = 408,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #408.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #408"
+                            Title = "Demo Ticket of type Story #408",
+                            Type = 2
                         },
                         new
                         {
                             Id = 409,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #409.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #409"
+                            Title = "Demo Ticket of type Bug #409",
+                            Type = 0
                         },
                         new
                         {
                             Id = 410,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #410.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #410"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #410",
+                            Type = 0
                         },
                         new
                         {
                             Id = 411,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #411.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #411"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #411",
+                            Type = 1
                         },
                         new
                         {
                             Id = 412,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #412.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #412"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #412",
+                            Type = 0
                         },
                         new
                         {
                             Id = 413,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #413.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #413"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #413",
+                            Type = 0
                         },
                         new
                         {
                             Id = 414,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #414.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket #414"
+                            Title = "Demo Ticket of type Task #414",
+                            Type = 1
                         },
                         new
                         {
                             Id = 415,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #415.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #415"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #415",
+                            Type = 0
                         },
                         new
                         {
                             Id = 416,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #416.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #416"
+                            Title = "Demo Ticket of type Bug #416",
+                            Type = 0
                         },
                         new
                         {
                             Id = 417,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #417.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #417"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #417",
+                            Type = 1
                         },
                         new
                         {
                             Id = 418,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #418.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #418"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #418",
+                            Type = 1
                         },
                         new
                         {
                             Id = 419,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #419.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket #419"
+                            Title = "Demo Ticket of type Story #419",
+                            Type = 2
                         },
                         new
                         {
                             Id = 420,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #420.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #420"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #420",
+                            Type = 0
                         },
                         new
                         {
                             Id = 421,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #421.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #421"
+                            Title = "Demo Ticket of type Story #421",
+                            Type = 2
                         },
                         new
                         {
                             Id = 422,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #422.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #422"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #422",
+                            Type = 1
                         },
                         new
                         {
                             Id = 423,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #423.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #423"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #423",
+                            Type = 1
                         },
                         new
                         {
                             Id = 424,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #424.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #424"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #424",
+                            Type = 2
                         },
                         new
                         {
                             Id = 425,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #425.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #425"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #425",
+                            Type = 0
                         },
                         new
                         {
                             Id = 426,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #426.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #426"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #426",
+                            Type = 2
                         },
                         new
                         {
                             Id = 427,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #427.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #427"
+                            Title = "Demo Ticket of type Task #427",
+                            Type = 1
                         },
                         new
                         {
                             Id = 428,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #428.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #428"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #428",
+                            Type = 2
                         },
                         new
                         {
                             Id = 429,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #429.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #429"
+                            Title = "Demo Ticket of type Story #429",
+                            Type = 2
                         },
                         new
                         {
                             Id = 430,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #430.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #430"
+                            Title = "Demo Ticket of type Story #430",
+                            Type = 2
                         },
                         new
                         {
                             Id = 431,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #431.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket #431"
+                            Title = "Demo Ticket of type Task #431",
+                            Type = 1
                         },
                         new
                         {
                             Id = 432,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #432.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #432"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #432",
+                            Type = 1
                         },
                         new
                         {
                             Id = 433,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #433.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #433"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #433",
+                            Type = 1
                         },
                         new
                         {
                             Id = 434,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #434.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #434"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #434",
+                            Type = 2
                         },
                         new
                         {
                             Id = 435,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #435.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #435"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #435",
+                            Type = 2
                         },
                         new
                         {
                             Id = 436,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #436.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket #436"
+                            Title = "Demo Ticket of type Task #436",
+                            Type = 1
                         },
                         new
                         {
                             Id = 437,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #437.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #437"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #437",
+                            Type = 0
                         },
                         new
                         {
                             Id = 438,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #438.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #438"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #438",
+                            Type = 0
                         },
                         new
                         {
                             Id = 439,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #439.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket #439"
+                            Title = "Demo Ticket of type Task #439",
+                            Type = 1
                         },
                         new
                         {
                             Id = 440,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #440.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #440"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #440",
+                            Type = 0
                         },
                         new
                         {
                             Id = 441,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #441.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #441"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #441",
+                            Type = 0
                         },
                         new
                         {
                             Id = 442,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #442.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #442"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #442",
+                            Type = 1
                         },
                         new
                         {
                             Id = 443,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #443.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #443"
+                            Title = "Demo Ticket of type Task #443",
+                            Type = 1
                         },
                         new
                         {
                             Id = 444,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #444.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #444"
+                            Title = "Demo Ticket of type Task #444",
+                            Type = 1
                         },
                         new
                         {
                             Id = 445,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #445.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #445"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #445",
+                            Type = 1
                         },
                         new
                         {
                             Id = 446,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #446.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #446"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #446",
+                            Type = 1
                         },
                         new
                         {
                             Id = 447,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #447.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #447"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #447",
+                            Type = 1
                         },
                         new
                         {
                             Id = 448,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #448.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #448"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #448",
+                            Type = 0
                         },
                         new
                         {
                             Id = 449,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #449.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #449"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #449",
+                            Type = 0
                         },
                         new
                         {
                             Id = 450,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #450.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #450"
+                            Title = "Demo Ticket of type Bug #450",
+                            Type = 0
                         },
                         new
                         {
                             Id = 451,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #451.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #451"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #451",
+                            Type = 1
                         },
                         new
                         {
                             Id = 452,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #452.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket #452"
+                            Title = "Demo Ticket of type Task #452",
+                            Type = 1
                         },
                         new
                         {
                             Id = 453,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #453.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #453"
+                            Title = "Demo Ticket of type Story #453",
+                            Type = 2
                         },
                         new
                         {
                             Id = 454,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #454.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #454"
+                            Title = "Demo Ticket of type Story #454",
+                            Type = 2
                         },
                         new
                         {
                             Id = 455,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #455.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #455"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #455",
+                            Type = 2
                         },
                         new
                         {
                             Id = 456,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #456.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #456"
+                            Title = "Demo Ticket of type Task #456",
+                            Type = 1
                         },
                         new
                         {
                             Id = 457,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #457.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #457"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #457",
+                            Type = 1
                         },
                         new
                         {
                             Id = 458,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #458.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #458"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #458",
+                            Type = 0
                         },
                         new
                         {
                             Id = 459,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #459.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #459"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #459",
+                            Type = 1
                         },
                         new
                         {
                             Id = 460,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #460.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #460"
+                            Title = "Demo Ticket of type Task #460",
+                            Type = 1
                         },
                         new
                         {
                             Id = 461,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #461.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #461"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #461",
+                            Type = 1
                         },
                         new
                         {
                             Id = 462,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #462.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #462"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #462",
+                            Type = 1
                         },
                         new
                         {
                             Id = 463,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #463.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket #463"
+                            Title = "Demo Ticket of type Bug #463",
+                            Type = 0
                         },
                         new
                         {
                             Id = 464,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #464.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #464"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #464",
+                            Type = 2
                         },
                         new
                         {
                             Id = 465,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #465.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket #465"
+                            Title = "Demo Ticket of type Story #465",
+                            Type = 2
                         },
                         new
                         {
                             Id = 466,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #466.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #466"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #466",
+                            Type = 0
                         },
                         new
                         {
                             Id = 467,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #467.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #467"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #467",
+                            Type = 1
                         },
                         new
                         {
                             Id = 468,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #468.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #468"
+                            Title = "Demo Ticket of type Task #468",
+                            Type = 1
                         },
                         new
                         {
                             Id = 469,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #469.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #469"
+                            Title = "Demo Ticket of type Bug #469",
+                            Type = 0
                         },
                         new
                         {
                             Id = 470,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #470.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket #470"
+                            Title = "Demo Ticket of type Bug #470",
+                            Type = 0
                         },
                         new
                         {
                             Id = 471,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #471.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #471"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #471",
+                            Type = 1
                         },
                         new
                         {
                             Id = 472,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #472.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #472"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #472",
+                            Type = 0
                         },
                         new
                         {
                             Id = 473,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #473.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #473"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #473",
+                            Type = 0
                         },
                         new
                         {
                             Id = 474,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #474.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #474"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #474",
+                            Type = 2
                         },
                         new
                         {
                             Id = 475,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #475.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #475"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #475",
+                            Type = 2
                         },
                         new
                         {
                             Id = 476,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #476.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #476"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #476",
+                            Type = 2
                         },
                         new
                         {
                             Id = 477,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #477.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #477"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #477",
+                            Type = 2
                         },
                         new
                         {
                             Id = 478,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #478.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket #478"
+                            Title = "Demo Ticket of type Task #478",
+                            Type = 1
                         },
                         new
                         {
                             Id = 479,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #479.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #479"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #479",
+                            Type = 1
                         },
                         new
                         {
                             Id = 480,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #480.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #480"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #480",
+                            Type = 0
                         },
                         new
                         {
                             Id = 481,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #481.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #481"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #481",
+                            Type = 2
                         },
                         new
                         {
                             Id = 482,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #482.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #482"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #482",
+                            Type = 0
                         },
                         new
                         {
                             Id = 483,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #483.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #483"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #483",
+                            Type = 1
                         },
                         new
                         {
                             Id = 484,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #484.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #484"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #484",
+                            Type = 0
                         },
                         new
                         {
                             Id = 485,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #485.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #485"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #485",
+                            Type = 2
                         },
                         new
                         {
                             Id = 486,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #486.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #486"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #486",
+                            Type = 2
                         },
                         new
                         {
                             Id = 487,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #487.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #487"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #487",
+                            Type = 2
                         },
                         new
                         {
                             Id = 488,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #488.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #488"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #488",
+                            Type = 1
                         },
                         new
                         {
                             Id = 489,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #489.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket #489"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #489",
+                            Type = 2
                         },
                         new
                         {
                             Id = 490,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #490.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket #490"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #490",
+                            Type = 2
                         },
                         new
                         {
                             Id = 491,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #491.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket #491"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #491",
+                            Type = 2
                         },
                         new
                         {
                             Id = 492,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #492.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #492"
+                            Title = "Demo Ticket of type Task #492",
+                            Type = 1
                         },
                         new
                         {
                             Id = 493,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #493.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #493"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #493",
+                            Type = 1
                         },
                         new
                         {
                             Id = 494,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #494.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #494"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #494",
+                            Type = 0
                         },
                         new
                         {
                             Id = 495,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #495.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #495"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #495",
+                            Type = 0
                         },
                         new
                         {
                             Id = 496,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #496.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #496"
+                            Title = "Demo Ticket of type Task #496",
+                            Type = 1
                         },
                         new
                         {
                             Id = 497,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #497.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #497"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #497",
+                            Type = 2
                         },
                         new
                         {
                             Id = 498,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #498.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #498"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #498",
+                            Type = 0
                         },
                         new
                         {
                             Id = 499,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #499.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #499"
+                            Title = "Demo Ticket of type Bug #499",
+                            Type = 0
                         },
                         new
                         {
                             Id = 500,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #500.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #500"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #500",
+                            Type = 1
                         },
                         new
                         {
                             Id = 501,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #501.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #501"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #501",
+                            Type = 0
                         },
                         new
                         {
                             Id = 502,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #502.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #502"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #502",
+                            Type = 2
                         },
                         new
                         {
                             Id = 503,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #503.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #503"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #503",
+                            Type = 2
                         },
                         new
                         {
                             Id = 504,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #504.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #504"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #504",
+                            Type = 1
                         },
                         new
                         {
                             Id = 505,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #505.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #505"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #505",
+                            Type = 0
                         },
                         new
                         {
                             Id = 506,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #506.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #506"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #506",
+                            Type = 0
                         },
                         new
                         {
                             Id = 507,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #507.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #507"
+                            Title = "Demo Ticket of type Task #507",
+                            Type = 1
                         },
                         new
                         {
                             Id = 508,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #508.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #508"
+                            Title = "Demo Ticket of type Bug #508",
+                            Type = 0
                         },
                         new
                         {
                             Id = 509,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #509.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #509"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #509",
+                            Type = 1
                         },
                         new
                         {
                             Id = 510,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #510.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #510"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #510",
+                            Type = 0
                         },
                         new
                         {
                             Id = 511,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #511.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #511"
+                            Title = "Demo Ticket of type Story #511",
+                            Type = 2
                         },
                         new
                         {
                             Id = 512,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #512.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #512"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #512",
+                            Type = 0
                         },
                         new
                         {
                             Id = 513,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #513.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #513"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #513",
+                            Type = 0
                         },
                         new
                         {
                             Id = 514,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #514.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #514"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #514",
+                            Type = 0
                         },
                         new
                         {
                             Id = 515,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #515.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #515"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #515",
+                            Type = 2
                         },
                         new
                         {
                             Id = 516,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #516.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #516"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #516",
+                            Type = 2
                         },
                         new
                         {
                             Id = 517,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #517.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #517"
+                            Title = "Demo Ticket of type Task #517",
+                            Type = 1
                         },
                         new
                         {
                             Id = 518,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #518.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #518"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #518",
+                            Type = 1
                         },
                         new
                         {
                             Id = 519,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #519.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #519"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #519",
+                            Type = 0
                         },
                         new
                         {
                             Id = 520,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #520.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #520"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #520",
+                            Type = 1
                         },
                         new
                         {
                             Id = 521,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #521.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #521"
+                            Title = "Demo Ticket of type Task #521",
+                            Type = 1
                         },
                         new
                         {
                             Id = 522,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #522.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #522"
+                            Title = "Demo Ticket of type Story #522",
+                            Type = 2
                         },
                         new
                         {
                             Id = 523,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #523.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #523"
+                            Title = "Demo Ticket of type Story #523",
+                            Type = 2
                         },
                         new
                         {
                             Id = 524,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #524.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #524"
+                            Title = "Demo Ticket of type Bug #524",
+                            Type = 0
                         },
                         new
                         {
                             Id = 525,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #525.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #525"
+                            Title = "Demo Ticket of type Bug #525",
+                            Type = 0
                         },
                         new
                         {
                             Id = 526,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #526.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #526"
+                            Title = "Demo Ticket of type Bug #526",
+                            Type = 0
                         },
                         new
                         {
                             Id = 527,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #527.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #527"
+                            Title = "Demo Ticket of type Task #527",
+                            Type = 1
                         },
                         new
                         {
                             Id = 528,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #528.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #528"
+                            Title = "Demo Ticket of type Task #528",
+                            Type = 1
                         },
                         new
                         {
                             Id = 529,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #529.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #529"
+                            Title = "Demo Ticket of type Task #529",
+                            Type = 1
                         },
                         new
                         {
                             Id = 530,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #530.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #530"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #530",
+                            Type = 2
                         },
                         new
                         {
                             Id = 531,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #531.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #531"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #531",
+                            Type = 0
                         },
                         new
                         {
                             Id = 532,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #532.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #532"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #532",
+                            Type = 0
                         },
                         new
                         {
                             Id = 533,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #533.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #533"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #533",
+                            Type = 2
                         },
                         new
                         {
                             Id = 534,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #534.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #534"
+                            Title = "Demo Ticket of type Bug #534",
+                            Type = 0
                         },
                         new
                         {
                             Id = 535,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #535.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #535"
+                            Title = "Demo Ticket of type Bug #535",
+                            Type = 0
                         },
                         new
                         {
                             Id = 536,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #536.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #536"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #536",
+                            Type = 2
                         },
                         new
                         {
                             Id = 537,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #537.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #537"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #537",
+                            Type = 2
                         },
                         new
                         {
                             Id = 538,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #538.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #538"
+                            Title = "Demo Ticket of type Task #538",
+                            Type = 1
                         },
                         new
                         {
                             Id = 539,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #539.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #539"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #539",
+                            Type = 2
                         },
                         new
                         {
                             Id = 540,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #540.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #540"
+                            Title = "Demo Ticket of type Bug #540",
+                            Type = 0
                         },
                         new
                         {
                             Id = 541,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #541.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #541"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #541",
+                            Type = 0
                         },
                         new
                         {
                             Id = 542,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #542.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #542"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #542",
+                            Type = 0
                         },
                         new
                         {
                             Id = 543,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #543.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #543"
+                            Title = "Demo Ticket of type Story #543",
+                            Type = 2
                         },
                         new
                         {
                             Id = 544,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #544.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #544"
+                            Title = "Demo Ticket of type Task #544",
+                            Type = 1
                         },
                         new
                         {
                             Id = 545,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #545.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #545"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #545",
+                            Type = 2
                         },
                         new
                         {
                             Id = 546,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #546.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #546"
+                            Title = "Demo Ticket of type Task #546",
+                            Type = 1
                         },
                         new
                         {
                             Id = 547,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #547.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #547"
+                            Title = "Demo Ticket of type Bug #547",
+                            Type = 0
                         },
                         new
                         {
                             Id = 548,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #548.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #548"
+                            Title = "Demo Ticket of type Bug #548",
+                            Type = 0
                         },
                         new
                         {
                             Id = 549,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #549.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #549"
+                            Title = "Demo Ticket of type Story #549",
+                            Type = 2
                         },
                         new
                         {
                             Id = 550,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #550.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #550"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #550",
+                            Type = 2
                         },
                         new
                         {
                             Id = 551,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #551.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #551"
+                            Title = "Demo Ticket of type Bug #551",
+                            Type = 0
                         },
                         new
                         {
                             Id = 552,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #552.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #552"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #552",
+                            Type = 2
                         },
                         new
                         {
                             Id = 553,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #553.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #553"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #553",
+                            Type = 2
                         },
                         new
                         {
                             Id = 554,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #554.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #554"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #554",
+                            Type = 1
                         },
                         new
                         {
                             Id = 555,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #555.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #555"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #555",
+                            Type = 1
                         },
                         new
                         {
                             Id = 556,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #556.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #556"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #556",
+                            Type = 1
                         },
                         new
                         {
                             Id = 557,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #557.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #557"
+                            Title = "Demo Ticket of type Bug #557",
+                            Type = 0
                         },
                         new
                         {
                             Id = 558,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #558.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #558"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #558",
+                            Type = 0
                         },
                         new
                         {
                             Id = 559,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #559.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #559"
+                            Title = "Demo Ticket of type Task #559",
+                            Type = 1
                         },
                         new
                         {
                             Id = 560,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #560.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #560"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #560",
+                            Type = 2
                         },
                         new
                         {
                             Id = 561,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #561.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #561"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #561",
+                            Type = 1
                         },
                         new
                         {
                             Id = 562,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #562.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #562"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #562",
+                            Type = 2
                         },
                         new
                         {
                             Id = 563,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #563.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #563"
+                            Title = "Demo Ticket of type Task #563",
+                            Type = 1
                         },
                         new
                         {
                             Id = 564,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #564.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #564"
+                            Title = "Demo Ticket of type Bug #564",
+                            Type = 0
                         },
                         new
                         {
                             Id = 565,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #565.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #565"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #565",
+                            Type = 0
                         },
                         new
                         {
                             Id = 566,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #566.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #566"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #566",
+                            Type = 1
                         },
                         new
                         {
                             Id = 567,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #567.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #567"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #567",
+                            Type = 0
                         },
                         new
                         {
                             Id = 568,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #568.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #568"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #568",
+                            Type = 1
                         },
                         new
                         {
                             Id = 569,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #569.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #569"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #569",
+                            Type = 2
                         },
                         new
                         {
                             Id = 570,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #570.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #570"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #570",
+                            Type = 2
                         },
                         new
                         {
                             Id = 571,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #571.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #571"
+                            Title = "Demo Ticket of type Story #571",
+                            Type = 2
                         },
                         new
                         {
                             Id = 572,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #572.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #572"
+                            Title = "Demo Ticket of type Bug #572",
+                            Type = 0
                         },
                         new
                         {
                             Id = 573,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #573.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #573"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #573",
+                            Type = 2
                         },
                         new
                         {
                             Id = 574,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #574.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #574"
+                            Title = "Demo Ticket of type Task #574",
+                            Type = 1
                         },
                         new
                         {
                             Id = 575,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #575.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #575"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #575",
+                            Type = 2
                         },
                         new
                         {
                             Id = 576,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #576.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #576"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #576",
+                            Type = 2
                         },
                         new
                         {
                             Id = 577,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #577.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #577"
+                            Title = "Demo Ticket of type Task #577",
+                            Type = 1
                         },
                         new
                         {
                             Id = 578,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #578.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #578"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #578",
+                            Type = 0
                         },
                         new
                         {
                             Id = 579,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #579.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #579"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #579",
+                            Type = 0
                         },
                         new
                         {
                             Id = 580,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #580.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #580"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #580",
+                            Type = 2
                         },
                         new
                         {
                             Id = 581,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #581.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #581"
+                            Title = "Demo Ticket of type Story #581",
+                            Type = 2
                         },
                         new
                         {
                             Id = 582,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #582.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #582"
+                            Title = "Demo Ticket of type Bug #582",
+                            Type = 0
                         },
                         new
                         {
                             Id = 583,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #583.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #583"
+                            Title = "Demo Ticket of type Task #583",
+                            Type = 1
                         },
                         new
                         {
                             Id = 584,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #584.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #584"
+                            Title = "Demo Ticket of type Bug #584",
+                            Type = 0
                         },
                         new
                         {
                             Id = 585,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #585.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #585"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #585",
+                            Type = 1
                         },
                         new
                         {
                             Id = 586,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #586.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #586"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #586",
+                            Type = 0
                         },
                         new
                         {
                             Id = 587,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #587.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #587"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #587",
+                            Type = 2
                         },
                         new
                         {
                             Id = 588,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #588.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #588"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #588",
+                            Type = 2
                         },
                         new
                         {
                             Id = 589,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #589.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #589"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #589",
+                            Type = 2
                         },
                         new
                         {
                             Id = 590,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #590.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #590"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #590",
+                            Type = 0
                         },
                         new
                         {
                             Id = 591,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #591.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #591"
+                            Title = "Demo Ticket of type Task #591",
+                            Type = 1
                         },
                         new
                         {
                             Id = 592,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #592.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #592"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #592",
+                            Type = 1
                         },
                         new
                         {
                             Id = 593,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #593.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #593"
+                            Title = "Demo Ticket of type Task #593",
+                            Type = 1
                         },
                         new
                         {
                             Id = 594,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #594.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #594"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #594",
+                            Type = 2
                         },
                         new
                         {
                             Id = 595,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #595.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #595"
+                            Title = "Demo Ticket of type Story #595",
+                            Type = 2
                         },
                         new
                         {
                             Id = 596,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #596.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #596"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #596",
+                            Type = 2
                         },
                         new
                         {
                             Id = 597,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #597.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #597"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #597",
+                            Type = 2
                         },
                         new
                         {
                             Id = 598,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #598.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #598"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #598",
+                            Type = 2
                         },
                         new
                         {
                             Id = 599,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #599.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #599"
+                            Title = "Demo Ticket of type Bug #599",
+                            Type = 0
                         },
                         new
                         {
                             Id = 600,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #600.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #600"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #600",
+                            Type = 2
                         },
                         new
                         {
                             Id = 601,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #601.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #601"
+                            Title = "Demo Ticket of type Story #601",
+                            Type = 2
                         },
                         new
                         {
                             Id = 602,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #602.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #602"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #602",
+                            Type = 0
                         },
                         new
                         {
                             Id = 603,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #603.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #603"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #603",
+                            Type = 1
                         },
                         new
                         {
                             Id = 604,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #604.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #604"
+                            Title = "Demo Ticket of type Task #604",
+                            Type = 1
                         },
                         new
                         {
                             Id = 605,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #605.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #605"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #605",
+                            Type = 0
                         },
                         new
                         {
                             Id = 606,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #606.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #606"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #606",
+                            Type = 1
                         },
                         new
                         {
                             Id = 607,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #607.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #607"
+                            Title = "Demo Ticket of type Story #607",
+                            Type = 2
                         },
                         new
                         {
                             Id = 608,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #608.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #608"
+                            Title = "Demo Ticket of type Story #608",
+                            Type = 2
                         },
                         new
                         {
                             Id = 609,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #609.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #609"
+                            Title = "Demo Ticket of type Task #609",
+                            Type = 1
                         },
                         new
                         {
                             Id = 610,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #610.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #610"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #610",
+                            Type = 0
                         },
                         new
                         {
                             Id = 611,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #611.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #611"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #611",
+                            Type = 2
                         },
                         new
                         {
                             Id = 612,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #612.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #612"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #612",
+                            Type = 2
                         },
                         new
                         {
                             Id = 613,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #613.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #613"
+                            Title = "Demo Ticket of type Story #613",
+                            Type = 2
                         },
                         new
                         {
                             Id = 614,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #614.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #614"
+                            Title = "Demo Ticket of type Story #614",
+                            Type = 2
                         },
                         new
                         {
                             Id = 615,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #615.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #615"
+                            Title = "Demo Ticket of type Task #615",
+                            Type = 1
                         },
                         new
                         {
                             Id = 616,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #616.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #616"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #616",
+                            Type = 1
                         },
                         new
                         {
                             Id = 617,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #617.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #617"
+                            Title = "Demo Ticket of type Bug #617",
+                            Type = 0
                         },
                         new
                         {
                             Id = 618,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #618.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #618"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #618",
+                            Type = 1
                         },
                         new
                         {
                             Id = 619,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #619.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #619"
+                            Title = "Demo Ticket of type Task #619",
+                            Type = 1
                         },
                         new
                         {
                             Id = 620,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #620.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #620"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #620",
+                            Type = 2
                         },
                         new
                         {
                             Id = 621,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #621.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #621"
+                            Title = "Demo Ticket of type Task #621",
+                            Type = 1
                         },
                         new
                         {
                             Id = 622,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #622.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #622"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #622",
+                            Type = 2
                         },
                         new
                         {
                             Id = 623,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #623.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #623"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #623",
+                            Type = 2
                         },
                         new
                         {
                             Id = 624,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #624.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #624"
+                            Title = "Demo Ticket of type Bug #624",
+                            Type = 0
                         },
                         new
                         {
                             Id = 625,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #625.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #625"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #625",
+                            Type = 0
                         },
                         new
                         {
                             Id = 626,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #626.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #626"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #626",
+                            Type = 1
                         },
                         new
                         {
                             Id = 627,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #627.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #627"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #627",
+                            Type = 2
                         },
                         new
                         {
                             Id = 628,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #628.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #628"
+                            Title = "Demo Ticket of type Bug #628",
+                            Type = 0
                         },
                         new
                         {
                             Id = 629,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #629.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #629"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #629",
+                            Type = 1
                         },
                         new
                         {
                             Id = 630,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #630.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #630"
+                            Title = "Demo Ticket of type Story #630",
+                            Type = 2
                         },
                         new
                         {
                             Id = 631,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #631.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #631"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #631",
+                            Type = 2
                         },
                         new
                         {
                             Id = 632,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #632.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #632"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #632",
+                            Type = 1
                         },
                         new
                         {
                             Id = 633,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #633.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #633"
+                            Title = "Demo Ticket of type Bug #633",
+                            Type = 0
                         },
                         new
                         {
                             Id = 634,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #634.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #634"
+                            Title = "Demo Ticket of type Bug #634",
+                            Type = 0
                         },
                         new
                         {
                             Id = 635,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #635.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #635"
+                            Title = "Demo Ticket of type Bug #635",
+                            Type = 0
                         },
                         new
                         {
                             Id = 636,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #636.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #636"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #636",
+                            Type = 2
                         },
                         new
                         {
                             Id = 637,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #637.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #637"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #637",
+                            Type = 0
                         },
                         new
                         {
                             Id = 638,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #638.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #638"
+                            Title = "Demo Ticket of type Bug #638",
+                            Type = 0
                         },
                         new
                         {
                             Id = 639,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #639.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #639"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #639",
+                            Type = 0
                         },
                         new
                         {
                             Id = 640,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #640.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #640"
+                            Title = "Demo Ticket of type Bug #640",
+                            Type = 0
                         },
                         new
                         {
                             Id = 641,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #641.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #641"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #641",
+                            Type = 0
                         },
                         new
                         {
                             Id = 642,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #642.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #642"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #642",
+                            Type = 2
                         },
                         new
                         {
                             Id = 643,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #643.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #643"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #643",
+                            Type = 1
                         },
                         new
                         {
                             Id = 644,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #644.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #644"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #644",
+                            Type = 1
                         },
                         new
                         {
                             Id = 645,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #645.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #645"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #645",
+                            Type = 1
                         },
                         new
                         {
                             Id = 646,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #646.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #646"
+                            Title = "Demo Ticket of type Bug #646",
+                            Type = 0
                         },
                         new
                         {
                             Id = 647,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #647.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #647"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #647",
+                            Type = 0
                         },
                         new
                         {
                             Id = 648,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #648.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #648"
+                            Title = "Demo Ticket of type Bug #648",
+                            Type = 0
                         },
                         new
                         {
                             Id = 649,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #649.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #649"
+                            Title = "Demo Ticket of type Bug #649",
+                            Type = 0
                         },
                         new
                         {
                             Id = 650,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #650.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #650"
+                            Title = "Demo Ticket of type Bug #650",
+                            Type = 0
                         },
                         new
                         {
                             Id = 651,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #651.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #651"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #651",
+                            Type = 1
                         },
                         new
                         {
                             Id = 652,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #652.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #652"
+                            Title = "Demo Ticket of type Task #652",
+                            Type = 1
                         },
                         new
                         {
                             Id = 653,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #653.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #653"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #653",
+                            Type = 0
                         },
                         new
                         {
                             Id = 654,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #654.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #654"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #654",
+                            Type = 0
                         },
                         new
                         {
                             Id = 655,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #655.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #655"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #655",
+                            Type = 2
                         },
                         new
                         {
                             Id = 656,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #656.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #656"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #656",
+                            Type = 1
                         },
                         new
                         {
                             Id = 657,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #657.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #657"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #657",
+                            Type = 1
                         },
                         new
                         {
                             Id = 658,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #658.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #658"
+                            Title = "Demo Ticket of type Task #658",
+                            Type = 1
                         },
                         new
                         {
                             Id = 659,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #659.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #659"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #659",
+                            Type = 0
                         },
                         new
                         {
                             Id = 660,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #660.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #660"
+                            Title = "Demo Ticket of type Bug #660",
+                            Type = 0
                         },
                         new
                         {
                             Id = 661,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #661.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #661"
+                            Title = "Demo Ticket of type Bug #661",
+                            Type = 0
                         },
                         new
                         {
                             Id = 662,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #662.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #662"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #662",
+                            Type = 0
                         },
                         new
                         {
                             Id = 663,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #663.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #663"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #663",
+                            Type = 1
                         },
                         new
                         {
                             Id = 664,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #664.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #664"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #664",
+                            Type = 0
                         },
                         new
                         {
                             Id = 665,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #665.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #665"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #665",
+                            Type = 2
                         },
                         new
                         {
                             Id = 666,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #666.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #666"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #666",
+                            Type = 0
                         },
                         new
                         {
                             Id = 667,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #667.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #667"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #667",
+                            Type = 0
                         },
                         new
                         {
                             Id = 668,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #668.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #668"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #668",
+                            Type = 0
                         },
                         new
                         {
                             Id = 669,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #669.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #669"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #669",
+                            Type = 2
                         },
                         new
                         {
                             Id = 670,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #670.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #670"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #670",
+                            Type = 0
                         },
                         new
                         {
                             Id = 671,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #671.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #671"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #671",
+                            Type = 0
                         },
                         new
                         {
                             Id = 672,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #672.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #672"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #672",
+                            Type = 0
                         },
                         new
                         {
                             Id = 673,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #673.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #673"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #673",
+                            Type = 2
                         },
                         new
                         {
                             Id = 674,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #674.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #674"
+                            Title = "Demo Ticket of type Story #674",
+                            Type = 2
                         },
                         new
                         {
                             Id = 675,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #675.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #675"
+                            Title = "Demo Ticket of type Bug #675",
+                            Type = 0
                         },
                         new
                         {
                             Id = 676,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #676.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #676"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #676",
+                            Type = 1
                         },
                         new
                         {
                             Id = 677,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #677.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #677"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #677",
+                            Type = 1
                         },
                         new
                         {
                             Id = 678,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #678.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #678"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #678",
+                            Type = 2
                         },
                         new
                         {
                             Id = 679,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #679.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #679"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #679",
+                            Type = 2
                         },
                         new
                         {
                             Id = 680,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #680.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #680"
+                            Title = "Demo Ticket of type Bug #680",
+                            Type = 0
                         },
                         new
                         {
                             Id = 681,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #681.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #681"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #681",
+                            Type = 0
                         },
                         new
                         {
                             Id = 682,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #682.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #682"
+                            Title = "Demo Ticket of type Bug #682",
+                            Type = 0
                         },
                         new
                         {
                             Id = 683,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #683.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #683"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #683",
+                            Type = 1
                         },
                         new
                         {
                             Id = 684,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #684.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #684"
+                            Title = "Demo Ticket of type Bug #684",
+                            Type = 0
                         },
                         new
                         {
                             Id = 685,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #685.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #685"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #685",
+                            Type = 1
                         },
                         new
                         {
                             Id = 686,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #686.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #686"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #686",
+                            Type = 2
                         },
                         new
                         {
                             Id = 687,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #687.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #687"
+                            Title = "Demo Ticket of type Story #687",
+                            Type = 2
                         },
                         new
                         {
                             Id = 688,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #688.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #688"
+                            Title = "Demo Ticket of type Story #688",
+                            Type = 2
                         },
                         new
                         {
                             Id = 689,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #689.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #689"
+                            Title = "Demo Ticket of type Story #689",
+                            Type = 2
                         },
                         new
                         {
                             Id = 690,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #690.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #690"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #690",
+                            Type = 1
                         },
                         new
                         {
                             Id = 691,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #691.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #691"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #691",
+                            Type = 0
                         },
                         new
                         {
                             Id = 692,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #692.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #692"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #692",
+                            Type = 2
                         },
                         new
                         {
                             Id = 693,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #693.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #693"
+                            Title = "Demo Ticket of type Task #693",
+                            Type = 1
                         },
                         new
                         {
                             Id = 694,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #694.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #694"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #694",
+                            Type = 2
                         },
                         new
                         {
                             Id = 695,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #695.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #695"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #695",
+                            Type = 1
                         },
                         new
                         {
                             Id = 696,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #696.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #696"
+                            Title = "Demo Ticket of type Task #696",
+                            Type = 1
                         },
                         new
                         {
                             Id = 697,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #697.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #697"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #697",
+                            Type = 1
                         },
                         new
                         {
                             Id = 698,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #698.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #698"
+                            Title = "Demo Ticket of type Bug #698",
+                            Type = 0
                         },
                         new
                         {
                             Id = 699,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #699.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #699"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #699",
+                            Type = 0
                         },
                         new
                         {
                             Id = 700,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #700.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #700"
+                            Title = "Demo Ticket of type Story #700",
+                            Type = 2
                         },
                         new
                         {
                             Id = 701,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #701.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #701"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #701",
+                            Type = 0
                         },
                         new
                         {
                             Id = 702,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #702.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #702"
+                            Title = "Demo Ticket of type Story #702",
+                            Type = 2
                         },
                         new
                         {
                             Id = 703,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #703.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #703"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #703",
+                            Type = 2
                         },
                         new
                         {
                             Id = 704,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #704.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #704"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #704",
+                            Type = 0
                         },
                         new
                         {
                             Id = 705,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #705.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #705"
+                            Title = "Demo Ticket of type Story #705",
+                            Type = 2
                         },
                         new
                         {
                             Id = 706,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #706.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #706"
+                            Title = "Demo Ticket of type Story #706",
+                            Type = 2
                         },
                         new
                         {
                             Id = 707,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #707.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #707"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #707",
+                            Type = 2
                         },
                         new
                         {
                             Id = 708,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #708.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #708"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #708",
+                            Type = 1
                         },
                         new
                         {
                             Id = 709,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #709.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #709"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #709",
+                            Type = 0
                         },
                         new
                         {
                             Id = 710,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #710.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #710"
+                            Title = "Demo Ticket of type Bug #710",
+                            Type = 0
                         },
                         new
                         {
                             Id = 711,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #711.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #711"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #711",
+                            Type = 0
                         },
                         new
                         {
                             Id = 712,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #712.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #712"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #712",
+                            Type = 1
                         },
                         new
                         {
                             Id = 713,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #713.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #713"
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #713",
+                            Type = 0
                         },
                         new
                         {
                             Id = 714,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #714.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #714"
+                            Title = "Demo Ticket of type Task #714",
+                            Type = 1
                         },
                         new
                         {
                             Id = 715,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #715.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket #715"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #715",
+                            Type = 0
                         },
                         new
                         {
                             Id = 716,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #716.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #716"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #716",
+                            Type = 2
                         },
                         new
                         {
                             Id = 717,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #717.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket #717"
+                            Title = "Demo Ticket of type Bug #717",
+                            Type = 0
                         },
                         new
                         {
                             Id = 718,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #718.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #718"
+                            Title = "Demo Ticket of type Bug #718",
+                            Type = 0
                         },
                         new
                         {
                             Id = 719,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #719.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #719"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #719",
+                            Type = 1
                         },
                         new
                         {
                             Id = 720,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #720.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #720"
+                            Title = "Demo Ticket of type Task #720",
+                            Type = 1
                         },
                         new
                         {
                             Id = 721,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #721.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket #721"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #721",
+                            Type = 1
                         },
                         new
                         {
                             Id = 722,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #722.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #722"
+                            Title = "Demo Ticket of type Task #722",
+                            Type = 1
                         },
                         new
                         {
                             Id = 723,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #723.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket #723"
+                            Title = "Demo Ticket of type Bug #723",
+                            Type = 0
                         },
                         new
                         {
                             Id = 724,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #724.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket #724"
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #724",
+                            Type = 0
                         },
                         new
                         {
                             Id = 725,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #725.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket #725"
+                            Title = "Demo Ticket of type Task #725",
+                            Type = 1
                         },
                         new
                         {
                             Id = 726,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #726.",
                             ProjectId = 3,
                             StatusId = 3,
-                            Title = "Demo Ticket #726"
+                            Title = "Demo Ticket of type Bug #726",
+                            Type = 0
                         },
                         new
                         {
                             Id = 727,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #727.",
                             ProjectId = 3,
-                            StatusId = 1,
-                            Title = "Demo Ticket #727"
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #727",
+                            Type = 0
                         },
                         new
                         {
                             Id = 728,
-                            CreatedBy = "",
+                            CreatedBy = 0,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #728.",
                             ProjectId = 3,
                             StatusId = 2,
-                            Title = "Demo Ticket #728"
+                            Title = "Demo Ticket of type Task #728",
+                            Type = 1
                         });
                 });
 
@@ -3866,12 +4254,71 @@ namespace TaskSync.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TaskSync.Infrastructure.Entities.UserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ExternalUserId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Picture")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedBy = 0,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Email = "empty",
+                            Picture = "",
+                            Username = "Kerem Karacay"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedBy = 0,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Email = "empty",
+                            Picture = "",
+                            Username = "Deniz Aslansu"
+                        });
+                });
+
             modelBuilder.Entity("TaskSync.Infrastructure.Entities.ProjectMemberEntity", b =>
                 {
                     b.HasOne("TaskSync.Infrastructure.Entities.ProjectEntity", null)
                         .WithMany("ProjectMembers")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TaskSync.Infrastructure.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("TaskSync.Infrastructure.Entities.TicketCommentEntity", b =>

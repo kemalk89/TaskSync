@@ -9,6 +9,8 @@ public class TicketEntity : AuditedEntity
     public string Title { get; set; } = "";
     public string? Description { get; set; }
 
+    public TicketType Type { get; set; }
+
     public int ProjectId { get; set; }
     public int? StatusId { get; set; }
 
@@ -16,7 +18,7 @@ public class TicketEntity : AuditedEntity
 
     public ProjectEntity Project { get; set; } = null!;
 
-    public string? AssigneeId { get; set; }
+    public int? AssigneeId { get; set; }
 
     public TicketModel ToTicket(User? createdBy = null, User? assignee = null)
     {
@@ -31,7 +33,8 @@ public class TicketEntity : AuditedEntity
             CreatedDate = CreatedDate,
             ModifiedDate = ModifiedDate,
             Status = Status?.ToDomainObject(),
-            Project = Project.ToDomainObject()
+            Project = Project.ToDomainObject(),
+            Type = Type
         };
     }
 
@@ -40,3 +43,5 @@ public class TicketEntity : AuditedEntity
         return AssigneeId != null;
     }
 }
+
+

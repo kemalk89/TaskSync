@@ -1,29 +1,68 @@
-using System.Collections;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskSync.Controllers.Request;
 using TaskSync.Controllers.Response;
 using TaskSync.Domain.User;
 using TaskSync.Domain.Shared;
+using TaskSync.Infrastructure.Repositories;
 
 namespace TaskSync.Controllers;
 
 [Authorize]
 [ApiController]
 [Route("/api/[controller]")]
-public class UserController
+public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IUserRepository _userRepository;
+    private readonly IExternalUserRepository _externalUserRepository;
+    private readonly ILogger<UserController> _logger;
 
-    public UserController(IUserService userService)
+    public UserController(
+        IUserService userService, 
+        IUserRepository userRepository,
+        IExternalUserRepository externalUserRepository, 
+        ILogger<UserController> logger)
     {
         _userService = userService;
+        _userRepository = userRepository;
+        _externalUserRepository = externalUserRepository;
+        _logger = logger;
     }
 
+    /// <summary>
+    /// Will fetch external user and insert into this application's database. This endpoint should be called,
+    /// for example, after a successful user login.
+    /// </summary>
+    [HttpPost]
+    [Route("external")]
+    public async Task<ActionResult<string>> SyncExternalUser([FromBody] SyncExternalUserRequest request)
+    {
+        var externalUser = await _externalUserRepository.FindUserByIdFromExternalSourceAsync(request.ExternalUserId);
+        if (externalUser == null)
+        {
+            _logger.LogWarning("External data source returned no user for ID: {id}", request.ExternalUserId);
+            return NotFound();
+        }
+        
+        var user = await _userRepository.FindUserByExternalUserIdAsync(request.ExternalUserId);
+        if (user == null)
+        {
+            _logger.LogInformation("Adding new user with ID: {id}", request.ExternalUserId);
+            await _userRepository.SaveNewUserAsync(externalUser);
+            return Created();
+        }
+        
+        _logger.LogDebug("Updating data of external user with ID: {id}", request.ExternalUserId);
+
+        user.Email = externalUser.Email;
+        user.Picture = externalUser.Picture;
+        user.Username = externalUser.Username;
+        await _userRepository.UpdateUserAsync(user);
+
+        return Ok();
+    }
+    
     [HttpPost]
     public async Task<IEnumerable<UserResponse>> SearchUsersAsync([FromBody] SearchUserRequest req)
     {

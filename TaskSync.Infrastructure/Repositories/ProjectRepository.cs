@@ -29,9 +29,9 @@ public class ProjectRepository : IProjectRepository
             Visibility = command.Visibility,
         };
 
-        if (!string.IsNullOrWhiteSpace(command.ProjectManagerId))
+        if (command.ProjectManagerId != null)
         {
-            var projectManager = new ProjectMemberEntity { UserId = command.ProjectManagerId, Role = "ProjectManager" };
+            var projectManager = new ProjectMemberEntity { UserId = (int)command.ProjectManagerId, Role = "ProjectManager" };
             entity.ProjectMembers.Add(projectManager);
         }
         
@@ -51,6 +51,7 @@ public class ProjectRepository : IProjectRepository
         var skip = (pageNumber - 1) * pageSize;
 
         var records = _dbContext.Projects
+            .Include(p => p.ProjectMembers)
             .OrderBy(item => item.CreatedDate)
             .Skip(skip)
             .Take(pageSize)
@@ -58,11 +59,14 @@ public class ProjectRepository : IProjectRepository
 
         // fetch project managers
         var projectManagerIds = records
-            .Where(r => !string.IsNullOrWhiteSpace(r.GetProjectManagerId()))
-            .Select(r => r.GetProjectManagerId())
+            .Where(r => r.GetProjectManagerId() != null)
+            .Select(r => r.GetProjectManagerId()!.Value) // cannot be null because of the Where statement
             .Distinct()
             .ToArray();
-        var projectManagers = (await this._userRepository.FindUsersAsync(projectManagerIds)).ToDictionary(u => u.Id, u => u);
+
+        var projectManagers = 
+            (await this._userRepository.FindUsersAsync(projectManagerIds))
+            .ToDictionary(u => u.Id, u => u);
         var projects = records.Select(item => item.ToDomainObject(null, projectManagers));
         
         int total = _dbContext.Projects.Count();
@@ -89,9 +93,9 @@ public class ProjectRepository : IProjectRepository
             return null;
         }
 
-        var projectManagerMap = new Dictionary<string, User>();
-        var projectMembers = await _userRepository.FindUsersAsync(entity.GetProjectMemberIds().ToArray());
-        projectMembers.ToList().ForEach(m => projectManagerMap.Add(m.Id, m));    
+        var memberIds = entity.GetProjectMemberIds().ToArray();
+        var projectMembers = await _userRepository.FindUsersAsync(memberIds);
+        var projectManagerMap = projectMembers.ToList().ToDictionary(u => u.Id, u => u);
         
         var createdBy = await _userRepository.FindUserByIdAsync(entity.CreatedBy);
         return entity.ToDomainObject(createdBy, projectManagerMap);

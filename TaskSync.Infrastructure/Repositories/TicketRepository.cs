@@ -185,11 +185,11 @@ public class TicketRepository : ITicketRepository
 
         var assigneeIds = tickets
             .Where(t => t.HasAssignee())
-            .Select(t => t.AssigneeId);
+            .Select(t => t.AssigneeId.Value);
 
         var createdByIds = tickets.Select(t => t.CreatedBy);
 
-        var userIds = assigneeIds.Union(createdByIds);
+        var userIds = assigneeIds.Union<int>(createdByIds);
 
         User[]? users = null;
         if (userIds.Count() > 0)

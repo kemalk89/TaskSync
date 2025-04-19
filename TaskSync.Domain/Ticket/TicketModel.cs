@@ -16,5 +16,12 @@ public class TicketModel
 
     public Project.Project Project { get; set; } = null!;
     public TicketStatus? Status { get; set; }
+    public TicketType Type { get; set; }
+}
 
+public enum TicketType
+{
+    Bug,
+    Task,
+    Story
 }

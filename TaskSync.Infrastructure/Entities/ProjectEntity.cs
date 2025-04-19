@@ -11,20 +11,20 @@ public class ProjectEntity : AuditedEntity
     public ProjectVisibility? Visibility { get; set; }
     public ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = new List<ProjectMemberEntity>();
 
-    public string GetProjectManagerId()
+    public int? GetProjectManagerId()
     {
         var result =  ProjectMembers.FirstOrDefault(m => m.Role == "ProjectManager");
-        return result != null ? result.UserId : string.Empty;
+        return result?.UserId;
     }
     
-    public IEnumerable<string> GetProjectMemberIds()
+    public IEnumerable<int> GetProjectMemberIds()
     {
         return ProjectMembers.Select(m => m.UserId);
     }   
     
     public Project ToDomainObject(
         User? createdBy = null, 
-        IDictionary<string, User>? memberMap = null)
+        IDictionary<int, User>? memberMap = null)
     {
         var result = new Project
         {
