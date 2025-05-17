@@ -22,7 +22,7 @@ public class TicketRepository : ITicketRepository
         _userRepository = userRepository;
     }
 
-    public async Task<TicketModel?> CreateAsync(CreateTicketCommand cmd)
+    public async Task<int?> CreateAsync(CreateTicketCommand cmd)
     {
         var project = await _dbContext.Projects.FindAsync(cmd.ProjectId);
         if (project != null)
@@ -32,21 +32,13 @@ public class TicketRepository : ITicketRepository
                 Title = cmd.Title,
                 Description = cmd.Description,
                 Project = project,
-                AssigneeId = cmd.Assignee?.Id
+                AssigneeId = cmd.Assignee
             };
 
             await _dbContext.Tickets.AddAsync(ticket);
             await _dbContext.SaveChangesAsync();
 
-            return new TicketModel
-            {
-                Id = ticket.Id,
-                Title = ticket.Title,
-                Description = ticket.Description,
-                Assignee = cmd.Assignee,
-                ProjectId = ticket.Project.Id,
-                Project = ticket.Project.ToDomainObject(),
-            };
+            return ticket.Id;
         }
 
         return null;

@@ -16,7 +16,7 @@ public class TicketService : ITicketService
         _projectRepository = projectRepository;
     }
 
-    public async Task<TicketModel?> CreateTicketAsync(CreateTicketCommand cmd)
+    public async Task<int?> CreateTicketAsync(CreateTicketCommand cmd)
     {
         var project = await _projectRepository.GetByIdAsync(cmd.ProjectId);
         if (project == null)
@@ -24,8 +24,8 @@ public class TicketService : ITicketService
             throw new DomainException($"Trying to create a ticket for project with ID {cmd.ProjectId}. This project does not exist.");
         }
 
-        var ticket = await _ticketRepository.CreateAsync(cmd);
-        return ticket;
+        var ticketId = await _ticketRepository.CreateAsync(cmd);
+        return ticketId;
     }
 
     public async Task<TicketModel?> GetTicketByIdAsync(int id)

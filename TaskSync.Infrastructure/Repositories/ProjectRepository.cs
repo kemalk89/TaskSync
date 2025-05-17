@@ -57,17 +57,17 @@ public class ProjectRepository : IProjectRepository
             .Take(pageSize)
             .ToList();
 
-        // fetch project managers
-        var projectManagerIds = records
-            .Where(r => r.GetProjectManagerId() != null)
-            .Select(r => r.GetProjectManagerId()!.Value) // cannot be null because of the Where statement
+        // fetch project members
+        var projectMemberIds = records
+            .SelectMany(project => project.ProjectMembers)
+            .Select(projectMember => projectMember.UserId)
             .Distinct()
             .ToArray();
 
-        var projectManagers = 
-            (await this._userRepository.FindUsersAsync(projectManagerIds))
-            .ToDictionary(u => u.Id, u => u);
-        var projects = records.Select(item => item.ToDomainObject(null, projectManagers));
+        var projectMembers = await this._userRepository.FindUsersAsync(projectMemberIds.Distinct().ToArray());
+        
+        var projectMemberMap = projectMembers.ToDictionary(u => u.Id, u => u);
+        var projects = records.Select(item => item.ToDomainObject(null, projectMemberMap));
         
         int total = _dbContext.Projects.Count();
 

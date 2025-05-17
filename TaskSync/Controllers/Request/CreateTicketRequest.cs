@@ -13,7 +13,7 @@ public class CreateTicketRequest
 
     public string? Description { get; set; }
 
-    public UserRequest? Assignee { get; set; }
+    public int? Assignee { get; set; }
 
     public CreateTicketCommand ToCommand()
     {
@@ -22,7 +22,8 @@ public class CreateTicketRequest
             ProjectId = ProjectId,
             Description = Description,
             Title = Title,
-            Assignee = Assignee?.ToUser()
+            Assignee = Assignee
         };
     }
 }
+

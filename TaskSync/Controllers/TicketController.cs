@@ -49,20 +49,20 @@ public class TicketController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<TicketResponse>> CreateTicket([FromBody] CreateTicketRequest req)
+    public async Task<ActionResult<CreateTicketResponse>> CreateTicket([FromBody] CreateTicketRequest req)
     {
         try
         {
-            var ticket = await _ticketService.CreateTicketAsync(req.ToCommand());
-            if (ticket == null)
+            var ticketId = await _ticketService.CreateTicketAsync(req.ToCommand());
+            if (ticketId == null)
             {
                 return BadRequest("Ticket could not be created.");
             }
             
             return CreatedAtAction(
                 nameof(GetTicketById),
-                new { id = ticket.Id },
-                new TicketResponse(ticket));
+                new { id = ticketId },
+                new CreateTicketResponse { TicketId = ticketId.Value});
         }
         catch (DomainException e)
         {
@@ -97,7 +97,7 @@ public class TicketController : ControllerBase
             var commentResponse = new TicketCommentResponse(comment);
             return new ObjectResult(commentResponse) { StatusCode = StatusCodes.Status201Created };
         }   
-        catch (ResourceNotFoundException e)
+        catch (ResourceNotFoundException)
         {
             return NotFound($"Ticket with id {id} could not be found.");
         }

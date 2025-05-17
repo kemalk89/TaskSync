@@ -8,5 +8,5 @@ public class CreateTicketCommand
 
     public string? Description { get; set; }
 
-    public User.User? Assignee { get; set; }
+    public int? Assignee { get; set; }
 }
