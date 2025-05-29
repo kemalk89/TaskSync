@@ -53,5 +53,10 @@ curl --request POST \
 ```
 Copy the token and authorize in Swagger UI.
 
+# DevOps
+## Health Check Endpoint
+The application exposes a basic health check endpoint used for monitoring and readiness probes:
+```GET /api/health```
+
 # Improvement Suggestions
 - Use [SecretManager for development](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows)

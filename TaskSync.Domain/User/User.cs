@@ -2,7 +2,7 @@ namespace TaskSync.Domain.User;
 
 public class User
 {
-    public int Id { get; set; } 
+    public int Id { get; set; }
     public string? ExternalUserId { get; set; }
     public string Username { get; set; } = null!;
     public string? Email { get; set; }

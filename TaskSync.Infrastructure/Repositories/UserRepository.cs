@@ -46,9 +46,29 @@ public class UserRepository : IUserRepository
         return entity?.ToUser();
     }
 
-    public Task<User[]> FindUsersAsync(int pageNumber, int pageSize)
+    public async Task<User[]> FindUsersAsync(int pageNumber, int pageSize)
     {
-        throw new NotImplementedException();
+        if (pageNumber <= 0) pageNumber = 1;
+        if (pageSize <= 0) pageSize = 10;
+        
+        var skip = (pageNumber - 1) * pageSize;
+        
+        var userEntities = await _dbContext.Users
+            .OrderBy(u => u.Username)
+            .Skip(skip)
+            .Take(pageSize)
+            .ToListAsync();
+        
+        var users = userEntities.Select(u => new User
+        {
+            Id = u.Id,
+            ExternalUserId = u.ExternalUserId,
+            Username = u.Username,
+            Email = u.Email,
+            Picture = u.Picture
+        });
+
+        return users.ToArray();
     }
 
     public async Task<int> SaveNewUserAsync(User user)
