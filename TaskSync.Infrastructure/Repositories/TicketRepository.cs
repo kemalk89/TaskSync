@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using TaskSync.Domain.Exceptions;
 using TaskSync.Domain.Project;
 using TaskSync.Domain.Shared;
@@ -15,7 +16,8 @@ public class TicketRepository : ITicketRepository
     private readonly DatabaseContext _dbContext;
     private readonly IProjectRepository _projectRepository;
 
-    public TicketRepository(DatabaseContext dbContext, IProjectRepository projectRepository, IUserRepository userRepository)
+    public TicketRepository(DatabaseContext dbContext, IProjectRepository projectRepository,
+        IUserRepository userRepository)
     {
         _dbContext = dbContext;
         _projectRepository = projectRepository;
@@ -24,24 +26,32 @@ public class TicketRepository : ITicketRepository
 
     public async Task<int?> CreateAsync(CreateTicketCommand cmd)
     {
-        var project = await _dbContext.Projects.FindAsync(cmd.ProjectId);
-        if (project != null)
+        var ticketType = TicketType.Task;
+        var hasParsed = Enum.TryParse<TicketType>(cmd.Type, true, out var parsedTicketType);
+        if (hasParsed)
         {
-            var ticket = new TicketEntity
-            {
-                Title = cmd.Title,
-                Description = cmd.Description,
-                Project = project,
-                AssigneeId = cmd.Assignee
-            };
-
-            await _dbContext.Tickets.AddAsync(ticket);
-            await _dbContext.SaveChangesAsync();
-
-            return ticket.Id;
+            ticketType = parsedTicketType;
         }
 
-        return null;
+        var project = await _dbContext.Projects.FindAsync(cmd.ProjectId);
+        if (project == null)
+        {
+            return null;
+        }
+
+        var ticket = new TicketEntity
+        {
+            Title = cmd.Title,
+            Description = cmd.Description,
+            Project = project,
+            AssigneeId = cmd.Assignee,
+            Type = ticketType
+        };
+
+        await _dbContext.Tickets.AddAsync(ticket);
+        await _dbContext.SaveChangesAsync();
+
+        return ticket.Id;
     }
 
     public async Task<PagedResult<TicketModel>> GetByProjectIdAsync(int projectId, int pageNumber, int pageSize)
@@ -97,12 +107,8 @@ public class TicketRepository : ITicketRepository
         {
             throw new ResourceNotFoundException($"Ticket with id {ticketId} could not be found.");
         }
-        
-        var comment = new TicketCommentEntity
-        {
-            Comment = cmd.Comment,
-            TicketId = ticketId
-        };
+
+        var comment = new TicketCommentEntity { Comment = cmd.Comment, TicketId = ticketId };
 
         await _dbContext.TicketComments.AddAsync(comment);
         await _dbContext.SaveChangesAsync();
@@ -112,22 +118,23 @@ public class TicketRepository : ITicketRepository
         return comment.ToModel(author);
     }
 
-    public async Task<PagedResult<TicketCommentModel>> GetTicketCommentsAsync(int ticketId, int pageNumber, int pageSize)
+    public async Task<PagedResult<TicketCommentModel>> GetTicketCommentsAsync(int ticketId, int pageNumber,
+        int pageSize)
     {
         var skip = (pageNumber - 1) * pageSize;
         var query = _dbContext.TicketComments
             .Where(comment => comment.TicketId == ticketId);
-        
+
         var comments = query
             .Skip(skip)
             .Take(pageSize)
             .ToList();
-        
+
         var createdByIds = comments.Select(t => t.CreatedBy);
-        var users =  await _userRepository.FindUsersAsync(createdByIds.ToArray());
-        
+        var users = await _userRepository.FindUsersAsync(createdByIds.ToArray());
+
         var result = new List<TicketCommentModel>();
-        
+
         foreach (var comment in comments)
         {
             var author = users?.FirstOrDefault(a => a.Id == comment.CreatedBy);
@@ -137,10 +144,7 @@ public class TicketRepository : ITicketRepository
         var total = query.Count();
         var paged = new PagedResult<TicketCommentModel>
         {
-            Items = result,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            Total = total
+            Items = result, PageNumber = pageNumber, PageSize = pageSize, Total = total
         };
 
         return paged;
@@ -208,13 +212,9 @@ public class TicketRepository : ITicketRepository
         int total = query.Count();
         var paged = new PagedResult<TicketModel>
         {
-            Items = result,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            Total = total
+            Items = result, PageNumber = pageNumber, PageSize = pageSize, Total = total
         };
 
         return paged;
     }
 }
-

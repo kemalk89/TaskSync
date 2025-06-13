@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 using TaskSync.Domain.Ticket.Command;
 
 namespace TaskSync.Controllers.Request;
@@ -15,6 +16,8 @@ public class CreateTicketRequest
 
     public int? Assignee { get; set; }
 
+    public string Type { get; set; }
+    
     public CreateTicketCommand ToCommand()
     {
         return new CreateTicketCommand
@@ -22,7 +25,8 @@ public class CreateTicketRequest
             ProjectId = ProjectId,
             Description = Description,
             Title = Title,
-            Assignee = Assignee
+            Assignee = Assignee,
+            Type = Type
         };
     }
 }
