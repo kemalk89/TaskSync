@@ -20,6 +20,12 @@ For local development we need a developer certificate which can be setup with ``
 In this solution we are going to use file-scoped namespaces which is a new feature since C# 10.
 In VSCode we can enable that in settings: `csharpextensions.useFileScopedNamespace`.
 
+## Run with Docker
+```shell
+docker build -t tasksync -f Dockerfile .
+docker run -it -p 8080:8080 --rm tasksync 
+```
+
 # Database Development
 This scripts allows to update the initial migration script. 
 ```sh
