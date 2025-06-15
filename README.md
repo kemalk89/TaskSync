@@ -14,11 +14,7 @@ For local development we need a developer certificate which can be setup with ``
     - Option 2 - VSCode: Hit <kbd>F5</kbd>
 4. Open the application
     - Swagger-UI: https://localhost:7190/swagger/index.html
-    - Database-UI: http://localhost:8081/?pgsql=db&username=postgres&db=TaskSync&ns=public (pw: example)
-
-## VSCode Settings
-In this solution we are going to use file-scoped namespaces which is a new feature since C# 10.
-In VSCode we can enable that in settings: `csharpextensions.useFileScopedNamespace`.
+    - Database-Explorer: Use a tool like pgAdmin - username=postgres, pw=example, db=TaskSync
 
 ## Run with Docker
 ```shell
