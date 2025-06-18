@@ -62,11 +62,12 @@ public class TicketRepository : ITicketRepository
             projectId: projectId);
     }
 
-    public async Task<PagedResult<TicketModel>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<PagedResult<TicketModel>> GetAllAsync(int pageNumber, int pageSize, TicketSearchFilter filter)
     {
         return await GetByFilter(
             pageNumber: pageNumber,
-            pageSize: pageSize);
+            pageSize: pageSize,
+            filter: filter);
     }
 
     public async Task<TicketModel?> GetByIdAsync(int id)
@@ -154,7 +155,8 @@ public class TicketRepository : ITicketRepository
         int pageNumber,
         int pageSize,
         int? projectId = null,
-        int? ticketId = null
+        int? ticketId = null,
+        TicketSearchFilter? filter = null
     )
     {
         var skip = (pageNumber - 1) * pageSize;
@@ -169,6 +171,11 @@ public class TicketRepository : ITicketRepository
         if (ticketId != null)
         {
             query = dbSet.Where(t => t.Id == ticketId);
+        }
+
+        if (filter != null && !string.IsNullOrWhiteSpace(filter.SearchText))
+        {
+            query = dbSet.Where(t => t.Title.Contains(filter.SearchText));
         }
 
         var tickets = query

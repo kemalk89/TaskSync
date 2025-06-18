@@ -34,9 +34,9 @@ public class TicketService : ITicketService
         return ticket;
     }
 
-    public async Task<PagedResult<TicketModel>> GetTicketsAsync(int pageNumber, int pageSize)
+    public async Task<PagedResult<TicketModel>> GetTicketsAsync(int pageNumber, int pageSize, TicketSearchFilter filter)
     {
-        var tickets = await _ticketRepository.GetAllAsync(pageNumber, pageSize);
+        var tickets = await _ticketRepository.GetAllAsync(pageNumber, pageSize, filter);
         return tickets;
     }
 
