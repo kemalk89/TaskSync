@@ -34,4 +34,14 @@ public class UserService : IUserService
         var users = await _userRepository.FindUsersAsync(userIds);
         return users;
     }
+
+    public async Task<User?> FindByExternalUserIdAsync(string? externalUserId)
+    {
+        if (string.IsNullOrWhiteSpace(externalUserId))
+        {
+            return null;
+        }
+        var user = await _userRepository.FindUserByExternalUserIdAsync(externalUserId);
+        return user;
+    }
 }

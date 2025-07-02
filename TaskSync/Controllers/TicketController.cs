@@ -16,7 +16,7 @@ public class TicketController : ControllerBase
     private readonly ILogger<TicketController> _logger;
 
     private readonly ITicketService _ticketService;
-
+    
     public TicketController(ITicketService ticketService, ILogger<TicketController> logger)
     {
         _ticketService = ticketService;
@@ -38,7 +38,7 @@ public class TicketController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{id}")]
+    [Route("{id}")] 
     public async Task<ActionResult<TicketResponse>> GetTicketById([FromRoute] int id)
     {
         var ticket = await _ticketService.GetTicketByIdAsync(id);
@@ -119,5 +119,25 @@ public class TicketController : ControllerBase
             Items = paged.Items.Select(item => new TicketCommentResponse(item)),
             Total = paged.Total
         };
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<ActionResult> DeleteTicket([FromRoute] int id)
+    {
+        // TODO Add Email notification
+        var result = await _ticketService.DeleteTicketAsync(id);
+        if (result.Success)
+        {
+            return NoContent();
+        }
+        
+        
+        return StatusCode(
+            StatusCodes.Status403Forbidden, 
+            new
+            {
+                message = "You do not have permission to delete this ticket."
+            });
     }
 }

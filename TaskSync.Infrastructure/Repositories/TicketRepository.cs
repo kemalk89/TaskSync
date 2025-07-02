@@ -24,6 +24,13 @@ public class TicketRepository : ITicketRepository
         _userRepository = userRepository;
     }
 
+    public async Task<int> DeleteTicketAsync(int id)
+    {
+        // immediately execute deletion
+        var numOfDeletedRecords = await _dbContext.Tickets.Where(t => t.Id == id).ExecuteDeleteAsync();
+        return numOfDeletedRecords;
+    }
+    
     public async Task<int?> CreateAsync(CreateTicketCommand cmd)
     {
         var ticketType = TicketType.Task;

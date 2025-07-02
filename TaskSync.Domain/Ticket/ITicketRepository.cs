@@ -12,4 +12,5 @@ public interface ITicketRepository
     Task<TicketStatus> UpdateTicketStatusAsync(int ticketId, int statusId);
     Task<TicketCommentModel> AddTicketCommentAsync(int ticketId, CreateTicketCommentCommand cmd);
     Task<PagedResult<TicketCommentModel>> GetTicketCommentsAsync(int id, int pageNumber, int pageSize);
+    Task<int> DeleteTicketAsync(int id);
 }

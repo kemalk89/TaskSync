@@ -6,6 +6,8 @@ using TaskSync.Domain.Project;
 using TaskSync.Domain.Ticket;
 using TaskSync.Infrastructure;
 using TaskSync.Infrastructure.Repositories;
+using TaskSync.Infrastructure.Services;
+
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
@@ -80,6 +82,8 @@ try
 
     builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+    builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
     builder.Services.AddAuth0();
 
