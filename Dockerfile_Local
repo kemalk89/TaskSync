@@ -1,0 +1,34 @@
+# Including a secure hash algorithm (SHA) after the image tag in a Dockerfile is a best practice. 
+FROM mcr.microsoft.com/dotnet/sdk:8.0@sha256:35792ea4ad1db051981f62b313f1be3b46b1f45cadbaa3c288cd0d3056eefb83 AS build
+WORKDIR /App
+
+# Generate HTTPS certificate and export it
+RUN dotnet dev-certs https -ep /https/aspnetapp.pfx -p mypass123
+
+# Copy everything
+COPY . ./
+# Restore as distinct layers
+RUN dotnet restore
+# Build and publish a release
+RUN dotnet publish -o out
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0@sha256:6c4df091e4e531bb93bdbfe7e7f0998e7ced344f54426b7e874116a3dc3233ff
+WORKDIR /App
+
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ConnectionStrings__db="Host=host.docker.internal;Port=5432;Database=TaskSync;Username=postgres;Password=postgres"
+
+# Configure Kestrel to use HTTPS
+ENV ASPNETCORE_URLS="https://+:7190;http://+:5068"
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+ENV ASPNETCORE_Kestrel__Certificates__Default__Password=mypass123
+
+COPY --from=build /App/out .
+COPY --from=build /https/aspnetapp.pfx /https/aspnetapp.pfx
+COPY .env ./.env
+
+# expose https port
+EXPOSE 7190 
+
+ENTRYPOINT ["dotnet", "TaskSync.dll"]

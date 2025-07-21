@@ -1,15 +1,26 @@
 namespace TaskSync.Common;
 
+/**
+ * Used for development only.
+ */
 public static class DotEnv
 {
     public static void Load(Action<string> loggerFn)
     {
         var root = Directory.GetCurrentDirectory();
         var filePath = Path.Combine(root, "./../.env");
-        
+                
         if (!File.Exists(filePath))
         {
-            return;
+            // 2nd try because running in docker container
+            filePath = Path.Combine(root, "./.env");
+
+            if (!File.Exists(filePath))
+            {
+                loggerFn("No .env file found.");
+                
+                return;
+            }
         }
 
         foreach (var line in File.ReadAllLines(filePath))
@@ -28,8 +39,6 @@ public static class DotEnv
                 // ignore comments
                 continue;
             }
-            
-            loggerFn($"Found {parts[0]}");
             
             Environment.SetEnvironmentVariable(parts[0], parts[1]);
         }

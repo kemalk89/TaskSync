@@ -18,8 +18,9 @@ For local development we need a developer certificate which can be setup with ``
 
 ## Run with Docker
 ```shell
-docker build -t tasksync -f Dockerfile .
-docker run -it -p 8080:8080 --rm tasksync 
+docker compose up -d
+docker build -t tasksync -f Dockerfile_Local .
+docker run -it -p 7190:7190 --name tasksync-container-local tasksync
 ```
 
 # Database Development
