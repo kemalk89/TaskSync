@@ -10,6 +10,8 @@ public class TicketCommentResponse
 
     public string Comment { get; set; }
     
+    public bool IsDeleted { get; set; }
+    
     public UserResponse? CreatedBy { get; set; }
     
     public DateTimeOffset CreatedDate { get; set; }
@@ -19,7 +21,8 @@ public class TicketCommentResponse
         Id = model.Id;
         TicketId = model.TicketId;
         Comment = model.Comment;
-        CreatedBy = new UserResponse(model.CreatedBy);
+        IsDeleted = model.IsDeleted;
+        CreatedBy = model.CreatedBy == null ? null : new UserResponse(model.CreatedBy);
         CreatedDate = model.CreatedDate;
     }
 }

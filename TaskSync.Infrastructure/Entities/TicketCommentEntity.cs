@@ -13,6 +13,8 @@ public class TicketCommentEntity : AuditedEntity
     
     public string Comment { get; set; }
 
+    public bool IsDeleted { get; set; }
+    
     public TicketCommentModel ToModel(User? createdBy = null)
     {
         return new TicketCommentModel
@@ -20,7 +22,9 @@ public class TicketCommentEntity : AuditedEntity
             Id = Id,
             TicketId = TicketId,
             Comment = Comment,
+            IsDeleted = IsDeleted,
             CreatedBy = createdBy,
+            CreatedById = CreatedBy,
             CreatedDate = CreatedDate
         };
     }

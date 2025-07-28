@@ -11,6 +11,8 @@ public interface ITicketRepository
     Task<PagedResult<TicketModel>> GetAllAsync(int pageNumber, int pageSize, TicketSearchFilter filter);
     Task<TicketStatus> UpdateTicketStatusAsync(int ticketId, int statusId);
     Task<TicketCommentModel> AddTicketCommentAsync(int ticketId, CreateTicketCommentCommand cmd);
+    Task<TicketCommentModel?> GetTicketCommentByIdAsync(int commentId);
     Task<PagedResult<TicketCommentModel>> GetTicketCommentsAsync(int id, int pageNumber, int pageSize);
     Task<int> DeleteTicketAsync(int id);
+    Task<bool> DeleteTicketCommentAsync(int commentId);
 }

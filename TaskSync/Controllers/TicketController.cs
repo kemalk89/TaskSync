@@ -132,12 +132,29 @@ public class TicketController : ControllerBase
             return NoContent();
         }
         
-        
         return StatusCode(
             StatusCodes.Status403Forbidden, 
             new
             {
                 message = "You do not have permission to delete this ticket."
+            });
+    }
+
+    [HttpDelete]
+    [Route("{id}/comment/{commentId}")]
+    public async Task<ActionResult> DeleteTicketComment([FromRoute] int id, [FromRoute] int commentId)
+    {
+        var result = await _ticketService.DeleteTicketCommentAsync(commentId);
+        if (result.Success)
+        {
+            return NoContent();
+        }
+
+        return StatusCode(
+            StatusCodes.Status404NotFound, 
+            new
+            {
+                message = "Unable to delete comment with ID " +  commentId
             });
     }
 }

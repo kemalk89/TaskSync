@@ -6,7 +6,11 @@ public class TicketCommentModel
 
     public int TicketId { get; set; }
     
+    public bool IsDeleted { get; set; }
+    
     public string Comment { get; set; }
+    
+    public int CreatedById { get; set; }
     
     public User.User? CreatedBy { get; set; }
 

@@ -131,7 +131,8 @@ public class TicketRepository : ITicketRepository
     {
         var skip = (pageNumber - 1) * pageSize;
         var query = _dbContext.TicketComments
-            .Where(comment => comment.TicketId == ticketId);
+            .Where(comment => comment.TicketId == ticketId)
+            .OrderByDescending((comment => comment.CreatedDate));
 
         var comments = query
             .Skip(skip)
@@ -230,5 +231,24 @@ public class TicketRepository : ITicketRepository
         };
 
         return paged;
+    }
+
+    public async Task<TicketCommentModel?> GetTicketCommentByIdAsync(int commentId)
+    {
+        var entity = await _dbContext.TicketComments.FindAsync(commentId);
+        return entity?.ToModel();
+    }
+
+    public async Task<bool> DeleteTicketCommentAsync(int commentId)
+    {
+        var comment = await _dbContext.TicketComments.FindAsync(commentId);
+        if (comment != null)
+        {
+            comment.IsDeleted = true;
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        return false;
     }
 }

@@ -99,4 +99,24 @@ public class TicketService : ITicketService
 
         return Result<bool>.Fail("Could not delete the ticket with ID " + id);
     }
+
+    public async Task<Result<bool>> DeleteTicketCommentAsync(int commentId)
+    {
+        var comment = await _ticketRepository.GetTicketCommentByIdAsync(commentId);
+        if (comment == null)
+        {
+            return Result<bool>.Fail("Could not delete the ticket comment with ID " + commentId + ". Not found.");
+        }
+        
+        // if the current user is author of the comment, allow deletion
+        var authorId = comment.CreatedById;
+        var currentUser = await _currentUserService.GetCurrentUserAsync();
+        if (currentUser?.Id == authorId)
+        {
+            var result = await _ticketRepository.DeleteTicketCommentAsync(commentId);
+            return result ? Result<bool>.Ok(result) : Result<bool>.Fail("Could not delete the ticket comment with ID " + commentId);
+        }
+        
+        return Result<bool>.Fail("Cannot delete comment with ID " + commentId + ". No permissions.");
+    }
 }

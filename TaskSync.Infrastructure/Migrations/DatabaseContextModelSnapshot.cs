@@ -156,6 +156,9 @@ namespace TaskSync.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -221,7 +224,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #365.",
                             ProjectId = 1,
-                            StatusId = 1,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Bug #365",
                             Type = 0
                         },
@@ -232,9 +235,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #366.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #366",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #366",
+                            Type = 0
                         },
                         new
                         {
@@ -254,7 +257,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #368.",
                             ProjectId = 1,
-                            StatusId = 3,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Story #368",
                             Type = 2
                         },
@@ -266,8 +269,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #369.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Story #369",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #369",
+                            Type = 1
                         },
                         new
                         {
@@ -276,9 +279,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #370.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #370",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #370",
+                            Type = 0
                         },
                         new
                         {
@@ -287,9 +290,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #371.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #371",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #371",
+                            Type = 1
                         },
                         new
                         {
@@ -299,8 +302,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #372.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Task #372",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #372",
+                            Type = 2
                         },
                         new
                         {
@@ -320,7 +323,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #374.",
                             ProjectId = 1,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Bug #374",
                             Type = 0
                         },
@@ -332,8 +335,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #375.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #375",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #375",
+                            Type = 1
                         },
                         new
                         {
@@ -342,9 +345,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #376.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #376",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #376",
+                            Type = 2
                         },
                         new
                         {
@@ -364,9 +367,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #378.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #378",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #378",
+                            Type = 1
                         },
                         new
                         {
@@ -375,9 +378,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #379.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #379",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #379",
+                            Type = 1
                         },
                         new
                         {
@@ -386,9 +389,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #380.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #380",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #380",
+                            Type = 1
                         },
                         new
                         {
@@ -397,7 +400,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #381.",
                             ProjectId = 1,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #381",
                             Type = 0
                         },
@@ -408,9 +411,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #382.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #382",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #382",
+                            Type = 1
                         },
                         new
                         {
@@ -419,9 +422,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #383.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #383",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #383",
+                            Type = 0
                         },
                         new
                         {
@@ -441,9 +444,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #385.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #385",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #385",
+                            Type = 1
                         },
                         new
                         {
@@ -453,8 +456,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #386.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Task #386",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #386",
+                            Type = 0
                         },
                         new
                         {
@@ -464,8 +467,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #387.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #387",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #387",
+                            Type = 1
                         },
                         new
                         {
@@ -474,9 +477,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #388.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #388",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #388",
+                            Type = 1
                         },
                         new
                         {
@@ -485,9 +488,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #389.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #389",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #389",
+                            Type = 2
                         },
                         new
                         {
@@ -496,7 +499,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #390.",
                             ProjectId = 1,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Story #390",
                             Type = 2
                         },
@@ -508,8 +511,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #391.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #391",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #391",
+                            Type = 2
                         },
                         new
                         {
@@ -518,9 +521,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #392.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #392",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #392",
+                            Type = 2
                         },
                         new
                         {
@@ -529,9 +532,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #393.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #393",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #393",
+                            Type = 1
                         },
                         new
                         {
@@ -540,9 +543,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #394.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #394",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #394",
+                            Type = 0
                         },
                         new
                         {
@@ -551,9 +554,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #395.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #395",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #395",
+                            Type = 0
                         },
                         new
                         {
@@ -562,9 +565,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #396.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #396",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #396",
+                            Type = 2
                         },
                         new
                         {
@@ -573,9 +576,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #397.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #397",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #397",
+                            Type = 0
                         },
                         new
                         {
@@ -584,9 +587,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #398.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #398",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #398",
+                            Type = 0
                         },
                         new
                         {
@@ -606,9 +609,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #400.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #400",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #400",
+                            Type = 0
                         },
                         new
                         {
@@ -618,8 +621,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #401.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #401",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #401",
+                            Type = 2
                         },
                         new
                         {
@@ -628,7 +631,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #402.",
                             ProjectId = 1,
-                            StatusId = 2,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Task #402",
                             Type = 1
                         },
@@ -639,7 +642,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #403.",
                             ProjectId = 1,
-                            StatusId = 1,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Bug #403",
                             Type = 0
                         },
@@ -651,8 +654,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #404.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Bug #404",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #404",
+                            Type = 1
                         },
                         new
                         {
@@ -662,8 +665,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #405.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #405",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #405",
+                            Type = 2
                         },
                         new
                         {
@@ -672,9 +675,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #406.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #406",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #406",
+                            Type = 2
                         },
                         new
                         {
@@ -683,9 +686,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #407.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #407",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #407",
+                            Type = 2
                         },
                         new
                         {
@@ -694,7 +697,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #408.",
                             ProjectId = 1,
-                            StatusId = 3,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Story #408",
                             Type = 2
                         },
@@ -705,9 +708,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #409.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #409",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #409",
+                            Type = 1
                         },
                         new
                         {
@@ -717,8 +720,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #410.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Bug #410",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #410",
+                            Type = 1
                         },
                         new
                         {
@@ -728,8 +731,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #411.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Task #411",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #411",
+                            Type = 0
                         },
                         new
                         {
@@ -738,7 +741,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #412.",
                             ProjectId = 1,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #412",
                             Type = 0
                         },
@@ -749,9 +752,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #413.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #413",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #413",
+                            Type = 2
                         },
                         new
                         {
@@ -760,7 +763,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #414.",
                             ProjectId = 1,
-                            StatusId = 2,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Task #414",
                             Type = 1
                         },
@@ -772,8 +775,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #415.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Bug #415",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #415",
+                            Type = 2
                         },
                         new
                         {
@@ -782,9 +785,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #416.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #416",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #416",
+                            Type = 1
                         },
                         new
                         {
@@ -794,8 +797,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #417.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Task #417",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #417",
+                            Type = 0
                         },
                         new
                         {
@@ -805,8 +808,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #418.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #418",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #418",
+                            Type = 2
                         },
                         new
                         {
@@ -815,7 +818,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #419.",
                             ProjectId = 1,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Story #419",
                             Type = 2
                         },
@@ -837,9 +840,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #421.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #421",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #421",
+                            Type = 0
                         },
                         new
                         {
@@ -848,7 +851,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #422.",
                             ProjectId = 1,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Task #422",
                             Type = 1
                         },
@@ -859,9 +862,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #423.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #423",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #423",
+                            Type = 0
                         },
                         new
                         {
@@ -871,8 +874,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #424.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #424",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #424",
+                            Type = 1
                         },
                         new
                         {
@@ -881,7 +884,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #425.",
                             ProjectId = 1,
-                            StatusId = 3,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Bug #425",
                             Type = 0
                         },
@@ -892,7 +895,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #426.",
                             ProjectId = 1,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Story #426",
                             Type = 2
                         },
@@ -904,8 +907,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #427.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Task #427",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #427",
+                            Type = 2
                         },
                         new
                         {
@@ -915,8 +918,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #428.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Story #428",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #428",
+                            Type = 0
                         },
                         new
                         {
@@ -936,9 +939,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #430.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #430",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #430",
+                            Type = 0
                         },
                         new
                         {
@@ -958,9 +961,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #432.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #432",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #432",
+                            Type = 0
                         },
                         new
                         {
@@ -969,9 +972,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #433.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #433",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #433",
+                            Type = 0
                         },
                         new
                         {
@@ -980,7 +983,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #434.",
                             ProjectId = 1,
-                            StatusId = 1,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Story #434",
                             Type = 2
                         },
@@ -992,8 +995,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #435.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Story #435",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #435",
+                            Type = 0
                         },
                         new
                         {
@@ -1002,9 +1005,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #436.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #436",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #436",
+                            Type = 2
                         },
                         new
                         {
@@ -1035,7 +1038,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #439.",
                             ProjectId = 1,
-                            StatusId = 2,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Task #439",
                             Type = 1
                         },
@@ -1047,8 +1050,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #440.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #440",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #440",
+                            Type = 1
                         },
                         new
                         {
@@ -1057,7 +1060,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #441.",
                             ProjectId = 1,
-                            StatusId = 2,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Bug #441",
                             Type = 0
                         },
@@ -1068,9 +1071,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #442.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #442",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #442",
+                            Type = 0
                         },
                         new
                         {
@@ -1079,7 +1082,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #443.",
                             ProjectId = 1,
-                            StatusId = 3,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Task #443",
                             Type = 1
                         },
@@ -1090,9 +1093,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #444.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #444",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #444",
+                            Type = 2
                         },
                         new
                         {
@@ -1101,7 +1104,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #445.",
                             ProjectId = 1,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Task #445",
                             Type = 1
                         },
@@ -1112,7 +1115,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #446.",
                             ProjectId = 1,
-                            StatusId = 1,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Task #446",
                             Type = 1
                         },
@@ -1123,9 +1126,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #447.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #447",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #447",
+                            Type = 2
                         },
                         new
                         {
@@ -1134,9 +1137,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #448.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #448",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #448",
+                            Type = 1
                         },
                         new
                         {
@@ -1146,8 +1149,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #449.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Bug #449",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #449",
+                            Type = 1
                         },
                         new
                         {
@@ -1156,7 +1159,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #450.",
                             ProjectId = 1,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Bug #450",
                             Type = 0
                         },
@@ -1167,9 +1170,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #451.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #451",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #451",
+                            Type = 2
                         },
                         new
                         {
@@ -1178,7 +1181,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #452.",
                             ProjectId = 1,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Task #452",
                             Type = 1
                         },
@@ -1190,8 +1193,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #453.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #453",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #453",
+                            Type = 0
                         },
                         new
                         {
@@ -1201,8 +1204,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #454.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #454",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #454",
+                            Type = 1
                         },
                         new
                         {
@@ -1211,9 +1214,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #455.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #455",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #455",
+                            Type = 1
                         },
                         new
                         {
@@ -1222,9 +1225,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #456.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #456",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #456",
+                            Type = 2
                         },
                         new
                         {
@@ -1233,9 +1236,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #457.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #457",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #457",
+                            Type = 0
                         },
                         new
                         {
@@ -1244,9 +1247,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #458.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #458",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #458",
+                            Type = 2
                         },
                         new
                         {
@@ -1256,8 +1259,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #459.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Task #459",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #459",
+                            Type = 0
                         },
                         new
                         {
@@ -1266,9 +1269,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #460.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #460",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #460",
+                            Type = 0
                         },
                         new
                         {
@@ -1277,9 +1280,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #461.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #461",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #461",
+                            Type = 0
                         },
                         new
                         {
@@ -1288,9 +1291,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #462.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #462",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #462",
+                            Type = 2
                         },
                         new
                         {
@@ -1299,9 +1302,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #463.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #463",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #463",
+                            Type = 2
                         },
                         new
                         {
@@ -1310,9 +1313,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #464.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #464",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #464",
+                            Type = 0
                         },
                         new
                         {
@@ -1322,8 +1325,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #465.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Story #465",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #465",
+                            Type = 0
                         },
                         new
                         {
@@ -1332,7 +1335,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #466.",
                             ProjectId = 1,
-                            StatusId = 1,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Bug #466",
                             Type = 0
                         },
@@ -1344,8 +1347,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #467.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Task #467",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #467",
+                            Type = 0
                         },
                         new
                         {
@@ -1354,9 +1357,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #468.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #468",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #468",
+                            Type = 2
                         },
                         new
                         {
@@ -1376,7 +1379,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #470.",
                             ProjectId = 1,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #470",
                             Type = 0
                         },
@@ -1387,9 +1390,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #471.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #471",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #471",
+                            Type = 2
                         },
                         new
                         {
@@ -1399,8 +1402,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #472.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Bug #472",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #472",
+                            Type = 1
                         },
                         new
                         {
@@ -1410,8 +1413,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #473.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #473",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #473",
+                            Type = 1
                         },
                         new
                         {
@@ -1432,8 +1435,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #475.",
                             ProjectId = 1,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Story #475",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #475",
+                            Type = 0
                         },
                         new
                         {
@@ -1442,9 +1445,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #476.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #476",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #476",
+                            Type = 0
                         },
                         new
                         {
@@ -1453,9 +1456,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #477.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #477",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #477",
+                            Type = 0
                         },
                         new
                         {
@@ -1475,9 +1478,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #479.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #479",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #479",
+                            Type = 2
                         },
                         new
                         {
@@ -1486,9 +1489,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #480.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #480",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #480",
+                            Type = 1
                         },
                         new
                         {
@@ -1509,8 +1512,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #482.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Bug #482",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #482",
+                            Type = 1
                         },
                         new
                         {
@@ -1520,8 +1523,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #483.",
                             ProjectId = 1,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #483",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #483",
+                            Type = 0
                         },
                         new
                         {
@@ -1530,9 +1533,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #484.",
                             ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #484",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #484",
+                            Type = 2
                         },
                         new
                         {
@@ -1542,8 +1545,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #485.",
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #485",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #485",
+                            Type = 0
                         },
                         new
                         {
@@ -1552,7 +1555,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #486.",
                             ProjectId = 1,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Story #486",
                             Type = 2
                         },
@@ -1563,9 +1566,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #487.",
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #487",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #487",
+                            Type = 0
                         },
                         new
                         {
@@ -1574,9 +1577,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #488.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #488",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #488",
+                            Type = 2
                         },
                         new
                         {
@@ -1585,9 +1588,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #489.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #489",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #489",
+                            Type = 0
                         },
                         new
                         {
@@ -1596,7 +1599,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #490.",
                             ProjectId = 1,
-                            StatusId = 2,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Story #490",
                             Type = 2
                         },
@@ -1607,9 +1610,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #491.",
                             ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #491",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #491",
+                            Type = 0
                         },
                         new
                         {
@@ -1618,9 +1621,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #492.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #492",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #492",
+                            Type = 2
                         },
                         new
                         {
@@ -1629,9 +1632,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #493.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #493",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #493",
+                            Type = 0
                         },
                         new
                         {
@@ -1640,9 +1643,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #494.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #494",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #494",
+                            Type = 2
                         },
                         new
                         {
@@ -1651,7 +1654,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #495.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Bug #495",
                             Type = 0
                         },
@@ -1662,7 +1665,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #496.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Task #496",
                             Type = 1
                         },
@@ -1673,7 +1676,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #497.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Story #497",
                             Type = 2
                         },
@@ -1684,9 +1687,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #498.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #498",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #498",
+                            Type = 2
                         },
                         new
                         {
@@ -1695,7 +1698,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #499.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #499",
                             Type = 0
                         },
@@ -1706,9 +1709,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #500.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #500",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #500",
+                            Type = 0
                         },
                         new
                         {
@@ -1718,8 +1721,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #501.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Bug #501",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #501",
+                            Type = 2
                         },
                         new
                         {
@@ -1728,9 +1731,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #502.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #502",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #502",
+                            Type = 0
                         },
                         new
                         {
@@ -1739,9 +1742,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #503.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #503",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #503",
+                            Type = 1
                         },
                         new
                         {
@@ -1751,8 +1754,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #504.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Task #504",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #504",
+                            Type = 0
                         },
                         new
                         {
@@ -1761,9 +1764,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #505.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #505",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #505",
+                            Type = 1
                         },
                         new
                         {
@@ -1772,9 +1775,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #506.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #506",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #506",
+                            Type = 1
                         },
                         new
                         {
@@ -1783,9 +1786,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #507.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #507",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #507",
+                            Type = 2
                         },
                         new
                         {
@@ -1794,7 +1797,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #508.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Bug #508",
                             Type = 0
                         },
@@ -1806,8 +1809,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #509.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Task #509",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #509",
+                            Type = 0
                         },
                         new
                         {
@@ -1816,9 +1819,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #510.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #510",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #510",
+                            Type = 2
                         },
                         new
                         {
@@ -1827,7 +1830,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #511.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Story #511",
                             Type = 2
                         },
@@ -1839,8 +1842,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #512.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #512",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #512",
+                            Type = 1
                         },
                         new
                         {
@@ -1849,7 +1852,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #513.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #513",
                             Type = 0
                         },
@@ -1860,7 +1863,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #514.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Bug #514",
                             Type = 0
                         },
@@ -1872,8 +1875,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #515.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #515",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #515",
+                            Type = 0
                         },
                         new
                         {
@@ -1882,9 +1885,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #516.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #516",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #516",
+                            Type = 0
                         },
                         new
                         {
@@ -1893,7 +1896,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #517.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Task #517",
                             Type = 1
                         },
@@ -1904,7 +1907,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #518.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Task #518",
                             Type = 1
                         },
@@ -1915,9 +1918,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #519.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #519",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #519",
+                            Type = 2
                         },
                         new
                         {
@@ -1926,9 +1929,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #520.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #520",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #520",
+                            Type = 0
                         },
                         new
                         {
@@ -1938,8 +1941,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #521.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Task #521",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #521",
+                            Type = 2
                         },
                         new
                         {
@@ -1948,9 +1951,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #522.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #522",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #522",
+                            Type = 0
                         },
                         new
                         {
@@ -1959,9 +1962,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #523.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #523",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #523",
+                            Type = 0
                         },
                         new
                         {
@@ -1981,9 +1984,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #525.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #525",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #525",
+                            Type = 2
                         },
                         new
                         {
@@ -1993,8 +1996,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #526.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #526",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #526",
+                            Type = 2
                         },
                         new
                         {
@@ -2003,9 +2006,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #527.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #527",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #527",
+                            Type = 0
                         },
                         new
                         {
@@ -2014,9 +2017,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #528.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #528",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #528",
+                            Type = 2
                         },
                         new
                         {
@@ -2025,7 +2028,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #529.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Task #529",
                             Type = 1
                         },
@@ -2037,8 +2040,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #530.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #530",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #530",
+                            Type = 0
                         },
                         new
                         {
@@ -2047,9 +2050,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #531.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #531",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #531",
+                            Type = 2
                         },
                         new
                         {
@@ -2058,9 +2061,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #532.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #532",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #532",
+                            Type = 2
                         },
                         new
                         {
@@ -2069,9 +2072,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #533.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #533",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #533",
+                            Type = 1
                         },
                         new
                         {
@@ -2080,7 +2083,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #534.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Bug #534",
                             Type = 0
                         },
@@ -2092,8 +2095,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #535.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #535",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #535",
+                            Type = 2
                         },
                         new
                         {
@@ -2103,8 +2106,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #536.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Story #536",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #536",
+                            Type = 0
                         },
                         new
                         {
@@ -2113,9 +2116,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #537.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #537",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #537",
+                            Type = 0
                         },
                         new
                         {
@@ -2124,9 +2127,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #538.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #538",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #538",
+                            Type = 2
                         },
                         new
                         {
@@ -2135,9 +2138,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #539.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #539",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #539",
+                            Type = 1
                         },
                         new
                         {
@@ -2147,8 +2150,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #540.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Bug #540",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #540",
+                            Type = 1
                         },
                         new
                         {
@@ -2157,7 +2160,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #541.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #541",
                             Type = 0
                         },
@@ -2168,7 +2171,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #542.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Bug #542",
                             Type = 0
                         },
@@ -2179,9 +2182,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #543.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #543",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #543",
+                            Type = 1
                         },
                         new
                         {
@@ -2190,9 +2193,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #544.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #544",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #544",
+                            Type = 2
                         },
                         new
                         {
@@ -2202,8 +2205,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #545.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Story #545",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #545",
+                            Type = 0
                         },
                         new
                         {
@@ -2212,7 +2215,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #546.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Task #546",
                             Type = 1
                         },
@@ -2223,9 +2226,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #547.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #547",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #547",
+                            Type = 2
                         },
                         new
                         {
@@ -2234,7 +2237,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #548.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #548",
                             Type = 0
                         },
@@ -2245,7 +2248,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #549.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Story #549",
                             Type = 2
                         },
@@ -2267,7 +2270,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #551.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #551",
                             Type = 0
                         },
@@ -2278,9 +2281,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #552.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #552",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #552",
+                            Type = 1
                         },
                         new
                         {
@@ -2289,7 +2292,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #553.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Story #553",
                             Type = 2
                         },
@@ -2300,9 +2303,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #554.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #554",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #554",
+                            Type = 2
                         },
                         new
                         {
@@ -2311,7 +2314,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #555.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Task #555",
                             Type = 1
                         },
@@ -2323,8 +2326,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #556.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #556",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #556",
+                            Type = 2
                         },
                         new
                         {
@@ -2333,9 +2336,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #557.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #557",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #557",
+                            Type = 2
                         },
                         new
                         {
@@ -2344,9 +2347,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #558.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #558",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #558",
+                            Type = 1
                         },
                         new
                         {
@@ -2356,8 +2359,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #559.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Task #559",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #559",
+                            Type = 0
                         },
                         new
                         {
@@ -2377,9 +2380,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #561.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #561",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #561",
+                            Type = 2
                         },
                         new
                         {
@@ -2389,8 +2392,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #562.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #562",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #562",
+                            Type = 0
                         },
                         new
                         {
@@ -2399,9 +2402,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #563.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #563",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #563",
+                            Type = 0
                         },
                         new
                         {
@@ -2410,9 +2413,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #564.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #564",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #564",
+                            Type = 2
                         },
                         new
                         {
@@ -2421,9 +2424,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #565.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #565",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #565",
+                            Type = 1
                         },
                         new
                         {
@@ -2432,7 +2435,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #566.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Task #566",
                             Type = 1
                         },
@@ -2443,9 +2446,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #567.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #567",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #567",
+                            Type = 2
                         },
                         new
                         {
@@ -2465,7 +2468,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #569.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Story #569",
                             Type = 2
                         },
@@ -2476,9 +2479,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #570.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #570",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #570",
+                            Type = 1
                         },
                         new
                         {
@@ -2487,9 +2490,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #571.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #571",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #571",
+                            Type = 1
                         },
                         new
                         {
@@ -2498,9 +2501,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #572.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #572",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #572",
+                            Type = 2
                         },
                         new
                         {
@@ -2509,9 +2512,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #573.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #573",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #573",
+                            Type = 1
                         },
                         new
                         {
@@ -2520,9 +2523,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #574.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #574",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #574",
+                            Type = 2
                         },
                         new
                         {
@@ -2531,9 +2534,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #575.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #575",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #575",
+                            Type = 0
                         },
                         new
                         {
@@ -2542,9 +2545,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #576.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #576",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #576",
+                            Type = 1
                         },
                         new
                         {
@@ -2554,8 +2557,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #577.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Task #577",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #577",
+                            Type = 2
                         },
                         new
                         {
@@ -2565,8 +2568,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #578.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Bug #578",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #578",
+                            Type = 2
                         },
                         new
                         {
@@ -2575,9 +2578,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #579.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #579",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #579",
+                            Type = 2
                         },
                         new
                         {
@@ -2586,7 +2589,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #580.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Story #580",
                             Type = 2
                         },
@@ -2608,7 +2611,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #582.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Bug #582",
                             Type = 0
                         },
@@ -2619,9 +2622,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #583.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #583",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #583",
+                            Type = 2
                         },
                         new
                         {
@@ -2630,9 +2633,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #584.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #584",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #584",
+                            Type = 2
                         },
                         new
                         {
@@ -2641,9 +2644,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #585.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #585",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #585",
+                            Type = 2
                         },
                         new
                         {
@@ -2652,7 +2655,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #586.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #586",
                             Type = 0
                         },
@@ -2663,9 +2666,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #587.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #587",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #587",
+                            Type = 0
                         },
                         new
                         {
@@ -2675,8 +2678,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #588.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Story #588",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #588",
+                            Type = 0
                         },
                         new
                         {
@@ -2685,9 +2688,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #589.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #589",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #589",
+                            Type = 0
                         },
                         new
                         {
@@ -2696,9 +2699,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #590.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #590",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #590",
+                            Type = 2
                         },
                         new
                         {
@@ -2707,7 +2710,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #591.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Task #591",
                             Type = 1
                         },
@@ -2719,8 +2722,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #592.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #592",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #592",
+                            Type = 0
                         },
                         new
                         {
@@ -2740,9 +2743,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #594.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #594",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #594",
+                            Type = 1
                         },
                         new
                         {
@@ -2751,9 +2754,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #595.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #595",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #595",
+                            Type = 0
                         },
                         new
                         {
@@ -2762,7 +2765,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #596.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Story #596",
                             Type = 2
                         },
@@ -2773,9 +2776,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #597.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #597",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #597",
+                            Type = 1
                         },
                         new
                         {
@@ -2785,8 +2788,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #598.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #598",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #598",
+                            Type = 1
                         },
                         new
                         {
@@ -2795,9 +2798,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #599.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #599",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #599",
+                            Type = 1
                         },
                         new
                         {
@@ -2806,7 +2809,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #600.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Story #600",
                             Type = 2
                         },
@@ -2817,9 +2820,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #601.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #601",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #601",
+                            Type = 1
                         },
                         new
                         {
@@ -2829,8 +2832,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #602.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Bug #602",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #602",
+                            Type = 1
                         },
                         new
                         {
@@ -2850,9 +2853,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #604.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #604",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #604",
+                            Type = 0
                         },
                         new
                         {
@@ -2862,8 +2865,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #605.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Bug #605",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #605",
+                            Type = 2
                         },
                         new
                         {
@@ -2872,9 +2875,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #606.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #606",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #606",
+                            Type = 0
                         },
                         new
                         {
@@ -2883,9 +2886,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #607.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #607",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #607",
+                            Type = 0
                         },
                         new
                         {
@@ -2894,7 +2897,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #608.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Story #608",
                             Type = 2
                         },
@@ -2906,8 +2909,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #609.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Task #609",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #609",
+                            Type = 2
                         },
                         new
                         {
@@ -2927,7 +2930,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #611.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Story #611",
                             Type = 2
                         },
@@ -2938,9 +2941,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #612.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #612",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #612",
+                            Type = 0
                         },
                         new
                         {
@@ -2950,8 +2953,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #613.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Story #613",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #613",
+                            Type = 1
                         },
                         new
                         {
@@ -2960,9 +2963,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #614.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #614",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #614",
+                            Type = 0
                         },
                         new
                         {
@@ -2972,8 +2975,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #615.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #615",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #615",
+                            Type = 0
                         },
                         new
                         {
@@ -2982,9 +2985,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #616.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #616",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #616",
+                            Type = 2
                         },
                         new
                         {
@@ -3005,8 +3008,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #618.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Task #618",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #618",
+                            Type = 2
                         },
                         new
                         {
@@ -3015,7 +3018,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #619.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Task #619",
                             Type = 1
                         },
@@ -3037,7 +3040,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #621.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Task #621",
                             Type = 1
                         },
@@ -3049,8 +3052,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #622.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Story #622",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #622",
+                            Type = 1
                         },
                         new
                         {
@@ -3060,8 +3063,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #623.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #623",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #623",
+                            Type = 1
                         },
                         new
                         {
@@ -3070,9 +3073,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #624.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #624",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #624",
+                            Type = 1
                         },
                         new
                         {
@@ -3081,7 +3084,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #625.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Bug #625",
                             Type = 0
                         },
@@ -3093,8 +3096,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #626.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #626",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #626",
+                            Type = 2
                         },
                         new
                         {
@@ -3103,7 +3106,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #627.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Story #627",
                             Type = 2
                         },
@@ -3115,8 +3118,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #628.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #628",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #628",
+                            Type = 1
                         },
                         new
                         {
@@ -3125,7 +3128,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #629.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Task #629",
                             Type = 1
                         },
@@ -3147,9 +3150,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #631.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #631",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #631",
+                            Type = 1
                         },
                         new
                         {
@@ -3159,8 +3162,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #632.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Task #632",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #632",
+                            Type = 0
                         },
                         new
                         {
@@ -3169,9 +3172,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #633.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #633",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #633",
+                            Type = 1
                         },
                         new
                         {
@@ -3191,7 +3194,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #635.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Bug #635",
                             Type = 0
                         },
@@ -3203,8 +3206,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #636.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Story #636",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #636",
+                            Type = 0
                         },
                         new
                         {
@@ -3214,8 +3217,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #637.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #637",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #637",
+                            Type = 1
                         },
                         new
                         {
@@ -3225,8 +3228,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #638.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Bug #638",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #638",
+                            Type = 2
                         },
                         new
                         {
@@ -3236,8 +3239,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #639.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Bug #639",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #639",
+                            Type = 2
                         },
                         new
                         {
@@ -3246,9 +3249,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #640.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #640",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #640",
+                            Type = 2
                         },
                         new
                         {
@@ -3258,8 +3261,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #641.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #641",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #641",
+                            Type = 2
                         },
                         new
                         {
@@ -3269,8 +3272,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #642.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #642",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #642",
+                            Type = 0
                         },
                         new
                         {
@@ -3280,8 +3283,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #643.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #643",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #643",
+                            Type = 0
                         },
                         new
                         {
@@ -3290,9 +3293,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #644.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #644",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #644",
+                            Type = 0
                         },
                         new
                         {
@@ -3301,9 +3304,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #645.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #645",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #645",
+                            Type = 0
                         },
                         new
                         {
@@ -3312,9 +3315,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #646.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #646",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #646",
+                            Type = 2
                         },
                         new
                         {
@@ -3323,9 +3326,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #647.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #647",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #647",
+                            Type = 1
                         },
                         new
                         {
@@ -3345,9 +3348,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #649.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #649",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #649",
+                            Type = 2
                         },
                         new
                         {
@@ -3368,8 +3371,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #651.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #651",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #651",
+                            Type = 2
                         },
                         new
                         {
@@ -3378,9 +3381,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #652.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #652",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #652",
+                            Type = 2
                         },
                         new
                         {
@@ -3400,7 +3403,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #654.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Bug #654",
                             Type = 0
                         },
@@ -3411,9 +3414,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #655.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #655",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #655",
+                            Type = 0
                         },
                         new
                         {
@@ -3423,8 +3426,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #656.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #656",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #656",
+                            Type = 2
                         },
                         new
                         {
@@ -3433,9 +3436,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #657.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #657",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #657",
+                            Type = 2
                         },
                         new
                         {
@@ -3456,8 +3459,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #659.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Bug #659",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #659",
+                            Type = 1
                         },
                         new
                         {
@@ -3466,9 +3469,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #660.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #660",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #660",
+                            Type = 1
                         },
                         new
                         {
@@ -3477,7 +3480,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #661.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #661",
                             Type = 0
                         },
@@ -3488,7 +3491,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #662.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Bug #662",
                             Type = 0
                         },
@@ -3500,8 +3503,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #663.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #663",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #663",
+                            Type = 2
                         },
                         new
                         {
@@ -3510,7 +3513,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #664.",
                             ProjectId = 2,
-                            StatusId = 2,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #664",
                             Type = 0
                         },
@@ -3521,9 +3524,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #665.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #665",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #665",
+                            Type = 1
                         },
                         new
                         {
@@ -3532,9 +3535,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #666.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #666",
-                            Type = 0
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #666",
+                            Type = 2
                         },
                         new
                         {
@@ -3543,9 +3546,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #667.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #667",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #667",
+                            Type = 1
                         },
                         new
                         {
@@ -3555,8 +3558,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #668.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Bug #668",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #668",
+                            Type = 2
                         },
                         new
                         {
@@ -3565,7 +3568,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #669.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Story #669",
                             Type = 2
                         },
@@ -3576,9 +3579,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #670.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #670",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #670",
+                            Type = 1
                         },
                         new
                         {
@@ -3587,7 +3590,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #671.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #671",
                             Type = 0
                         },
@@ -3599,8 +3602,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #672.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Bug #672",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #672",
+                            Type = 1
                         },
                         new
                         {
@@ -3609,7 +3612,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #673.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Story #673",
                             Type = 2
                         },
@@ -3621,8 +3624,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #674.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Story #674",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #674",
+                            Type = 1
                         },
                         new
                         {
@@ -3642,9 +3645,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #676.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #676",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #676",
+                            Type = 0
                         },
                         new
                         {
@@ -3653,9 +3656,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #677.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #677",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #677",
+                            Type = 2
                         },
                         new
                         {
@@ -3665,8 +3668,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #678.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #678",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #678",
+                            Type = 1
                         },
                         new
                         {
@@ -3686,7 +3689,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #680.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Bug #680",
                             Type = 0
                         },
@@ -3697,7 +3700,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #681.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 1,
                             Title = "Demo Ticket of type Bug #681",
                             Type = 0
                         },
@@ -3709,8 +3712,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #682.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #682",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #682",
+                            Type = 1
                         },
                         new
                         {
@@ -3719,9 +3722,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #683.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #683",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #683",
+                            Type = 0
                         },
                         new
                         {
@@ -3730,9 +3733,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #684.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #684",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #684",
+                            Type = 2
                         },
                         new
                         {
@@ -3741,9 +3744,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #685.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #685",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #685",
+                            Type = 0
                         },
                         new
                         {
@@ -3752,9 +3755,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #686.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #686",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #686",
+                            Type = 1
                         },
                         new
                         {
@@ -3763,9 +3766,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #687.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #687",
-                            Type = 2
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Task #687",
+                            Type = 1
                         },
                         new
                         {
@@ -3775,8 +3778,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #688.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Story #688",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #688",
+                            Type = 1
                         },
                         new
                         {
@@ -3785,9 +3788,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #689.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #689",
-                            Type = 2
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #689",
+                            Type = 1
                         },
                         new
                         {
@@ -3797,8 +3800,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #690.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Task #690",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #690",
+                            Type = 2
                         },
                         new
                         {
@@ -3807,9 +3810,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #691.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #691",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #691",
+                            Type = 1
                         },
                         new
                         {
@@ -3829,9 +3832,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #693.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #693",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #693",
+                            Type = 0
                         },
                         new
                         {
@@ -3840,7 +3843,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #694.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 3,
                             Title = "Demo Ticket of type Story #694",
                             Type = 2
                         },
@@ -3852,8 +3855,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #695.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #695",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #695",
+                            Type = 0
                         },
                         new
                         {
@@ -3863,8 +3866,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #696.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #696",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #696",
+                            Type = 0
                         },
                         new
                         {
@@ -3874,8 +3877,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #697.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Task #697",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #697",
+                            Type = 0
                         },
                         new
                         {
@@ -3885,8 +3888,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #698.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Bug #698",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #698",
+                            Type = 2
                         },
                         new
                         {
@@ -3895,9 +3898,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #699.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #699",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #699",
+                            Type = 2
                         },
                         new
                         {
@@ -3907,8 +3910,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #700.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #700",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #700",
+                            Type = 0
                         },
                         new
                         {
@@ -3918,8 +3921,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #701.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #701",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #701",
+                            Type = 2
                         },
                         new
                         {
@@ -3929,8 +3932,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #702.",
                             ProjectId = 2,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Story #702",
-                            Type = 2
+                            Title = "Demo Ticket of type Bug #702",
+                            Type = 0
                         },
                         new
                         {
@@ -3939,9 +3942,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #703.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #703",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #703",
+                            Type = 0
                         },
                         new
                         {
@@ -3950,9 +3953,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #704.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #704",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #704",
+                            Type = 2
                         },
                         new
                         {
@@ -3962,8 +3965,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #705.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Story #705",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #705",
+                            Type = 1
                         },
                         new
                         {
@@ -3972,9 +3975,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #706.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #706",
-                            Type = 2
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #706",
+                            Type = 0
                         },
                         new
                         {
@@ -3984,8 +3987,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #707.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Story #707",
-                            Type = 2
+                            Title = "Demo Ticket of type Task #707",
+                            Type = 1
                         },
                         new
                         {
@@ -3994,9 +3997,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #708.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #708",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Story #708",
+                            Type = 2
                         },
                         new
                         {
@@ -4005,9 +4008,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #709.",
                             ProjectId = 2,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #709",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Task #709",
+                            Type = 1
                         },
                         new
                         {
@@ -4016,9 +4019,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #710.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #710",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #710",
+                            Type = 1
                         },
                         new
                         {
@@ -4027,9 +4030,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #711.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #711",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #711",
+                            Type = 2
                         },
                         new
                         {
@@ -4039,8 +4042,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #712.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Task #712",
-                            Type = 1
+                            Title = "Demo Ticket of type Bug #712",
+                            Type = 0
                         },
                         new
                         {
@@ -4050,8 +4053,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #713.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Bug #713",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #713",
+                            Type = 1
                         },
                         new
                         {
@@ -4060,7 +4063,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #714.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Task #714",
                             Type = 1
                         },
@@ -4071,9 +4074,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #715.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #715",
-                            Type = 0
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Story #715",
+                            Type = 2
                         },
                         new
                         {
@@ -4082,7 +4085,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #716.",
                             ProjectId = 2,
-                            StatusId = 1,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Story #716",
                             Type = 2
                         },
@@ -4093,9 +4096,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #717.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #717",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Task #717",
+                            Type = 1
                         },
                         new
                         {
@@ -4105,8 +4108,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #718.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #718",
-                            Type = 0
+                            Title = "Demo Ticket of type Task #718",
+                            Type = 1
                         },
                         new
                         {
@@ -4115,9 +4118,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #719.",
                             ProjectId = 2,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Task #719",
-                            Type = 1
+                            StatusId = 3,
+                            Title = "Demo Ticket of type Bug #719",
+                            Type = 0
                         },
                         new
                         {
@@ -4127,8 +4130,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #720.",
                             ProjectId = 2,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Task #720",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #720",
+                            Type = 2
                         },
                         new
                         {
@@ -4137,9 +4140,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #721.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #721",
-                            Type = 1
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Bug #721",
+                            Type = 0
                         },
                         new
                         {
@@ -4148,9 +4151,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #722.",
                             ProjectId = 2,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #722",
-                            Type = 1
+                            StatusId = 1,
+                            Title = "Demo Ticket of type Bug #722",
+                            Type = 0
                         },
                         new
                         {
@@ -4159,7 +4162,7 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #723.",
                             ProjectId = 2,
-                            StatusId = 3,
+                            StatusId = 2,
                             Title = "Demo Ticket of type Bug #723",
                             Type = 0
                         },
@@ -4182,8 +4185,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #725.",
                             ProjectId = 2,
                             StatusId = 2,
-                            Title = "Demo Ticket of type Task #725",
-                            Type = 1
+                            Title = "Demo Ticket of type Story #725",
+                            Type = 2
                         },
                         new
                         {
@@ -4192,9 +4195,9 @@ namespace TaskSync.Infrastructure.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "This is the description of the demo ticket #726.",
                             ProjectId = 3,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Bug #726",
-                            Type = 0
+                            StatusId = 2,
+                            Title = "Demo Ticket of type Story #726",
+                            Type = 2
                         },
                         new
                         {
@@ -4204,8 +4207,8 @@ namespace TaskSync.Infrastructure.Migrations
                             Description = "This is the description of the demo ticket #727.",
                             ProjectId = 3,
                             StatusId = 3,
-                            Title = "Demo Ticket of type Bug #727",
-                            Type = 0
+                            Title = "Demo Ticket of type Story #727",
+                            Type = 2
                         },
                         new
                         {
