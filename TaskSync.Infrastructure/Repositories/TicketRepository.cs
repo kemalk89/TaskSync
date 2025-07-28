@@ -181,9 +181,9 @@ public class TicketRepository : ITicketRepository
             query = dbSet.Where(t => t.Id == ticketId);
         }
 
-        if (filter != null && !string.IsNullOrWhiteSpace(filter.SearchText))
+        if (!string.IsNullOrWhiteSpace(filter?.SearchText))
         {
-            query = dbSet.Where(t => t.Title.Contains(filter.SearchText));
+            query = dbSet.Where(t => EF.Functions.Like(t.Title.ToLower(), $"%{filter.SearchText.ToLower()}%"));
         }
 
         var tickets = query
