@@ -70,6 +70,13 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet]
+    [Route("{projectId}/backlog")]
+    public async Task GetBacklog([FromRoute] int projectId)
+    {
+        // TODO
+    }
+    
+    [HttpGet]
     [Route("{id}/tickets")]
     public async Task<PagedResult<TicketResponse>> GetProjectTickets(
         [FromRoute] int id,
@@ -96,5 +103,12 @@ public class ProjectController : ControllerBase
         // TODO Permissions: Who can assign team members?
         await _projectService.AssignTeamMembersAsync(projectId, command);
         return NoContent();
+    }
+    
+    [HttpPatch]
+    [Route("{projectId}/{userId}")]
+    public async Task<Result<bool>> AssignProjectManager( [FromRoute] int projectId, [FromRoute] int userId)
+    {
+        return await _projectService.AssignProjectManagerAsync(projectId, userId);
     }
 }
