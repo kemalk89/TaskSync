@@ -85,7 +85,7 @@ public class ProjectService : IProjectService
         return Result<bool>.Ok(true);
     }
 
-    public async Task<Result<bool>> AssignProjectManagerAsync(int projectId, int projectManagerId)
+    public async Task<Result<bool>> UpdateProjectAsync(int projectId, UpdateProjectCommand updateProjectCommand)
     {
         var project = await _projectRepository.GetByIdAsync(projectId);
         if (project == null)
@@ -98,15 +98,18 @@ public class ProjectService : IProjectService
         {
             return Result<bool>.Fail("No permissions: Current user cannot assign project manager to project with ID " + projectId);
         }
-
-        var currentProjectManager = FindProjectManager(project);
-        if (currentProjectManager != null)
-        {
-            _logger.LogInformation("Project (ID: {ProjectId}) already have a project manager assigned (ID: {UserId}). Going to replace with new project manager (ID: {UserId1}).",
-                project.Id, currentProjectManager.UserId, projectManagerId);   
-        }
         
-        await _projectRepository.UpdateProjectManagerAsync(projectId, projectManagerId);
+        if (updateProjectCommand.ProjectManagerId != null)
+        {
+            var currentProjectManager = FindProjectManager(project);
+            if (currentProjectManager != null)
+            {
+                _logger.LogInformation("Project (ID: {ProjectId}) already have a project manager assigned (ID: {UserId}). Going to replace with new project manager (ID: {UserId1}).",
+                    project.Id, currentProjectManager.UserId, updateProjectCommand.ProjectManagerId);   
+            }
+        }
+
+        await _projectRepository.UpdateProjectAsync(projectId, updateProjectCommand);
         
         return Result<bool>.Ok(true);
     }

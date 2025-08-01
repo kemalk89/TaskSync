@@ -12,5 +12,5 @@ public interface IProjectService
     Task<PagedResult<TicketModel>> GetProjectTicketsAsync(int projectId, int pageNumber, int pageSize);
     Task DeleteProjectAsync(int id);
     Task<Result<bool>> AssignTeamMembersAsync(int projectId, AssignTeamMembersCommand command);
-    Task<Result<bool>> AssignProjectManagerAsync(int projectId, int projectManagerId);
+    Task<Result<bool>> UpdateProjectAsync(int projectId, UpdateProjectCommand updateProjectCommand);
 }

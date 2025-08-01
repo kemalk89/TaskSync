@@ -9,6 +9,6 @@ public interface IProjectRepository
     Task<Project?> GetByIdAsync(int id);
     Task<PagedResult<Project>> GetAllAsync(int pageNumber, int pageSize);
     Task DeleteByIdAsync(int id);
-    Task UpdateProjectManagerAsync(int projectId, int projectManagerId);
+    Task UpdateProjectAsync(int projectId, UpdateProjectCommand command);
     Task SaveAsync(Project project);
 }

@@ -127,7 +127,7 @@ public class ProjectRepository : IProjectRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task UpdateProjectManagerAsync(int projectId, int projectManagerId)
+    public async Task UpdateProjectAsync(int projectId, UpdateProjectCommand command)
     {
         var project = await _dbContext.Projects.FindAsync(projectId);
         if (project == null)
@@ -135,12 +135,20 @@ public class ProjectRepository : IProjectRepository
             throw new KeyNotFoundException($"Project with ID {projectId} not found.");
         }
 
-        project.ProjectMembers.Add(new ProjectMemberEntity
+        if (command.ProjectManagerId != null)
         {
-            Role = "ProjectManager", 
-            UserId = projectManagerId, 
-            ProjectId = projectId
-        });
+            project.ProjectMembers.Add(new ProjectMemberEntity
+            {
+                Role = "ProjectManager", 
+                UserId = (int) command.ProjectManagerId, 
+                ProjectId = projectId
+            });
+        }
+
+        if (!string.IsNullOrWhiteSpace(command.Title))
+        {
+            project.Title = command.Title;
+        }
         
         await _dbContext.SaveChangesAsync();
     }

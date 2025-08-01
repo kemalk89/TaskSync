@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using TaskSync.Controllers.Response;
 using TaskSync.Domain.Project;
 using TaskSync.Domain.Project.Commands;
@@ -106,9 +107,11 @@ public class ProjectController : ControllerBase
     }
     
     [HttpPatch]
-    [Route("{projectId}/{userId}")]
-    public async Task<Result<bool>> AssignProjectManager( [FromRoute] int projectId, [FromRoute] int userId)
+    [Route("{projectId}")]
+    public async Task<Result<bool>> AssignProjectManager( 
+        [FromRoute] int projectId, 
+        [FromBody] UpdateProjectCommand updateProjectCommand)
     {
-        return await _projectService.AssignProjectManagerAsync(projectId, userId);
+        return await _projectService.UpdateProjectAsync(projectId, updateProjectCommand);
     }
 }

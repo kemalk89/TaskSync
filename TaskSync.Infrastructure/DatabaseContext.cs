@@ -72,7 +72,7 @@ public class DatabaseContext : DbContext
             Id = 1, ProjectId = 1, UserId = 1, Role = "Software Developer"
         });
         
-        CreateDemoTickets(modelBuilder, projectId: 1, amount: 127);
+        CreateDemoTickets(modelBuilder, projectId: 1, amount: 12);
 
         // demo project #2
         modelBuilder.Entity<ProjectEntity>().HasData(new ProjectEntity
@@ -93,7 +93,7 @@ public class DatabaseContext : DbContext
            Id = 3, ProjectId = 2, UserId = 2, Role = "UI / UX"
         });
 
-        CreateDemoTickets(modelBuilder, projectId: 2, amount: 234);
+        CreateDemoTickets(modelBuilder, projectId: 2, amount: 34);
 
         // demo project #3
         modelBuilder.Entity<ProjectEntity>().HasData(new ProjectEntity
@@ -153,7 +153,7 @@ public class DatabaseContext : DbContext
                 Id = TicketIdTracker,
                 Type = ticketType,
                 Title = title,
-                Description = $"This is the description of the demo ticket #{TicketIdTracker}.",
+                Description = GetDescription($"This is the description of the demo ticket #{TicketIdTracker}."),
                 CreatedBy = 0,
                 ProjectId = projectId,
                 StatusId = new Random().Next(1, 4) // Generates a random number between 1 (inclusive) and 4 (exclusive)
@@ -211,5 +211,26 @@ public class DatabaseContext : DbContext
         }
 
         return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    private string GetDescription(string text)
+    {
+        return $$"""
+               {
+                 "type": "doc",
+                 "content": [
+                   {
+                     "type": "paragraph",
+                     "content": [
+                       {
+                         "type": "text",
+                         "text": "{{text}}"
+                       }
+                     ]
+                   },
+                   { "type": "paragraph" }
+                 ]
+               }
+               """;
     }
 }
