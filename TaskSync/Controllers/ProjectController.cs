@@ -108,7 +108,7 @@ public class ProjectController : ControllerBase
     
     [HttpPatch]
     [Route("{projectId}")]
-    public async Task<Result<bool>> AssignProjectManager( 
+    public async Task<Result<bool>> UpdateProject( 
         [FromRoute] int projectId, 
         [FromBody] UpdateProjectCommand updateProjectCommand)
     {

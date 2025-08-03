@@ -48,12 +48,6 @@ public class TicketService : ITicketService
         return await _ticketRepository.GetByProjectIdAsync(projectId, pageNumber, pageSize);
     }
 
-    public async Task<TicketStatus> UpdateTicketStatusAsync(int ticketId, int statusId)
-    {
-        var newStatus = await _ticketRepository.UpdateTicketStatusAsync(ticketId, statusId);
-        return newStatus;
-    }
-
     public async Task<TicketCommentModel> AddCommentAsync(int id, CreateTicketCommentCommand cmd)
     {
         var ticket = await _ticketRepository.GetByIdAsync(id);
@@ -118,5 +112,11 @@ public class TicketService : ITicketService
         }
         
         return Result<bool>.Fail("Cannot delete comment with ID " + commentId + ". No permissions.");
+    }
+
+    public async Task<Result<bool>> UpdateTicketAsync(int ticketId, UpdateTicketCommand updateTicketCommand)
+    {   
+        var result = await _ticketRepository.UpdateTicketAsync(ticketId, updateTicketCommand);
+        return result;
     }
 }

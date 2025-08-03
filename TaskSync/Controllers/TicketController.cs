@@ -5,6 +5,7 @@ using TaskSync.Controllers.Response;
 using TaskSync.Domain.Exceptions;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
+using TaskSync.Domain.Ticket.Command;
 
 namespace TaskSync.Controllers;
 
@@ -72,20 +73,11 @@ public class TicketController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("{id}/status/{statusId}")]
-    public async Task<ActionResult> UpdateTicketStatus([FromRoute] int id, [FromRoute] int statusId)
-    {
-        try
-        {
-            var newStatus = await _ticketService.UpdateTicketStatusAsync(id, statusId);
-            return Ok(newStatus);
-        }
-        catch (ResourceNotFoundException e)
-        {
-            _logger.LogError(e.Message);
-            return NotFound("Ticket or status not found.");
-        }
-
+    [Route("{id}")]
+    public async Task<ActionResult<Result<bool>>> UpdateTicket([FromRoute] int id, [FromBody] UpdateTicketCommand updateTicketCommand)
+    { 
+        var newStatus = await _ticketService.UpdateTicketAsync(id, updateTicketCommand);
+        return Ok(newStatus);
     }
 
     [HttpPost]

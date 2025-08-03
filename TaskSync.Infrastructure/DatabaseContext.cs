@@ -63,7 +63,7 @@ public class DatabaseContext : DbContext
         {
             Id = 1,
             Title = "My First Project",
-            Description = "This is the description of the first project. This project has one member as well.",
+            Description = GetDescription("This is the description of the first project. This project has one member as well."),
             CreatedBy = 1
         });
         
@@ -79,7 +79,7 @@ public class DatabaseContext : DbContext
         {
             Id = 2,
             Title = "My 2nd Project",
-            Description = "This is the description of the 2nd project. This project has two members.",
+            Description = GetDescription("This is the description of the 2nd project. This project has two members."),
             CreatedBy = 2
         });
 
@@ -100,7 +100,7 @@ public class DatabaseContext : DbContext
         {
             Id = 3,
             Title = "My 3rd Project",
-            Description = "This is the description of the 3rd project.",
+            Description = GetDescription("This is the description of the 3rd project."),
             CreatedBy = 0
         });
 
@@ -111,7 +111,7 @@ public class DatabaseContext : DbContext
         {
             Id = 4,
             Title = "My 4rd Project",
-            Description = "This is the description of the 4rd project.",
+            Description = GetDescription("This is the description of the 4rd project."),
             CreatedBy = 0
         });
     }

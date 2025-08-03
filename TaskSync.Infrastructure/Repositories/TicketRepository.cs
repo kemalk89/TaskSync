@@ -87,27 +87,6 @@ public class TicketRepository : ITicketRepository
         return tickets.Items.FirstOrDefault();
     }
 
-    public async Task<TicketStatus> UpdateTicketStatusAsync(int ticketId, int statusId)
-    {
-        var ticket = await _dbContext.Tickets.FindAsync(ticketId);
-        if (ticket == null)
-        {
-            throw new ResourceNotFoundException($"Ticket with id {ticketId} could not be found.");
-        }
-
-        var status = _dbContext.TicketStatus.Find(statusId);
-        if (status == null)
-        {
-            throw new ResourceNotFoundException($"TicketStatus with id {statusId} could not be found.");
-        }
-
-        ticket.Status = status;
-
-        await _dbContext.SaveChangesAsync();
-
-        return status.ToDomainObject();
-    }
-
     public async Task<TicketCommentModel> AddTicketCommentAsync(int ticketId, CreateTicketCommentCommand cmd)
     {
         var ticket = await _dbContext.Tickets.FindAsync(ticketId);
@@ -250,5 +229,38 @@ public class TicketRepository : ITicketRepository
         }
 
         return false;
+    }
+
+    public async Task<Result<bool>> UpdateTicketAsync(int ticketId, UpdateTicketCommand updateTicketCommand)
+    {
+        var ticket = await _dbContext.Tickets.FindAsync(ticketId);
+        if (ticket == null)
+        { 
+            return Result<bool>.Fail($"Ticket with id {ticketId} could not be found.");
+        }
+
+        if (updateTicketCommand.StatusId != null)
+        {
+            var status = _dbContext.TicketStatus.Find(updateTicketCommand.StatusId);
+            if (status == null)
+            {
+                return Result<bool>.Fail($"TicketStatus with id {updateTicketCommand.StatusId} could not be found.");
+            }
+            
+            ticket.Status = status;
+        }
+
+        if (!string.IsNullOrWhiteSpace(updateTicketCommand.Title))
+        {
+            ticket.Title = updateTicketCommand.Title;
+        }
+        
+        if (updateTicketCommand.Description != null)
+        {
+            ticket.Description = updateTicketCommand.Description;
+        }
+
+        await _dbContext.SaveChangesAsync();
+        return Result<bool>.Ok(true);
     }
 }

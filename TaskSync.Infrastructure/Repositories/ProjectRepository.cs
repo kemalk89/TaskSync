@@ -149,6 +149,11 @@ public class ProjectRepository : IProjectRepository
         {
             project.Title = command.Title;
         }
+
+        if (command.Description != null)
+        {
+            project.Description = command.Description;
+        }
         
         await _dbContext.SaveChangesAsync();
     }

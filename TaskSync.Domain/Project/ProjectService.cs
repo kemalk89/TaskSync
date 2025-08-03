@@ -73,7 +73,6 @@ public class ProjectService : IProjectService
         {
             return Result<bool>.Fail("Project not found. ID " + projectId);
         }
-
         
         command.TeamMembers.ToList().ForEach(m => project.ProjectMembers.Add(new ProjectMember
         {
@@ -90,13 +89,15 @@ public class ProjectService : IProjectService
         var project = await _projectRepository.GetByIdAsync(projectId);
         if (project == null)
         {
-            return Result<bool>.Fail("Project not found. ID " + projectId);
+            _logger.LogInformation("Project not found. ID {ProjectId}", projectId);
+            return Result<bool>.Fail(ResultCodes.ResultCodeResourceNotFound);
         }
         
         var currentUser = await _currentUserService.GetCurrentUserAsync();
         if (project.CreatedBy != null && project.CreatedBy.Id != currentUser?.Id)
         {
-            return Result<bool>.Fail("No permissions: Current user cannot assign project manager to project with ID " + projectId);
+            _logger.LogInformation("No permissions: Current user cannot assign project manager to project with ID {ProjectId}", projectId);
+            return Result<bool>.Fail(ResultCodes.ResultCodeNoPermissions);
         }
         
         if (updateProjectCommand.ProjectManagerId != null)
