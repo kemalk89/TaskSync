@@ -1,4 +1,5 @@
 ![build project](https://github.com/kemalk89/TaskSync/actions/workflows/dotnet.yml/badge.svg)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=kemalk89_TaskSync)](https://sonarcloud.io/summary/new_code?id=kemalk89_TaskSync)
 
 # Development
 
