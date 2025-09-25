@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+
 using TaskSync.Controllers.Request;
 using TaskSync.Controllers.Response;
 using TaskSync.Domain.User;
@@ -44,20 +46,27 @@ public class UserController : ControllerBase
             _logger.LogWarning("External data source returned no user for ID: {id}", request.ExternalUserId);
             return NotFound();
         }
-        
-        var user = await _userRepository.FindUserByExternalUserIdAsync(request.ExternalUserId);
+
+        var user = await _userRepository.FindUserByEmailAsync(externalUser.Email);
         if (user == null)
         {
-            _logger.LogInformation("Adding new user with ID: {id}", request.ExternalUserId);
+            _logger.LogInformation("Adding new external user with ID: {id}", request.ExternalUserId);
             await _userRepository.SaveNewUserAsync(externalUser);
             return Created();
         }
         
         _logger.LogDebug("Updating data of external user with ID: {id}", request.ExternalUserId);
 
-        user.Email = externalUser.Email;
-        user.Picture = externalUser.Picture;
-        user.Username = externalUser.Username;
+        if (user.Picture.IsNullOrEmpty())
+        {
+            user.Picture = externalUser.Picture;
+        }
+        if (user.Username.IsNullOrEmpty())
+        {
+            user.Username = externalUser.Username;
+        }
+        
+        user.ExternalUserId = request.ExternalUserId;
         await _userRepository.UpdateUserAsync(user);
 
         return Ok();

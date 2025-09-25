@@ -107,4 +107,10 @@ public class UserRepository : IUserRepository
         
         return entity?.ToUser();
     }
+
+    public async Task<User?> FindUserByEmailAsync(string email)
+    {
+        var entity = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+        return entity?.ToUser();
+    }
 }

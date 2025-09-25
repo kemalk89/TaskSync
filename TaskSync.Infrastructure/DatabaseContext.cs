@@ -129,11 +129,11 @@ public class DatabaseContext : DbContext
 
     private void CreateDemoUsers(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 1, Email = "Kerem.Karacay@tasksync.test", Username = "Kerem Karacay", Picture = "" });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 2, Email = "Deniz.Aslansu@tasksync.test", Username = "Deniz Aslansu", Picture = "" });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 3, Email = "Ali.Balci@tasksync.test", Username = "Ali Balcı", Picture = "" });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 4, Email = "Sven.Imker@tasksync.test", Username = "Sven Imker", Picture = "" });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 5, Email = "Mina.Koch@tasksync.test", Username = "Mina Koch", Picture = "" });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 1, Email = "Kerem.Karacay@tasksync.test", Username = "Kerem Karacay", Picture = "", CreatedDate = DateTimeOffset.UtcNow });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 2, Email = "Deniz.Aslansu@tasksync.test", Username = "Deniz Aslansu", Picture = "", CreatedDate = DateTimeOffset.UtcNow });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 3, Email = "Ali.Balci@tasksync.test", Username = "Ali Balcı", Picture = "", CreatedDate = DateTimeOffset.UtcNow });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 4, Email = "Sven.Imker@tasksync.test", Username = "Sven Imker", Picture = "", CreatedDate = DateTimeOffset.UtcNow });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 5, Email = "Mina.Koch@tasksync.test", Username = "Mina Koch", Picture = "", CreatedDate = DateTimeOffset.UtcNow });
     }
     
     private void CreateDemoTickets(ModelBuilder modelBuilder, int projectId, int amount)

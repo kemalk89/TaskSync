@@ -27,5 +27,6 @@ public class UserEntity : AuditedEntity
         Email = user.Email;
         Username = user.Username;
         Picture = user.Picture;
+        ExternalUserId = user.ExternalUserId;
     }
 }
