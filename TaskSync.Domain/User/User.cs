@@ -7,4 +7,6 @@ public class User
     public string? Username { get; set; }
     public string Email { get; set; }
     public string? Picture { get; set; }
+    public DateTimeOffset CreatedDate { get; set; }
+    public DateTimeOffset? ModifiedDate { get; set; }
 }

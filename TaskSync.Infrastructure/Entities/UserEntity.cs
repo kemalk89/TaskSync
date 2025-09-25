@@ -6,7 +6,7 @@ public class UserEntity : AuditedEntity
 {
     public int Id { get; set; }
     public string Email { get; set; }
-    public string Username { get; set; }
+    public string? Username { get; set; }
     public string? ExternalUserId { get; set; }
     public string? Picture { get; set; }
 
@@ -18,7 +18,9 @@ public class UserEntity : AuditedEntity
             Email = Email,
             Username = Username,
             Picture = Picture,
-            ExternalUserId = ExternalUserId
+            ExternalUserId = ExternalUserId,
+            CreatedDate = CreatedDate,
+            ModifiedDate = ModifiedDate
         };
     }
 
@@ -28,5 +30,6 @@ public class UserEntity : AuditedEntity
         Username = user.Username;
         Picture = user.Picture;
         ExternalUserId = user.ExternalUserId;
+        ModifiedDate = DateTimeOffset.Now;
     }
 }

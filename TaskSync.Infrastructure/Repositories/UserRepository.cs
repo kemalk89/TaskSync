@@ -59,14 +59,7 @@ public class UserRepository : IUserRepository
             .Take(pageSize)
             .ToListAsync();
         
-        var users = userEntities.Select(u => new User
-        {
-            Id = u.Id,
-            ExternalUserId = u.ExternalUserId,
-            Username = u.Username,
-            Email = u.Email,
-            Picture = u.Picture
-        });
+        var users = userEntities.Select(u => u.ToUser());
 
         return users.ToArray();
     }
