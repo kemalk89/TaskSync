@@ -38,12 +38,46 @@ public class ProjectControllerTests : BaseIntegrationTest
         var fetchedProject = await responseGet.Content.ReadFromJsonAsync<ProjectResponse>();
         Assert.Equal("Test Project Title", fetchedProject?.Title);
     }
-    
-    /*
-    [Fact]
-    public async Task CreateTicket_ShouldReturn404_WhenProjectNotExists()
-    {
 
+    [Fact]
+    public async Task Api_ShouldReturn401_WhenNoAuthProvided()
+    {
+        var endpoints = new (string Url, HttpMethod Method, object? Payload)[]
+        {
+            ("/api/project/123", HttpMethod.Get, null),
+            ("/api/project", HttpMethod.Get, null),
+            ("/api/project", HttpMethod.Post, new CreateProjectCommand())
+        };
+        
+        foreach (var (url, method, payload) in endpoints)
+        {
+            HttpResponseMessage response;
+            if (method == HttpMethod.Post)
+            {
+                response = await _client.PostAsJsonAsync(url, payload);
+            } else if (method == HttpMethod.Get)
+            {
+                response = await _client.GetAsync(url);
+                
+            }
+            else
+            {
+                throw new NotSupportedException($"Method {method} not supported");
+            }
+
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
     }
-    */
+    
+    [Fact]
+    public async Task CreateTicket_ShouldReturn400_WhenInvalidRequestProvided()
+    {
+        SetAuthenticatedUser();
+
+        var cmd = new CreateProjectCommand();
+        
+        var responseCreate = await _client.PostAsJsonAsync("/api/project", cmd);
+        
+        Assert.Equal(HttpStatusCode.BadRequest, responseCreate.StatusCode);
+    }
 }
