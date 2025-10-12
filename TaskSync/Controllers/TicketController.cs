@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TaskSync.Controllers.Request;
 using TaskSync.Controllers.Response;
 using TaskSync.Domain.Exceptions;
+using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
 using TaskSync.Domain.Ticket.Command;
@@ -45,11 +46,32 @@ public class TicketController : ControllerBase
         var ticket = await _ticketService.GetTicketByIdAsync(id);
         if (ticket == null)
         {
-            return NotFound();
+            return NotFound("Ticket not found");
         }
         return Ok(new TicketResponse(ticket));
     }
+    
+    [HttpPost("{ticketId}/labels")]
+    public async Task<ActionResult<bool>> AssignTicketLabel(int ticketId, [FromBody] AssignTicketLabelCommand cmd)
+    {
+        var result = await _ticketService.AssignTicketLabelAsync(ticketId, cmd);
 
+        return result switch
+        {
+            { Success: false, Error: ResultCodes.ResultCodeResourceNotFound } => NotFound(result.ErrorDetails),
+            { Success: false, Error: ResultCodes.ResultCodeValidationFailed } => BadRequest(result.ErrorDetails),
+            _ => Ok(result.Value)
+        };
+    }
+
+    /*
+    [HttpPost("{ticketId}/labels")]
+    public async Task<ActionResult> UnassignTicketLabel([FromRoute] int ticketId)
+    {
+        // TODO
+        throw new NotImplementedException();
+    }
+    */
     [HttpPost]
     public async Task<ActionResult<CreateTicketResponse>> CreateTicket([FromBody] CreateTicketRequest req)
     {

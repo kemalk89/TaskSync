@@ -5,6 +5,8 @@ using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
 using TaskSync.Domain.User;
 
+using ResultCodes = TaskSync.Domain.Shared.ResultCodes;
+
 namespace TaskSync.Domain.Project;
 
 public class ProjectService : IProjectService

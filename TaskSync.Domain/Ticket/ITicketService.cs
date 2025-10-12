@@ -1,3 +1,4 @@
+using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket.Command;
 
@@ -14,4 +15,5 @@ public interface ITicketService
     Task<PagedResult<TicketCommentModel>> GetTicketCommentsAsync(int id, int pageNumber, int pageSize);
     Task<Result<bool>> DeleteTicketAsync(int id);
     Task<Result<bool>> DeleteTicketCommentAsync(int commentId);
+    Task<Result<bool>> AssignTicketLabelAsync(int ticketId, AssignTicketLabelCommand cmd);
 }

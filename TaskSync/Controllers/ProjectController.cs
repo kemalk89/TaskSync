@@ -48,6 +48,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<ProjectResponse>> CreateProject(
         [FromBody] CreateProjectCommand req
     )

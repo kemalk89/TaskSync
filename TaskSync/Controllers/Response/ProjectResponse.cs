@@ -16,6 +16,11 @@ public class ProjectResponse
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset? ModifiedDate { get; set; }
 
+    // Parameterless constructor for JSON deserialization (needed in Integration Tests)
+    public ProjectResponse() 
+    {
+    }
+    
     public ProjectResponse(Project project)
     {
         Id = project.Id;

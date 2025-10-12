@@ -16,6 +16,8 @@ public class TicketResponse
     public ProjectResponse Project { get; set; }
     public string? Type { get; set; }
     
+    public List<TicketLabelModel> Labels { get; set; }
+    
     public TicketResponse(TicketModel ticket)
     {
         Id = ticket.Id;
@@ -27,6 +29,7 @@ public class TicketResponse
         ModifiedDate = ticket.ModifiedDate;
         Status = ticket.Status != null ? new TicketStatusResponse(ticket.Status) : null;
         Project = new ProjectResponse(ticket.Project);
+        Labels = ticket.Labels;
         Type = ticket.Type switch
         {
             TicketType.Task => "task",

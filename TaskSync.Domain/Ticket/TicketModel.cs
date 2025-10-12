@@ -8,6 +8,8 @@ public class TicketModel
 
     public int ProjectId { get; set; }
     public User.User? Assignee { get; set; }
+    
+    public List<TicketLabelModel> Labels { get; set; }
 
     public User.User? CreatedBy { get; set; }
 

@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 
 using TaskSync.Auth.Auth0;
 using TaskSync.Common;
+using TaskSync.Extensions;
 
 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
 {
@@ -27,8 +28,6 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
     .AddEnvironmentVariables()
     .Build();
-
-
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
@@ -79,7 +78,8 @@ try
 
     builder.Services.AddScoped<ITicketService, TicketService>();
     builder.Services.AddScoped<ITicketRepository, TicketRepository>();
-
+    builder.Services.AddScoped<ILabelRepository, LabelRepository>();
+    
     builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
 
@@ -126,6 +126,7 @@ try
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+        app.ApplyMigrations();
     }
 
     app.UseHttpsRedirection();
@@ -155,3 +156,6 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+// This line of code is needed to enable integration tests
+public partial class Program { }

@@ -1,5 +1,6 @@
 using TaskSync.Domain.Exceptions;
 using TaskSync.Domain.Project;
+using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket.Command;
 using TaskSync.Domain.User;
@@ -11,12 +12,14 @@ public class TicketService : ITicketService
     private readonly ITicketRepository _ticketRepository;
     private readonly IProjectRepository _projectRepository;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILabelRepository _labelRepository;
 
-    public TicketService(ITicketRepository taskRepository, IProjectRepository projectRepository, ICurrentUserService currentUserService)
+    public TicketService(ITicketRepository taskRepository, IProjectRepository projectRepository, ICurrentUserService currentUserService, ILabelRepository labelRepository)
     {
         _ticketRepository = taskRepository;
         _projectRepository = projectRepository;
         _currentUserService = currentUserService;
+        _labelRepository = labelRepository;
     }
 
     public async Task<int?> CreateTicketAsync(CreateTicketCommand cmd)
@@ -118,5 +121,48 @@ public class TicketService : ITicketService
     {   
         var result = await _ticketRepository.UpdateTicketAsync(ticketId, updateTicketCommand);
         return result;
+    }
+
+    public async Task<Result<bool>> AssignTicketLabelAsync(int ticketId, AssignTicketLabelCommand cmd)
+    {
+        var ticket = await _ticketRepository.GetByIdAsync(ticketId);
+        if (ticket is null)
+        {
+            return Result<bool>.Fail(ResultCodes.ResultCodeResourceNotFound, ErrorDetails.TicketNotFound);
+        }
+
+        // validation
+        if (cmd.LabelId == null && string.IsNullOrWhiteSpace(cmd.Title))
+        {
+            return Result<bool>.Fail(
+                ResultCodes.ResultCodeValidationFailed,
+                $"Both field {nameof(cmd.LabelId)} and {nameof(cmd.Title)} cannot be null or empty.");
+        }
+
+        var labelId = cmd.LabelId;
+        if (cmd.LabelId == null)
+        {
+            labelId = await _labelRepository.CreateLabelAsync(cmd.Title!);
+        }
+        else
+        {
+            var label = await _labelRepository.FindByIdAsync((int) labelId!); 
+            if (label == null)
+            {
+                return Result<bool>.Fail(
+                    ResultCodes.ResultCodeResourceNotFound,
+                    $"Label with ID {cmd.LabelId} not exists. So it cannot be assigned to ticket with ID {ticketId}."); 
+            }
+        } 
+
+        var alreadyAssigned = ticket.Labels.Find(i => i.Id == labelId) != null;
+        if (alreadyAssigned)
+        {
+            return Result<bool>.Fail(
+                ResultCodes.ResultCodeValidationFailed,
+                $"Label ID {labelId} already assigned to ticket.");
+        } 
+        
+        return await _ticketRepository.AssignTicketLabelAsync(ticketId, (int) labelId);
     }
 }

@@ -15,4 +15,5 @@ public interface ITicketRepository
     Task<PagedResult<TicketCommentModel>> GetTicketCommentsAsync(int id, int pageNumber, int pageSize);
     Task<int> DeleteTicketAsync(int id);
     Task<bool> DeleteTicketCommentAsync(int commentId);
+    Task<Result<bool>> AssignTicketLabelAsync(int ticketId, int labelId);
 }

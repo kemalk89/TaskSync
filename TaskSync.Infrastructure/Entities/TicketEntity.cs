@@ -20,6 +20,8 @@ public class TicketEntity : AuditedEntity
 
     public int? AssigneeId { get; set; }
 
+    public ICollection<TicketLabelEntity> Labels { get; set; } = [];
+    
     public TicketModel ToTicket(User? createdBy = null, User? assignee = null)
     {
         return new TicketModel
@@ -34,6 +36,7 @@ public class TicketEntity : AuditedEntity
             ModifiedDate = ModifiedDate,
             Status = Status?.ToDomainObject(),
             Project = Project.ToDomainObject(),
+            Labels = Labels.Select(i => new TicketLabelModel{Id = i.Id, Text = i.Text}).ToList(),
             Type = Type
         };
     }

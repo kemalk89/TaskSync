@@ -169,6 +169,7 @@ public class TicketRepository : ITicketRepository
             .OrderBy(t => t.CreatedDate)
             .Include(t => t.Project)
             .Include(t => t.Status)
+            .Include(t => t.Labels)
             .Skip(skip)
             .Take(pageSize)
             .ToList();
@@ -261,6 +262,24 @@ public class TicketRepository : ITicketRepository
         }
 
         await _dbContext.SaveChangesAsync();
+        return Result<bool>.Ok(true);
+    }
+
+    public async Task<Result<bool>> AssignTicketLabelAsync(int ticketId, int labelId)
+    {
+        var ticket = await _dbContext.Tickets.FindAsync(ticketId);
+        if (ticket == null)
+        { 
+            return Result<bool>.Fail($"Ticket with id {ticketId} could not be found.");
+        }
+        
+        var trackedLabel = _dbContext.TicketLabels.Local.FirstOrDefault(l => l.Id == labelId);
+        var label = trackedLabel ?? new TicketLabelEntity { Id = labelId };;
+        
+        ticket.Labels.Add(label);
+        
+        await _dbContext.SaveChangesAsync();
+        
         return Result<bool>.Ok(true);
     }
 }
