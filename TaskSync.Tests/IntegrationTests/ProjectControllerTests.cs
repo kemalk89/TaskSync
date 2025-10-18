@@ -79,5 +79,8 @@ public class ProjectControllerTests : BaseIntegrationTest
         var responseCreate = await _client.PostAsJsonAsync("/api/project", cmd);
         
         Assert.Equal(HttpStatusCode.BadRequest, responseCreate.StatusCode);
+        
+        var errors = await responseCreate.Content.ReadFromJsonAsync<ErrorResponse>();
+        Assert.Equal( "'Title' must not be empty.", errors?.Errors[0]);
     }
 }

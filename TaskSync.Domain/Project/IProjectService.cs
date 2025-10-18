@@ -6,7 +6,7 @@ namespace TaskSync.Domain.Project;
 
 public interface IProjectService
 {
-    Task<Project> CreateProjectAsync(CreateProjectCommand command);
+    Task<Result<Project>> CreateProjectAsync(CreateProjectCommand command);
     Task<Project?> GetProjectByIdAsync(int id);
     Task<PagedResult<Project>> GetProjectsAsync(int pageNumber, int pageSize);
     Task<PagedResult<TicketModel>> GetProjectTicketsAsync(int projectId, int pageNumber, int pageSize);

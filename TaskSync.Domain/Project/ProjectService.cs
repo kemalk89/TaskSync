@@ -1,3 +1,5 @@
+using FluentValidation;
+
 using Microsoft.Extensions.Logging;
 
 using TaskSync.Domain.Project.Commands;
@@ -16,23 +18,32 @@ public class ProjectService : IProjectService
     private readonly IProjectRepository _projectRepository;
     private readonly ITicketService _ticketService;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IValidator<CreateProjectCommand> _validator;
     
     public ProjectService(
         IProjectRepository projectRepository,
         ITicketService ticketService, 
         ICurrentUserService currentUserService, 
-        ILogger<ProjectService> logger)
+        ILogger<ProjectService> logger, 
+        IValidator<CreateProjectCommand> validator)
     {
         _projectRepository = projectRepository;
         _ticketService = ticketService;
         _currentUserService = currentUserService;
+        _validator = validator;
         _logger = logger;
     }
 
-    public async Task<Project> CreateProjectAsync(CreateProjectCommand command)
+    public async Task<Result<Project>> CreateProjectAsync(CreateProjectCommand command)
     {
+        var result = await _validator.ValidateAsync(command);
+        if (!result.IsValid)
+        {
+            return Result<Project>.Fail(ResultCodes.ResultCodeValidationFailed, result);
+        }
+        
         var project = await _projectRepository.CreateAsync(command);
-        return project;
+        return Result<Project>.Ok(project);
     }
 
     public async Task<Project?> GetProjectByIdAsync(int id)

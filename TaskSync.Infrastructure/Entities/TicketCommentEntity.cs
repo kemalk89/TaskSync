@@ -9,9 +9,9 @@ public class TicketCommentEntity : AuditedEntity
 
     public int TicketId { get; set; }
     
-    public TicketEntity Ticket { get; set; }
+    public TicketEntity? Ticket { get; set; }
     
-    public string Comment { get; set; }
+    public string Comment { get; set; } = string.Empty;
 
     public bool IsDeleted { get; set; }
     

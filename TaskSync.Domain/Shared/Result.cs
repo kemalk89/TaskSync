@@ -1,3 +1,5 @@
+using FluentValidation.Results;
+
 namespace TaskSync.Domain.Shared;
 
 /// <summary>
@@ -8,10 +10,10 @@ namespace TaskSync.Domain.Shared;
 public class Result<T>
 {
     public bool Success { get; }
-    public T Value { get; }
+    public T? Value { get; }
     public string Error { get; }
-    
-    public string? ErrorDetails { get; init; }
+
+    public string[] ErrorDetails { get; init; } = [];
     
     /// <summary>
     /// Optional structured information about the error.
@@ -19,11 +21,11 @@ public class Result<T>
     /// </summary>
     public Dictionary<string, string>? ErrorPayload { get; init; }
 
-    private Result(bool success, T value, string error)
+    private Result(bool success, T? value, string? error)
     {
         Success = success;
         Value = value;
-        Error = error;
+        Error = error ?? string.Empty;
     }
     
     public static Result<T> Ok(T value) => new (true, value, null);
@@ -39,7 +41,13 @@ public class Result<T>
     public static Result<T> Fail(string error, string errorDetails = "", Dictionary<string, string>? errorPayload = null) 
         => new (false, default, error)
         {
-            ErrorDetails = errorDetails,
+            ErrorDetails = [errorDetails],
             ErrorPayload = errorPayload
         };
+
+    public static Result<T> Fail(string error, ValidationResult validationResult)
+    {
+        var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToArray();
+        return new Result<T>(false, default, error) { ErrorDetails = errors };
+    }
 }

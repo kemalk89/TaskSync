@@ -17,7 +17,7 @@ public class CurrentUserService : ICurrentUserService
     
     public async Task<User?> GetCurrentUserAsync()
     {
-        var externalUserId = _httpContextAccessor.HttpContext.User.Identity?.Name;
+        var externalUserId = _httpContextAccessor.HttpContext?.User.Identity?.Name;
         var currentUser = await _userService.FindByExternalUserIdAsync(externalUserId);
         return currentUser;
     }

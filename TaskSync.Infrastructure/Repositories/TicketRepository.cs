@@ -149,7 +149,7 @@ public class TicketRepository : ITicketRepository
         var skip = (pageNumber - 1) * pageSize;
 
         var dbSet = _dbContext.Tickets;
-        IQueryable<TicketEntity> query = dbSet.Where(t => 1 == 1);
+        IQueryable<TicketEntity> query = dbSet.Where(t => true);
         if (projectId != null)
         {
             query = dbSet.Where(t => t.ProjectId == projectId);
@@ -174,9 +174,14 @@ public class TicketRepository : ITicketRepository
             .Take(pageSize)
             .ToList();
 
-        var assigneeIds = tickets
-            .Where(t => t.HasAssignee())
-            .Select(t => t.AssigneeId.Value);
+        List<int> assigneeIds = [];
+        foreach (var t in tickets)
+        {
+            if (t.AssigneeId != null)
+            {
+                assigneeIds.Add(t.AssigneeId.Value);
+            }
+        }
 
         var createdByIds = tickets.Select(t => t.CreatedBy);
 
@@ -193,7 +198,7 @@ public class TicketRepository : ITicketRepository
         {
             User? createdBy = users?.FirstOrDefault(a => a.Id == ticket.CreatedBy);
 
-            if (ticket.HasAssignee())
+            if (ticket.AssigneeId != null)
             {
                 User? assignee = users?.FirstOrDefault(a => a.Id == ticket.AssigneeId);
                 result.Add(ticket.ToTicket(assignee: assignee, createdBy: createdBy));

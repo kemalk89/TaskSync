@@ -8,7 +8,7 @@ public class UserRequest
     [Required]
     public int Id { get; set; }
     [Required]
-    public string Username { get; set; } = null!;
+    public string Username { get; set; } = string.Empty;
     public string? Email { get; set; }
     public string? Picture { get; set; }
 
@@ -18,7 +18,7 @@ public class UserRequest
         {
             Id = Id,
             Username = Username,
-            Email = Email,
+            Email = Email ?? string.Empty,
             Picture = Picture
         };
     }

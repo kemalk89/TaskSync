@@ -11,10 +11,13 @@ using TaskSync.Infrastructure.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
+using FluentValidation;
+
 using Microsoft.OpenApi.Models;
 
 using TaskSync.Auth.Auth0;
 using TaskSync.Common;
+using TaskSync.Domain.Project.Commands;
 using TaskSync.Extensions;
 
 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
@@ -85,6 +88,8 @@ try
 
     builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+    builder.Services.AddValidatorsFromAssemblyContaining<CreateProjectCommandValidator>();
+    
     builder.Services.AddAuth0();
 
     builder.Services.AddDbContext<DatabaseContext>(
@@ -97,7 +102,7 @@ try
         .AddJwtBearer(options =>
         {
             options.Audience = configuration["Auth:Audience"];
-            options.MetadataAddress = configuration["Auth:MetadataAddress"];
+            options.MetadataAddress = configuration["Auth:MetadataAddress"] ?? string.Empty;
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 NameClaimType = ClaimTypes.NameIdentifier,

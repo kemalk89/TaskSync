@@ -24,7 +24,7 @@ public class Auth0AccessTokenProvider : IAccessTokenProvider
     {
         if (CachedAccessToken == null)
         {
-            var domain = _config["Auth:MachineToMachineApplication:Domain"];
+            var domain = _config["Auth:MachineToMachineApplication:Domain"] ?? string.Empty;
             var clientId = _config["Auth:MachineToMachineApplication:ClientId"];
             var clientSecret = _config["Auth:MachineToMachineApplication:ClientSecret"];
             
@@ -41,7 +41,8 @@ public class Auth0AccessTokenProvider : IAccessTokenProvider
 
             if (response.IsSuccessful)
             {
-                var json = JsonConvert.DeserializeObject<dynamic>(response.Content);
+                var content = response.Content;
+                var json = JsonConvert.DeserializeObject<dynamic>(content ?? "{}");
                 CachedAccessToken = json?.access_token;
                 _logger.LogDebug("Successfully retrieved access token from Auth0.");
             }

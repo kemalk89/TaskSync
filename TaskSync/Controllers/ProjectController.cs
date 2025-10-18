@@ -57,11 +57,16 @@ public class ProjectController : ControllerBase
         [FromBody] CreateProjectCommand req
     )
     {
-        var item = await _projectService.CreateProjectAsync(req);
-        return CreatedAtAction(
-            nameof(GetProjectById),
-            new { id = item.Id },
-            new ProjectResponse(item));
+        var result = await _projectService.CreateProjectAsync(req);
+        if (result.Success && result.Value != null)
+        {
+            return CreatedAtAction(
+                nameof(GetProjectById),
+                new { id = result.Value.Id },
+                new ProjectResponse(result.Value));
+        }
+
+        return BadRequest(new ErrorResponse(result.ErrorDetails));
     }
 
     [HttpDelete]
@@ -77,9 +82,10 @@ public class ProjectController : ControllerBase
 
     [HttpGet]
     [Route("{projectId}/backlog")]
-    public async Task GetBacklog([FromRoute] int projectId)
+    public Task GetBacklog([FromRoute] int projectId)
     {
         // TODO
+        throw new NotImplementedException();
     }
     
     [HttpGet]

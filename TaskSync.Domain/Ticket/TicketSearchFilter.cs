@@ -2,5 +2,6 @@ namespace TaskSync.Domain.Ticket;
 
 public class TicketSearchFilter
 {
-    public string SearchText { get; set; }
+    public string SearchText { get; set; } = string.Empty;
+    
 }

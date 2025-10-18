@@ -8,10 +8,10 @@ public class ProjectMemberEntity
 {
     public int Id { get; set; }
     
-    public string Role { get; set; } = "";
+    public string Role { get; set; } = string.Empty;
     public int UserId { get; set; }
     [NotMapped]
-    public User User { get; set; }
+    public User? User { get; set; }
     
     // Optional foreign key property
     public int ProjectId { get; set; }

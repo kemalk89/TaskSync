@@ -6,11 +6,11 @@ namespace TaskSync.Controllers.Response;
 public class ProjectResponse
 {
     public int Id { get; set; }
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
     public string? Description { get; set; }
     public ProjectVisibility? Visibility { get; set; }
-    public User? ProjectManager { get; set; }    
-    public ICollection<ProjectMember> ProjectMembers { get; set; }
+    public User? ProjectManager { get; set; }
+    public ICollection<ProjectMember> ProjectMembers { get; set; } = [];
 
     public User? CreatedBy { get; set; }
     public DateTimeOffset CreatedDate { get; set; }

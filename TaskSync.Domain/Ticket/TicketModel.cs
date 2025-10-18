@@ -3,13 +3,13 @@ namespace TaskSync.Domain.Ticket;
 public class TicketModel
 {
     public int Id { get; set; }
-    public string Title { get; set; } = "";
+    public string Title { get; set; } = string.Empty;
     public string? Description { get; set; }
 
     public int ProjectId { get; set; }
     public User.User? Assignee { get; set; }
-    
-    public List<TicketLabelModel> Labels { get; set; }
+
+    public List<TicketLabelModel> Labels { get; set; } = [];
 
     public User.User? CreatedBy { get; set; }
 

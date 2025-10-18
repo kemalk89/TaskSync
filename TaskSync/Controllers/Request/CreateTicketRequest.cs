@@ -10,13 +10,13 @@ public class CreateTicketRequest
     public int ProjectId { get; set; }
 
     [Required]
-    public string Title { get; set; } = null!;
+    public string Title { get; set; } = string.Empty;
 
     public string? Description { get; set; }
 
     public int? Assignee { get; set; }
 
-    public string Type { get; set; }
+    public string? Type { get; set; }
     
     public CreateTicketCommand ToCommand()
     {

@@ -40,11 +40,6 @@ public class TicketEntity : AuditedEntity
             Type = Type
         };
     }
-
-    public bool HasAssignee()
-    {
-        return AssigneeId != null;
-    }
 }
 
 
