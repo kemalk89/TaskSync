@@ -1,6 +1,15 @@
 ![build project](https://github.com/kemalk89/TaskSync/actions/workflows/dotnet.yml/badge.svg)
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=kemalk89_TaskSync)](https://sonarcloud.io/summary/new_code?id=kemalk89_TaskSync)
 
+# Technical Overview
+
+- Architecture: The solution adopts principles from Clean Architecture and Domain-Driven Design (DDD)
+- Target Framework: .NET Core 8
+- EF Core 8 with PostgreSQL
+- Validation through FluentValidation
+- For security, JWT Bearer authentication is configured
+- Testing is implemented using xUnit with Testcontainers for PostgreSQL
+
 # Development
 
 ## How to run project
