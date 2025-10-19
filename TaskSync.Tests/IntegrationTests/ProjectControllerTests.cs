@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 
 using TaskSync.Controllers.Response;
 using TaskSync.Domain.Project.Commands;
+using TaskSync.Domain.Shared;
 
 namespace TaskSync.Tests.IntegrationTests;
 
@@ -42,31 +43,11 @@ public class ProjectControllerTests : BaseIntegrationTest
     [Fact]
     public async Task Api_ShouldReturn401_WhenNoAuthProvided()
     {
-        var endpoints = new (string Url, HttpMethod Method, object? Payload)[]
-        {
+        await AssertEndpointsReturnUnauthorized([
             ("/api/project/123", HttpMethod.Get, null),
             ("/api/project", HttpMethod.Get, null),
             ("/api/project", HttpMethod.Post, new CreateProjectCommand())
-        };
-        
-        foreach (var (url, method, payload) in endpoints)
-        {
-            HttpResponseMessage response;
-            if (method == HttpMethod.Post)
-            {
-                response = await _client.PostAsJsonAsync(url, payload);
-            } else if (method == HttpMethod.Get)
-            {
-                response = await _client.GetAsync(url);
-                
-            }
-            else
-            {
-                throw new NotSupportedException($"Method {method} not supported");
-            }
-
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
+        ]);
     }
     
     [Fact]
@@ -81,6 +62,7 @@ public class ProjectControllerTests : BaseIntegrationTest
         Assert.Equal(HttpStatusCode.BadRequest, responseCreate.StatusCode);
         
         var errors = await responseCreate.Content.ReadFromJsonAsync<ErrorResponse>();
-        Assert.Equal( "'Title' must not be empty.", errors?.Errors[0]);
+        Assert.Equal(ResultCodes.ResultCodeValidationFailed, errors?.ErrorCode);
+        Assert.Equal( "'Title' must not be empty.", errors?.ErrorDetails[0]);
     }
 }

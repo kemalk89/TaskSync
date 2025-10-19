@@ -1,15 +1,11 @@
-using System.ComponentModel.DataAnnotations;
-
 using TaskSync.Domain.Ticket.Command;
 
 namespace TaskSync.Controllers.Request;
 
 public class CreateTicketRequest
 {
-    [Range(1, int.MaxValue, ErrorMessage = "Only positive numbers allowed.")]
     public int ProjectId { get; set; }
 
-    [Required]
     public string Title { get; set; } = string.Empty;
 
     public string? Description { get; set; }

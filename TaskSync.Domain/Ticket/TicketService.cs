@@ -1,3 +1,5 @@
+using FluentValidation;
+
 using TaskSync.Domain.Exceptions;
 using TaskSync.Domain.Project;
 using TaskSync.Domain.Project.Commands;
@@ -13,25 +15,38 @@ public class TicketService : ITicketService
     private readonly IProjectRepository _projectRepository;
     private readonly ICurrentUserService _currentUserService;
     private readonly ILabelRepository _labelRepository;
+    private readonly IValidator<CreateTicketCommand> _validator;
 
-    public TicketService(ITicketRepository taskRepository, IProjectRepository projectRepository, ICurrentUserService currentUserService, ILabelRepository labelRepository)
+    public TicketService(ITicketRepository taskRepository, IProjectRepository projectRepository, ICurrentUserService currentUserService, ILabelRepository labelRepository, IValidator<CreateTicketCommand> validator)
     {
         _ticketRepository = taskRepository;
         _projectRepository = projectRepository;
         _currentUserService = currentUserService;
         _labelRepository = labelRepository;
+        _validator = validator;
     }
 
-    public async Task<int?> CreateTicketAsync(CreateTicketCommand cmd)
+    public async Task<Result<int>> CreateTicketAsync(CreateTicketCommand cmd)
     {
+        var result = await _validator.ValidateAsync(cmd);
+        if (!result.IsValid)
+        {
+            return Result<int>.Fail(ResultCodes.ResultCodeValidationFailed, result);
+        }
+        
         var project = await _projectRepository.GetByIdAsync(cmd.ProjectId);
         if (project == null)
         {
-            throw new DomainException($"Trying to create a ticket for project with ID {cmd.ProjectId}. This project does not exist.");
+            return Result<int>.Fail(ResultCodes.ResultCodeResourceNotFound, result);
         }
 
         var ticketId = await _ticketRepository.CreateAsync(cmd);
-        return ticketId;
+        if (ticketId == null)
+        {
+            throw new DomainException("Could not create ticket");
+        }
+        
+        return Result<int>.Ok(ticketId.Value);
     }
 
     public async Task<TicketModel?> GetTicketByIdAsync(int id)

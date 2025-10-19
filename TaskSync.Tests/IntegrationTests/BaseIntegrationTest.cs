@@ -1,4 +1,6 @@
+using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -52,6 +54,28 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
         var json = JsonSerializer.Serialize(authData);
         var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", encoded);
+    }
+
+    protected async Task AssertEndpointsReturnUnauthorized((string Url, HttpMethod Method, object? Payload)[] endpoints)
+    {
+        foreach (var (url, method, payload) in endpoints)
+        {
+            HttpResponseMessage response;
+            if (method == HttpMethod.Post)
+            {
+                response = await _client.PostAsJsonAsync(url, payload);
+            } else if (method == HttpMethod.Get)
+            {
+                response = await _client.GetAsync(url);
+            
+            }
+            else
+            {
+                throw new NotSupportedException($"Method {method} not supported");
+            }
+
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
     }
 }
 

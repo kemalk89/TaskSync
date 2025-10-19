@@ -5,10 +5,13 @@ namespace TaskSync.Controllers.Response;
 /// </summary>
 public class ErrorResponse
 {
-    public string[]  Errors { get; set; }
+    public string ErrorCode { get; set; }
+    
+    public string[]  ErrorDetails { get; set; }
 
-    public ErrorResponse(string[] errors)
+    public ErrorResponse(string errorCode, string[] errorDetails)
     {
-        Errors = errors;
+        ErrorCode = errorCode;
+        ErrorDetails = errorDetails;
     }
 }

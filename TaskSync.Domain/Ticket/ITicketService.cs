@@ -6,7 +6,7 @@ namespace TaskSync.Domain.Ticket;
 
 public interface ITicketService
 {
-    Task<int?> CreateTicketAsync(CreateTicketCommand cmd);
+    Task<Result<int>> CreateTicketAsync(CreateTicketCommand cmd);
     Task<TicketModel?> GetTicketByIdAsync(int id);
     Task<PagedResult<TicketModel>> GetTicketsAsync(int pageNumber, int pageSize, TicketSearchFilter filter);
     Task<PagedResult<TicketModel>> GetTicketsByProjectIdAsync(int projectId, int pageNumber, int pageSize);

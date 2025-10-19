@@ -66,7 +66,7 @@ public class ProjectController : ControllerBase
                 new ProjectResponse(result.Value));
         }
 
-        return BadRequest(new ErrorResponse(result.ErrorDetails));
+        return BadRequest(new ErrorResponse(result.Error, result.ErrorDetails));
     }
 
     [HttpDelete]
