@@ -83,7 +83,13 @@ public class TicketController : ControllerBase
                 new { id = result.Value },
                 new CreateTicketResponse { TicketId = result.Value});
         }
-        return BadRequest(new ErrorResponse(result.Error, result.ErrorDetails));
+
+        return result.Error switch
+        {
+            ResultCodes.ResultCodeResourceNotFound => NotFound(new ErrorResponse(result.Error, result.ErrorDetails)),
+            ResultCodes.ResultCodeValidationFailed => BadRequest(new ErrorResponse(result.Error, result.ErrorDetails)),
+            _ => throw new InvalidOperationException($"Unexpected result code: {result.Error}.")
+        };
     }
 
     [HttpPatch]

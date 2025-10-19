@@ -39,4 +39,33 @@ public class TicketControllerTest : BaseIntegrationTest
         Assert.Equal( "'Title' must not be empty.", errors?.ErrorDetails[0]);
         Assert.Equal( "'Project Id' must not be empty.", errors?.ErrorDetails[1]);
     }
+    
+    [Fact]
+    public async Task CreateTicket_ShouldReturn404_WhenNoProjectExists()
+    {
+        SetAuthenticatedUser();
+        
+        var cmd = new CreateTicketCommand
+        {
+            Title = "Test Project",
+            ProjectId = 123456789
+        };
+        
+        var responseCreate = await _client.PostAsJsonAsync("/api/ticket", cmd);
+        
+        Assert.Equal(HttpStatusCode.NotFound, responseCreate.StatusCode);
+        
+        var errors = await responseCreate.Content.ReadFromJsonAsync<ErrorResponse>();
+        Assert.Equal(ResultCodes.ResultCodeResourceNotFound, errors?.ErrorCode);
+    }
+
+    /*
+    [Fact]
+    public async Task CreateTicket_ShouldReturn201_WhenValidRequest()
+    {
+        SetAuthenticatedUser();
+        var cmd = new CreateTicketCommand();
+        
+    }
+    */
 }
