@@ -22,11 +22,11 @@ public class ProjectEntity : AuditedEntity
         return ProjectMembers.Select(m => m.UserId);
     }   
     
-    public Project ToDomainObject(
+    public ProjectModel ToDomainObject(
         User? createdBy = null, 
         IDictionary<int, User>? memberMap = null)
     {
-        var result = new Project
+        var result = new ProjectModel
         {
             Id = Id,
             Title = Title,

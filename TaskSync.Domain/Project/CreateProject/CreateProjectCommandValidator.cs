@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace TaskSync.Domain.Project.Commands;
+namespace TaskSync.Domain.Project.CreateProject;
 
 public class CreateProjectCommandValidator : AbstractValidator<CreateProjectCommand>
 {

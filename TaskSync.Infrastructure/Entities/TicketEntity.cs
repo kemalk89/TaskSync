@@ -35,7 +35,7 @@ public class TicketEntity : AuditedEntity
             CreatedDate = CreatedDate,
             ModifiedDate = ModifiedDate,
             Status = Status?.ToDomainObject(),
-            Project = Project.ToDomainObject(),
+            ProjectModel = Project.ToDomainObject(),
             Labels = Labels.Select(i => new TicketLabelModel{Id = i.Id, Text = i.Text}).ToList(),
             Type = Type
         };

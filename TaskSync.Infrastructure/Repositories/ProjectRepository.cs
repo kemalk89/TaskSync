@@ -2,8 +2,8 @@ using Microsoft.EntityFrameworkCore;
 
 using TaskSync.Domain.Project;
 using TaskSync.Domain.Project.Commands;
+using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Shared;
-using TaskSync.Domain.Ticket;
 using TaskSync.Domain.User;
 using TaskSync.Infrastructure.Entities;
 
@@ -21,7 +21,7 @@ public class ProjectRepository : IProjectRepository
         _userRepository = userRepository;
     }
 
-    public async Task<Project> CreateAsync(CreateProjectCommand command)
+    public async Task<ProjectModel> CreateAsync(CreateProjectCommand command)
     {
         var entity = new ProjectEntity
         {
@@ -39,7 +39,7 @@ public class ProjectRepository : IProjectRepository
         await _dbContext.Projects.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
 
-        return new Project
+        return new ProjectModel
         {
             Id = entity.Id,
             Title = entity.Title,
@@ -47,7 +47,7 @@ public class ProjectRepository : IProjectRepository
         };
     }
 
-    public async Task<PagedResult<Project>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<PagedResult<ProjectModel>> GetAllAsync(int pageNumber, int pageSize)
     {
         var skip = (pageNumber - 1) * pageSize;
 
@@ -72,7 +72,7 @@ public class ProjectRepository : IProjectRepository
         
         int total = _dbContext.Projects.Count();
 
-        var paged = new PagedResult<Project>
+        var paged = new PagedResult<ProjectModel>
         {
             Items = projects,
             PageNumber = pageNumber,
@@ -83,7 +83,7 @@ public class ProjectRepository : IProjectRepository
         return paged;
     }
 
-    public async Task<Project?> GetByIdAsync(int id)
+    public async Task<ProjectModel?> GetByIdAsync(int id)
     {
         ProjectEntity? entity = await _dbContext.Projects
             .Include(p => p.ProjectMembers)
@@ -111,16 +111,16 @@ public class ProjectRepository : IProjectRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task SaveAsync(Project project)
+    public async Task SaveAsync(ProjectModel projectModel)
     {
-        var record = await _dbContext.Projects.FindAsync(project.Id);
+        var record = await _dbContext.Projects.FindAsync(projectModel.Id);
         if (record == null)
         {
             // TODO Implement 
             throw new NotImplementedException();
         }
         
-        var projectMembers = project.ProjectMembers
+        var projectMembers = projectModel.ProjectMembers
             .Select(m => new ProjectMemberEntity { UserId = m.UserId, Role = m.Role, ProjectId = record.Id });
         
         record.ProjectMembers = projectMembers.ToList();

@@ -1,6 +1,6 @@
 namespace TaskSync.Domain.Project;
 
-public class Project
+public class ProjectModel
 {
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;

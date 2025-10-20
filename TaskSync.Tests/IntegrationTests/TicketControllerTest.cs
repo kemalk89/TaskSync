@@ -1,9 +1,10 @@
 using System.Net;
 using System.Net.Http.Json;
 
-using TaskSync.Controllers.Request;
+using TaskSync.Controllers.Project;
 using TaskSync.Controllers.Response;
 using TaskSync.Domain.Project.Commands;
+using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Ticket.Command;
 using TaskSync.Domain.Shared;
 
@@ -92,7 +93,7 @@ public class TicketControllerTest : BaseIntegrationTest
         var createTicketCommand = new CreateTicketCommand
         {
             Title = "Test Ticket",
-            ProjectId = createdProject!.Id,
+            ProjectId = createdProject.Id,
             Labels = [
                 new AssignTicketLabelCommand { Title = "Team A" }, // Create and assign new ticket label
                 new AssignTicketLabelCommand { LabelId = createdLabel.Id } // Assign existing ticket label: Label with ID 3 is existing one, which has been seeded 

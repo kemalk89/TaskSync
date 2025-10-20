@@ -16,7 +16,7 @@ public class TicketModel
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset? ModifiedDate { get; set; }
 
-    public Project.Project Project { get; set; } = null!;
+    public Project.ProjectModel ProjectModel { get; set; } = null!;
     public TicketStatus? Status { get; set; }
     public TicketType Type { get; set; }
 }

@@ -18,7 +18,6 @@ public class ProjectService : IProjectService
     private readonly IProjectRepository _projectRepository;
     private readonly ITicketService _ticketService;
     private readonly ICurrentUserService _currentUserService;
-    private readonly IValidator<CreateProjectCommand> _createProjectCommandValidator;
     private readonly IValidator<CreateProjectLabelCommand> _createProjectLabelCommandValidator;
     
     public ProjectService(
@@ -26,36 +25,22 @@ public class ProjectService : IProjectService
         ITicketService ticketService, 
         ICurrentUserService currentUserService, 
         ILogger<ProjectService> logger, 
-        IValidator<CreateProjectCommand> createProjectCommandValidator, 
         IValidator<CreateProjectLabelCommand> createProjectLabelCommandValidator)
     {
         _projectRepository = projectRepository;
         _ticketService = ticketService;
         _currentUserService = currentUserService;
-        _createProjectCommandValidator = createProjectCommandValidator;
         _createProjectLabelCommandValidator = createProjectLabelCommandValidator;
         _logger = logger;
     }
 
-    public async Task<Result<Project>> CreateProjectAsync(CreateProjectCommand command)
-    {
-        var result = await _createProjectCommandValidator.ValidateAsync(command);
-        if (!result.IsValid)
-        {
-            return Result<Project>.Fail(ResultCodes.ResultCodeValidationFailed, result);
-        }
-        
-        var project = await _projectRepository.CreateAsync(command);
-        return Result<Project>.Ok(project);
-    }
-
-    public async Task<Project?> GetProjectByIdAsync(int id)
+    public async Task<ProjectModel?> GetProjectByIdAsync(int id)
     {
         var project = await _projectRepository.GetByIdAsync(id);
         return project;
     }
 
-    public async Task<PagedResult<Project>> GetProjectsAsync(int pageNumber, int pageSize)
+    public async Task<PagedResult<ProjectModel>> GetProjectsAsync(int pageNumber, int pageSize)
     {
         var projects = await _projectRepository.GetAllAsync(pageNumber, pageSize);
         return projects;
@@ -155,9 +140,9 @@ public class ProjectService : IProjectService
         return Result<int>.Ok(labelId);
     }
 
-    private ProjectMember? FindProjectManager(Project project)
+    private ProjectMember? FindProjectManager(ProjectModel projectModel)
     {
-        return project.ProjectMembers.FirstOrDefault((p) => p.Role == "ProjectManager");
+        return projectModel.ProjectMembers.FirstOrDefault((p) => p.Role == "ProjectManager");
     }
 }
 

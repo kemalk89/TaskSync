@@ -1,17 +1,17 @@
 using TaskSync.Domain.Project.Commands;
+using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Shared;
-using TaskSync.Domain.Ticket;
 
 namespace TaskSync.Domain.Project;
 
 public interface IProjectRepository
 {
-    Task<Project> CreateAsync(CreateProjectCommand command);
-    Task<Project?> GetByIdAsync(int id);
-    Task<PagedResult<Project>> GetAllAsync(int pageNumber, int pageSize);
+    Task<ProjectModel> CreateAsync(CreateProjectCommand command);
+    Task<ProjectModel?> GetByIdAsync(int id);
+    Task<PagedResult<ProjectModel>> GetAllAsync(int pageNumber, int pageSize);
     Task DeleteByIdAsync(int id);
     Task UpdateProjectAsync(int projectId, UpdateProjectCommand command);
-    Task SaveAsync(Project project);
+    Task SaveAsync(ProjectModel projectModel);
     Task<int> CreateLabelAsync(int projectId, string text);
     Task<List<ProjectLabelModel>> GetLabelsAsync(int projectId);
 }

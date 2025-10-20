@@ -5,28 +5,50 @@ using TaskSync.Controllers.Response;
 using TaskSync.Domain.Exceptions;
 using TaskSync.Domain.Project;
 using TaskSync.Domain.Project.Commands;
+using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
 
-namespace TaskSync.Controllers;
+namespace TaskSync.Controllers.Project;
 
 [Authorize]
 [ApiController]
 [Route("/api/[controller]")]
 public class ProjectController : ControllerBase
 {
-
     private readonly IProjectService _projectService;
+    protected readonly CreateProjectCommandHandler _createProjectCommandHandler;
 
-    public ProjectController(IProjectService projectService)
+    public ProjectController(IProjectService projectService, CreateProjectCommandHandler createProjectCommandHandler)
     {
         _projectService = projectService;
+        _createProjectCommandHandler = createProjectCommandHandler;
     }
 
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<ProjectResponse>> CreateProject(
+        [FromBody] CreateProjectCommand command
+    )
+    {
+        var result = await _createProjectCommandHandler.HandleCommandAsync(command);
+        if (result.Success && result.Value != null)
+        {
+            return CreatedAtAction(
+                nameof(GetProjectById),
+                new { id = result.Value.Id },
+                new ProjectResponse(result.Value));
+        }
+
+        return BadRequest(new ErrorResponse(result.Error, result.ErrorDetails));
+    }
+    
     [HttpGet]
     public async Task<PagedResult<ProjectResponse>> GetProjects([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
     {
-        PagedResult<Project> pagedResult = await _projectService.GetProjectsAsync(pageNumber, pageSize);
+        PagedResult<ProjectModel> pagedResult = await _projectService.GetProjectsAsync(pageNumber, pageSize);
         return new PagedResult<ProjectResponse>
         {
             PageNumber = pagedResult.PageNumber,
@@ -48,26 +70,6 @@ public class ProjectController : ControllerBase
             return NotFound();
         }
         return Ok(new ProjectResponse(item));
-    }
-
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<ProjectResponse>> CreateProject(
-        [FromBody] CreateProjectCommand req
-    )
-    {
-        var result = await _projectService.CreateProjectAsync(req);
-        if (result.Success && result.Value != null)
-        {
-            return CreatedAtAction(
-                nameof(GetProjectById),
-                new { id = result.Value.Id },
-                new ProjectResponse(result.Value));
-        }
-
-        return BadRequest(new ErrorResponse(result.Error, result.ErrorDetails));
     }
 
     [HttpDelete]
@@ -133,6 +135,7 @@ public class ProjectController : ControllerBase
     
     [HttpGet]
     [Route("{id}/tickets")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<PagedResult<TicketResponse>> GetProjectTickets(
         [FromRoute] int id,
         [FromQuery] int pageNumber = 1,
@@ -148,7 +151,7 @@ public class ProjectController : ControllerBase
             Total = pagedResult.Total
         };
     }
-
+    
     [HttpPost]
     [Route("{projectId}/team")]
     public async Task<ActionResult> AssignTeamMembers(

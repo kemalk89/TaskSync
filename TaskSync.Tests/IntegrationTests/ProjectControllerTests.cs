@@ -1,8 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
 
+using TaskSync.Controllers.Project;
 using TaskSync.Controllers.Response;
-using TaskSync.Domain.Project.Commands;
+using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Shared;
 
 namespace TaskSync.Tests.IntegrationTests;

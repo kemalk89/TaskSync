@@ -1,7 +1,7 @@
 using TaskSync.Domain.Project;
 using TaskSync.Domain.User;
 
-namespace TaskSync.Controllers.Response;
+namespace TaskSync.Controllers.Project;
 
 public class ProjectResponse
 {
@@ -21,16 +21,16 @@ public class ProjectResponse
     {
     }
     
-    public ProjectResponse(Project project)
+    public ProjectResponse(ProjectModel projectModel)
     {
-        Id = project.Id;
-        Title = project.Title;
-        Description = project.Description;
-        Visibility = project.Visibility;
-        ProjectMembers = project.ProjectMembers;
-        ProjectManager = project.ProjectMembers.FirstOrDefault(m => m.Role == "ProjectManager")?.User;
-        CreatedBy = project.CreatedBy;
-        CreatedDate = project.CreatedDate;
-        ModifiedDate = project.ModifiedDate;
+        Id = projectModel.Id;
+        Title = projectModel.Title;
+        Description = projectModel.Description;
+        Visibility = projectModel.Visibility;
+        ProjectMembers = projectModel.ProjectMembers;
+        ProjectManager = projectModel.ProjectMembers.FirstOrDefault(m => m.Role == "ProjectManager")?.User;
+        CreatedBy = projectModel.CreatedBy;
+        CreatedDate = projectModel.CreatedDate;
+        ModifiedDate = projectModel.ModifiedDate;
     }
 }

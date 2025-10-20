@@ -1,3 +1,4 @@
+using TaskSync.Controllers.Project;
 using TaskSync.Domain.Ticket;
 using TaskSync.Domain.User;
 
@@ -28,7 +29,7 @@ public class TicketResponse
         CreatedDate = ticket.CreatedDate;
         ModifiedDate = ticket.ModifiedDate;
         Status = ticket.Status != null ? new TicketStatusResponse(ticket.Status) : null;
-        Project = new ProjectResponse(ticket.Project);
+        Project = new ProjectResponse(ticket.ProjectModel);
         Labels = ticket.Labels;
         Type = ticket.Type switch
         {

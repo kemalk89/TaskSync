@@ -17,7 +17,7 @@ using Microsoft.OpenApi.Models;
 
 using TaskSync.Auth.Auth0;
 using TaskSync.Common;
-using TaskSync.Domain.Project.Commands;
+using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Extensions;
 
 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
@@ -87,6 +87,8 @@ try
 
     builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+    builder.Services.AddScoped<CreateProjectCommandHandler>();
+    
     builder.Services.AddValidatorsFromAssemblyContaining<CreateProjectCommandValidator>();
     
     builder.Services.AddAuth0();
