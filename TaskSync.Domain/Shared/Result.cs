@@ -32,7 +32,7 @@ public class Result<T>
 
     public static Result<T> Fail(string error) => new(false, default, error);
     
-    public static Result<T> Fail(string error, string errorDetails = "", Dictionary<string, string>? errorPayload = null) 
+    public static Result<T> Fail(string error, string errorDetails, Dictionary<string, string>? errorPayload = null) 
         => new (false, default, error)
         {
             ErrorDetails = [errorDetails],
