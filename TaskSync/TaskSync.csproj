@@ -25,7 +25,6 @@
     <ProjectReference Include="..\TaskSync.Domain\TaskSync.Domain.csproj" />
     <ProjectReference Include="..\TaskSync.Infrastructure\TaskSync.Infrastructure.csproj" />
     <ProjectReference Include="..\TaskSync.Auth.Auth0\TaskSync.Auth.Auth0.csproj" />
-    <ProjectReference Include="..\TaskSync.TimeSheet.API\TaskSync.TimeSheet.API.csproj" />
     <ProjectReference Include="..\TaskSync.Common\TaskSync.Common.csproj" />
   </ItemGroup>
 </Project>
