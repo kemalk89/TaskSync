@@ -15,5 +15,5 @@ public interface ITicketService
     Task<PagedResult<TicketCommentModel>> GetTicketCommentsAsync(int id, int pageNumber, int pageSize);
     Task<Result<bool>> DeleteTicketAsync(int id);
     Task<Result<bool>> DeleteTicketCommentAsync(int commentId);
-    Task<Result<bool>> AssignTicketLabelAsync(int ticketId, AssignTicketLabelCommand cmd);
+    Task<Result<int>> AssignTicketLabelAsync(int projectId, int ticketId, AssignTicketLabelCommand cmd);
 }

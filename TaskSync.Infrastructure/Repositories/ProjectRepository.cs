@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TaskSync.Domain.Project;
 using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Shared;
+using TaskSync.Domain.Ticket;
 using TaskSync.Domain.User;
 using TaskSync.Infrastructure.Entities;
 
@@ -156,5 +157,25 @@ public class ProjectRepository : IProjectRepository
         }
         
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<int> CreateLabelAsync(int projectId, string text)
+    {
+        var entity = new TicketLabelEntity { ProjectId = projectId, Text = text };
+        var result = await _dbContext.AddAsync(entity);
+        await _dbContext.SaveChangesAsync();
+        return result.Entity.Id;
+    }
+
+    public async Task<List<ProjectLabelModel>> GetLabelsAsync(int projectId)
+    {
+        return await _dbContext.TicketLabels
+            .Where(e => e.ProjectId == projectId)
+            .Select(e => new ProjectLabelModel
+            {
+                Id = e.Id,
+                Text = e.Text
+            })
+            .ToListAsync();
     }
 }

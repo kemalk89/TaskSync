@@ -1,3 +1,5 @@
+using TaskSync.Domain.Project.Commands;
+
 namespace TaskSync.Domain.Ticket.Command;
 
 public class CreateTicketCommand
@@ -11,4 +13,6 @@ public class CreateTicketCommand
     public int? Assignee { get; set; }
     
     public string? Type { get; set; }
+    
+    public List<AssignTicketLabelCommand>? Labels { get; set; }
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using TaskSync.Controllers.Response;
+using TaskSync.Domain.Exceptions;
 using TaskSync.Domain.Project;
 using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Shared;
@@ -86,6 +87,48 @@ public class ProjectController : ControllerBase
     {
         // TODO
         throw new NotImplementedException();
+    }
+
+    [HttpPost]
+    [Route("{id}/labels")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<ProjectLabelResponse>> CreateTicketLabel([FromBody] CreateProjectLabelCommand command)
+    {
+        var result = await _projectService.CreateTicketLabelAsync(command);
+        if (result.Success)
+        {
+            return CreatedAtAction(
+                null,
+                new ProjectLabelResponse { Id = result.Value, Text = command.Text});
+        }
+        
+        if (ResultCodes.ResultCodeValidationFailed.Equals(result.Error))
+        {
+            return BadRequest(result);
+        }
+        
+        throw new DomainException("Unknown error.");
+    }
+    
+    [HttpGet]
+    [Route("{id}/labels")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<List<ProjectLabelResponse>> GetProjectLabels([FromRoute] int id)
+    {
+        var result = await _projectService.GetLabelsAsync(id);
+        if (result.Success && result.Value != null)
+        {
+            return result.Value.Select(e => new ProjectLabelResponse
+            {
+                Id = e.Id,
+                Text = e.Text
+            }).ToList();   
+        }
+
+        throw new DomainException("Unexpected result.");
     }
     
     [HttpGet]

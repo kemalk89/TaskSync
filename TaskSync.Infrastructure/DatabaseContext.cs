@@ -66,14 +66,20 @@ public class DatabaseContext : DbContext
             .HasForeignKey(entity => entity.TicketId)
             .OnDelete(DeleteBehavior.Cascade);
         
+        modelBuilder.Entity<TicketLabelEntity>()
+            .HasOne<ProjectEntity>()
+            .WithMany()
+            .HasForeignKey(e => e.ProjectId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         // seed data: https://learn.microsoft.com/en-us/ef/core/modeling/data-seeding
         CreateDemoUsers(modelBuilder);
         
         modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = 1, Name = "Todo" });
         modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = 2, Name = "In Progress" });
         modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = 3, Name = "Done" });
-
-        // demo project #1
+        
+        // demo project
         modelBuilder.Entity<ProjectEntity>().HasData(new ProjectEntity
         {
             Id = 1,
@@ -82,53 +88,23 @@ public class DatabaseContext : DbContext
             CreatedBy = 1
         });
         
+        // demo project has 3 labels
+        modelBuilder.Entity<TicketLabelEntity>().HasData(new TicketLabelEntity { Id = 1, Text = "Need's Design", ProjectId = 1 });
+        modelBuilder.Entity<TicketLabelEntity>().HasData(new TicketLabelEntity { Id = 2, Text = "Need's Discussion", ProjectId = 1 });
+        modelBuilder.Entity<TicketLabelEntity>().HasData(new TicketLabelEntity { Id = 3, Text = "Quick Fix", ProjectId = 1 });
+        
+        // demo project has 2 team members
         modelBuilder.Entity<ProjectMemberEntity>().HasData(new ProjectMemberEntity
         {
             Id = 1, ProjectId = 1, UserId = 1, Role = "Software Developer"
         });
+
+        modelBuilder.Entity<ProjectMemberEntity>().HasData(new ProjectMemberEntity
+        {
+            Id = 2, ProjectId = 1, UserId = 2, Role = "UI / UX"
+        });
         
         CreateDemoTickets(modelBuilder, projectId: 1, amount: 12);
-
-        // demo project #2
-        modelBuilder.Entity<ProjectEntity>().HasData(new ProjectEntity
-        {
-            Id = 2,
-            Title = "My 2nd Project",
-            Description = GetDescription("This is the description of the 2nd project. This project has two members."),
-            CreatedBy = 2
-        });
-
-        modelBuilder.Entity<ProjectMemberEntity>().HasData(new ProjectMemberEntity
-        {
-            Id = 2, ProjectId = 2, UserId = 1, Role = "ProjectManager"
-        });
-        
-        modelBuilder.Entity<ProjectMemberEntity>().HasData(new ProjectMemberEntity
-        {
-           Id = 3, ProjectId = 2, UserId = 2, Role = "UI / UX"
-        });
-
-        CreateDemoTickets(modelBuilder, projectId: 2, amount: 34);
-
-        // demo project #3
-        modelBuilder.Entity<ProjectEntity>().HasData(new ProjectEntity
-        {
-            Id = 3,
-            Title = "My 3rd Project",
-            Description = GetDescription("This is the description of the 3rd project."),
-            CreatedBy = 0
-        });
-
-        CreateDemoTickets(modelBuilder, projectId: 3, amount: 3);
-
-        // demo project #4 - has no tickets
-        modelBuilder.Entity<ProjectEntity>().HasData(new ProjectEntity
-        {
-            Id = 4,
-            Title = "My 4rd Project",
-            Description = GetDescription("This is the description of the 4rd project."),
-            CreatedBy = 0
-        });
     }
 
     private static TicketType GetRandomTicketType()

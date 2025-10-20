@@ -270,21 +270,26 @@ public class TicketRepository : ITicketRepository
         return Result<bool>.Ok(true);
     }
 
-    public async Task<Result<bool>> AssignTicketLabelAsync(int ticketId, int labelId)
+    public async Task<Result<int>> AssignTicketLabelAsync(int projectId, int ticketId, int labelId)
     {
         var ticket = await _dbContext.Tickets.FindAsync(ticketId);
         if (ticket == null)
         { 
-            return Result<bool>.Fail($"Ticket with id {ticketId} could not be found.");
+            return Result<int>.Fail($"Ticket with id {ticketId} could not be found.");
+        }
+
+        var label = await _dbContext.TicketLabels.FindAsync(labelId);
+        if (label == null)
+        {
+            return Result<int>.Fail($"Ticket Label with id {labelId} could not be found.");
+        }
+
+        if (!ticket.Labels.Any(e => e.Id == label.Id))
+        {
+            ticket.Labels.Add(label);
+            await _dbContext.SaveChangesAsync();
         }
         
-        var trackedLabel = _dbContext.TicketLabels.Local.FirstOrDefault(l => l.Id == labelId);
-        var label = trackedLabel ?? new TicketLabelEntity { Id = labelId };;
-        
-        ticket.Labels.Add(label);
-        
-        await _dbContext.SaveChangesAsync();
-        
-        return Result<bool>.Ok(true);
+        return Result<int>.Ok(labelId);
     }
 }

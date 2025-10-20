@@ -13,4 +13,6 @@ public interface IProjectService
     Task DeleteProjectAsync(int id);
     Task<Result<bool>> AssignTeamMembersAsync(int projectId, AssignTeamMembersCommand command);
     Task<Result<bool>> UpdateProjectAsync(int projectId, UpdateProjectCommand updateProjectCommand);
+    Task<Result<List<ProjectLabelModel>>> GetLabelsAsync(int projectId);
+    Task<Result<int>> CreateTicketLabelAsync(CreateProjectLabelCommand command);
 }

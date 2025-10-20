@@ -51,6 +51,7 @@ public class TicketController : ControllerBase
         return Ok(new TicketResponse(ticket));
     }
     
+    /*
     [HttpPost("{ticketId}/labels")]
     public async Task<ActionResult<bool>> AssignTicketLabel(int ticketId, [FromBody] AssignTicketLabelCommand cmd)
     {
@@ -63,6 +64,7 @@ public class TicketController : ControllerBase
             _ => Ok(result.Value)
         };
     }
+    */
 
     /*
     [HttpPost("{ticketId}/labels")]
@@ -73,9 +75,13 @@ public class TicketController : ControllerBase
     }
     */
     [HttpPost]
-    public async Task<ActionResult<CreateTicketResponse>> CreateTicket([FromBody] CreateTicketRequest req)
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<CreateTicketResponse>> CreateTicket([FromBody] CreateTicketCommand command)
     {
-        var result = await _ticketService.CreateTicketAsync(req.ToCommand());
+        var result = await _ticketService.CreateTicketAsync(command);
         if (result.Success)
         {
             return CreatedAtAction(

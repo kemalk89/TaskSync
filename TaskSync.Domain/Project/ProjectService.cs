@@ -18,25 +18,28 @@ public class ProjectService : IProjectService
     private readonly IProjectRepository _projectRepository;
     private readonly ITicketService _ticketService;
     private readonly ICurrentUserService _currentUserService;
-    private readonly IValidator<CreateProjectCommand> _validator;
+    private readonly IValidator<CreateProjectCommand> _createProjectCommandValidator;
+    private readonly IValidator<CreateProjectLabelCommand> _createProjectLabelCommandValidator;
     
     public ProjectService(
         IProjectRepository projectRepository,
         ITicketService ticketService, 
         ICurrentUserService currentUserService, 
         ILogger<ProjectService> logger, 
-        IValidator<CreateProjectCommand> validator)
+        IValidator<CreateProjectCommand> createProjectCommandValidator, 
+        IValidator<CreateProjectLabelCommand> createProjectLabelCommandValidator)
     {
         _projectRepository = projectRepository;
         _ticketService = ticketService;
         _currentUserService = currentUserService;
-        _validator = validator;
+        _createProjectCommandValidator = createProjectCommandValidator;
+        _createProjectLabelCommandValidator = createProjectLabelCommandValidator;
         _logger = logger;
     }
 
     public async Task<Result<Project>> CreateProjectAsync(CreateProjectCommand command)
     {
-        var result = await _validator.ValidateAsync(command);
+        var result = await _createProjectCommandValidator.ValidateAsync(command);
         if (!result.IsValid)
         {
             return Result<Project>.Fail(ResultCodes.ResultCodeValidationFailed, result);
@@ -126,6 +129,30 @@ public class ProjectService : IProjectService
         await _projectRepository.UpdateProjectAsync(projectId, updateProjectCommand);
         
         return Result<bool>.Ok(true);
+    }
+
+    public async Task<Result<List<ProjectLabelModel>>> GetLabelsAsync(int projectId)
+    {
+        var result = await _projectRepository.GetLabelsAsync(projectId);
+        return Result<List<ProjectLabelModel>>.Ok(result);
+    }
+
+    public async Task<Result<int>> CreateTicketLabelAsync(CreateProjectLabelCommand command)
+    {
+        var result = await _createProjectLabelCommandValidator.ValidateAsync(command);
+        if (!result.IsValid)
+        {
+            return Result<int>.Fail(ResultCodes.ResultCodeValidationFailed, result);
+        }
+
+        var project = await _projectRepository.GetByIdAsync(command.ProjectId);
+        if (project == null)
+        {
+            return Result<int>.Fail(ResultCodes.ResultCodeValidationFailed, "Project not found. ID " + command.ProjectId);
+        }
+
+        var labelId = await _projectRepository.CreateLabelAsync(command.ProjectId, command.Text);
+        return Result<int>.Ok(labelId);
     }
 
     private ProjectMember? FindProjectManager(Project project)
