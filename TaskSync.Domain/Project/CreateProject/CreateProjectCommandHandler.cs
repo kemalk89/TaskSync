@@ -4,7 +4,7 @@ using TaskSync.Domain.Shared;
 
 namespace TaskSync.Domain.Project.CreateProject;
 
-public class CreateProjectCommandHandler : ICommandHandler<CreateProjectCommand, ProjectModel>
+public class CreateProjectCommandHandler : ICommandHandler
 {
     private readonly IProjectRepository _projectRepository;
     private readonly IValidator<CreateProjectCommand> _createProjectCommandValidator;
@@ -17,7 +17,7 @@ public class CreateProjectCommandHandler : ICommandHandler<CreateProjectCommand,
         _createProjectCommandValidator = createProjectCommandValidator;
     }
 
-    public async Task<Result<ProjectModel>> HandleCommandAsync(CreateProjectCommand command)
+    public async Task<Result<ProjectModel>> HandleAsync(CreateProjectCommand command)
     {
         var result = await _createProjectCommandValidator.ValidateAsync(command);
         if (!result.IsValid)

@@ -5,6 +5,9 @@ using TaskSync.Domain.Project;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
 using TaskSync.Domain.Ticket.Command;
+using TaskSync.Domain.Ticket.CreateTicket;
+using TaskSync.Domain.Ticket.QueryTicket;
+using TaskSync.Domain.Ticket.UpdateTicket;
 using TaskSync.Domain.User;
 using TaskSync.Infrastructure.Entities;
 
@@ -87,7 +90,7 @@ public class TicketRepository : ITicketRepository
         return tickets.Items.FirstOrDefault();
     }
 
-    public async Task<TicketCommentModel> AddTicketCommentAsync(int ticketId, CreateTicketCommentCommand cmd)
+    public async Task<TicketCommentModel> AddTicketCommentAsync(int ticketId, AddTicketCommentCommand cmd)
     {
         var ticket = await _dbContext.Tickets.FindAsync(ticketId);
         if (ticket == null)

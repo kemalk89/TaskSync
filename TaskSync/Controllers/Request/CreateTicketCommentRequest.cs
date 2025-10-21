@@ -6,5 +6,5 @@ namespace TaskSync.Controllers.Request;
 
 public record CreateTicketCommentRequest([Required] string Comment)
 {
-    public CreateTicketCommentCommand ToCommand() => new() { Comment = Comment };
+    public AddTicketCommentCommand ToCommand() => new() { Comment = Comment };
 }

@@ -4,8 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using TaskSync.Controllers.Response;
 using TaskSync.Domain.Exceptions;
 using TaskSync.Domain.Project;
-using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Project.CreateProject;
+using TaskSync.Domain.Project.AssignProjectLabel;
+using TaskSync.Domain.Project.AssignTeamMembers;
+using TaskSync.Domain.Project.DeleteProject;
+using TaskSync.Domain.Project.QueryProject;
+using TaskSync.Domain.Project.UpdateProject;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
 
@@ -16,13 +20,27 @@ namespace TaskSync.Controllers.Project;
 [Route("/api/[controller]")]
 public class ProjectController : ControllerBase
 {
-    private readonly IProjectService _projectService;
-    protected readonly CreateProjectCommandHandler _createProjectCommandHandler;
+    private readonly QueryProjectCommandHandler _queryProjectCommandHandler;
+    private readonly CreateProjectCommandHandler _createProjectCommandHandler;
+    private readonly UpdateProjectCommandHandler _updateProjectCommandHandler;
+    private readonly DeleteProjectCommandHandler _deleteProjectCommandHandler;
+    private readonly AssignProjectLabelCommandHandler _assignProjectLabelCommandHandler;
+    private readonly AssignTeamMembersCommandHandler _assignTeamMembersCommandHandler;
 
-    public ProjectController(IProjectService projectService, CreateProjectCommandHandler createProjectCommandHandler)
+    public ProjectController(
+        CreateProjectCommandHandler createProjectCommandHandler, 
+        AssignProjectLabelCommandHandler assignProjectLabelCommandHandler, 
+        AssignTeamMembersCommandHandler assignTeamMembersCommandHandler, 
+        UpdateProjectCommandHandler updateProjectCommandHandler, 
+        DeleteProjectCommandHandler deleteProjectCommandHandler, 
+        QueryProjectCommandHandler queryProjectCommandHandler)
     {
-        _projectService = projectService;
         _createProjectCommandHandler = createProjectCommandHandler;
+        _assignProjectLabelCommandHandler = assignProjectLabelCommandHandler;
+        _assignTeamMembersCommandHandler = assignTeamMembersCommandHandler;
+        _updateProjectCommandHandler = updateProjectCommandHandler;
+        _deleteProjectCommandHandler = deleteProjectCommandHandler;
+        _queryProjectCommandHandler = queryProjectCommandHandler;
     }
 
     [HttpPost]
@@ -33,7 +51,7 @@ public class ProjectController : ControllerBase
         [FromBody] CreateProjectCommand command
     )
     {
-        var result = await _createProjectCommandHandler.HandleCommandAsync(command);
+        var result = await _createProjectCommandHandler.HandleAsync(command);
         if (result.Success && result.Value != null)
         {
             return CreatedAtAction(
@@ -48,7 +66,7 @@ public class ProjectController : ControllerBase
     [HttpGet]
     public async Task<PagedResult<ProjectResponse>> GetProjects([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
     {
-        PagedResult<ProjectModel> pagedResult = await _projectService.GetProjectsAsync(pageNumber, pageSize);
+        PagedResult<ProjectModel> pagedResult = await _queryProjectCommandHandler.GetProjectsAsync(pageNumber, pageSize);
         return new PagedResult<ProjectResponse>
         {
             PageNumber = pagedResult.PageNumber,
@@ -64,7 +82,7 @@ public class ProjectController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<TicketResponse>> GetProjectById([FromRoute] int id)
     {
-        var item = await _projectService.GetProjectByIdAsync(id);
+        var item = await _queryProjectCommandHandler.GetProjectByIdAsync(id);
         if (item == null)
         {
             return NotFound();
@@ -78,7 +96,7 @@ public class ProjectController : ControllerBase
     {
         // TODO Permissions: Who can delete project? 
 
-        await _projectService.DeleteProjectAsync(id);
+        await _deleteProjectCommandHandler.HandleAsync(id);
 
         return NoContent();
     }
@@ -96,9 +114,9 @@ public class ProjectController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<ProjectLabelResponse>> CreateTicketLabel([FromBody] CreateProjectLabelCommand command)
+    public async Task<ActionResult<ProjectLabelResponse>> CreateTicketLabel([FromBody] AssignProjectLabelCommand command)
     {
-        var result = await _projectService.CreateTicketLabelAsync(command);
+        var result = await _assignProjectLabelCommandHandler.HandleAsync(command);
         if (result.Success)
         {
             return CreatedAtAction(
@@ -120,7 +138,7 @@ public class ProjectController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<List<ProjectLabelResponse>> GetProjectLabels([FromRoute] int id)
     {
-        var result = await _projectService.GetLabelsAsync(id);
+        var result = await _queryProjectCommandHandler.GetLabelsAsync(id);
         if (result.Success && result.Value != null)
         {
             return result.Value.Select(e => new ProjectLabelResponse
@@ -142,7 +160,7 @@ public class ProjectController : ControllerBase
         [FromQuery] int pageSize = 50
     )
     {
-        PagedResult<TicketModel> pagedResult = await _projectService.GetProjectTicketsAsync(id, pageNumber, pageSize);
+        PagedResult<TicketModel> pagedResult = await _queryProjectCommandHandler.GetProjectTicketsAsync(id, pageNumber, pageSize);
         return new PagedResult<TicketResponse>
         {
             PageNumber = pagedResult.PageNumber,
@@ -159,7 +177,7 @@ public class ProjectController : ControllerBase
         [FromBody] AssignTeamMembersCommand command)
     {
         // TODO Permissions: Who can assign team members?
-        await _projectService.AssignTeamMembersAsync(projectId, command);
+        await _assignTeamMembersCommandHandler.HandleAsync(projectId, command);
         return NoContent();
     }
     
@@ -169,6 +187,6 @@ public class ProjectController : ControllerBase
         [FromRoute] int projectId, 
         [FromBody] UpdateProjectCommand updateProjectCommand)
     {
-        return await _projectService.UpdateProjectAsync(projectId, updateProjectCommand);
+        return await _updateProjectCommandHandler.HandleAsync(projectId, updateProjectCommand);
     }
 }

@@ -1,4 +1,4 @@
-namespace TaskSync.Domain.Ticket;
+namespace TaskSync.Domain.Ticket.QueryTicket;
 
 public class TicketSearchFilter
 {

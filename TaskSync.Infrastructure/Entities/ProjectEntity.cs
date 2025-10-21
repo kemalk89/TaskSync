@@ -8,7 +8,7 @@ public class ProjectEntity : AuditedEntity
     public int Id { get; set; }
     public string Title { get; set; } = "";
     public string? Description { get; set; }
-    public ProjectVisibility? Visibility { get; set; }
+    public ProjectVisibilityModel? Visibility { get; set; }
     public ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = new List<ProjectMemberEntity>();
 
     public int? GetProjectManagerId()
@@ -31,7 +31,7 @@ public class ProjectEntity : AuditedEntity
             Id = Id,
             Title = Title,
             Description = Description,
-            ProjectMembers = ProjectMembers.Select(m => new ProjectMember
+            ProjectMembers = ProjectMembers.Select(m => new ProjectMemberModel
             {
                 UserId = m.UserId, 
                 Role = m.Role, 

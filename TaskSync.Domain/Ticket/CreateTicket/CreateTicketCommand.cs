@@ -1,6 +1,7 @@
-using TaskSync.Domain.Project.Commands;
+using TaskSync.Domain.Ticket.AssignTicketLabel;
+using TaskSync.Domain.Ticket.Command;
 
-namespace TaskSync.Domain.Ticket.Command;
+namespace TaskSync.Domain.Ticket.CreateTicket;
 
 public class CreateTicketCommand
 {

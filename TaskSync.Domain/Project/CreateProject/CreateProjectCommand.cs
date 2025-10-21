@@ -6,7 +6,7 @@ public class CreateProjectCommand
 
     public string? Description { get; set; }
 
-    public ProjectVisibility? Visibility { get; set; } = ProjectVisibility.Everybody;
+    public ProjectVisibilityModel? Visibility { get; set; } = ProjectVisibilityModel.Everybody;
     
     public int? ProjectManagerId { get; set; }
 }

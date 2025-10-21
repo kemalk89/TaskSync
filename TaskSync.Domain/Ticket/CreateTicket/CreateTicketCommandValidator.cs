@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace TaskSync.Domain.Ticket.Command;
+namespace TaskSync.Domain.Ticket.CreateTicket;
 
 public class CreateTicketCommandValidator : AbstractValidator<CreateTicketCommand>
 {

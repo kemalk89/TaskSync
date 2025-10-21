@@ -1,6 +1,6 @@
-namespace TaskSync.Domain.Project.Commands;
+namespace TaskSync.Domain.Project.AssignProjectLabel;
 
-public class CreateProjectLabelCommand
+public class AssignProjectLabelCommand
 {
     public int ProjectId { get; set; }
     public string Text { get; set; } = string.Empty;

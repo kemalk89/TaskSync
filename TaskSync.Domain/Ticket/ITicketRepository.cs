@@ -1,5 +1,8 @@
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket.Command;
+using TaskSync.Domain.Ticket.CreateTicket;
+using TaskSync.Domain.Ticket.QueryTicket;
+using TaskSync.Domain.Ticket.UpdateTicket;
 
 namespace TaskSync.Domain.Ticket;
 
@@ -10,7 +13,7 @@ public interface ITicketRepository
     Task<PagedResult<TicketModel>> GetByProjectIdAsync(int projectId, int pageNumber, int pageSize);
     Task<PagedResult<TicketModel>> GetAllAsync(int pageNumber, int pageSize, TicketSearchFilter filter);
     Task<Result<bool>> UpdateTicketAsync(int ticketId, UpdateTicketCommand updateTicketCommand);
-    Task<TicketCommentModel> AddTicketCommentAsync(int ticketId, CreateTicketCommentCommand cmd);
+    Task<TicketCommentModel> AddTicketCommentAsync(int ticketId, AddTicketCommentCommand cmd);
     Task<TicketCommentModel?> GetTicketCommentByIdAsync(int commentId);
     Task<PagedResult<TicketCommentModel>> GetTicketCommentsAsync(int id, int pageNumber, int pageSize);
     Task<int> DeleteTicketAsync(int id);

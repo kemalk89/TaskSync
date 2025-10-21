@@ -1,5 +1,5 @@
-using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Project.CreateProject;
+using TaskSync.Domain.Project.UpdateProject;
 using TaskSync.Domain.Shared;
 
 namespace TaskSync.Domain.Project;

@@ -1,4 +1,4 @@
-namespace TaskSync.Domain.Project.Commands;
+namespace TaskSync.Domain.Ticket.AssignTicketLabel;
 
 public class AssignTicketLabelCommand
 {

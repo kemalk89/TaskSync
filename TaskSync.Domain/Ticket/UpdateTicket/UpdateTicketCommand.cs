@@ -1,4 +1,4 @@
-namespace TaskSync.Domain.Ticket.Command;
+namespace TaskSync.Domain.Ticket.UpdateTicket;
 
 public class UpdateTicketCommand
 {

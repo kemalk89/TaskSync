@@ -1,6 +1,6 @@
 namespace TaskSync.Domain.Project;
 
-public enum ProjectVisibility
+public enum ProjectVisibilityModel
 {
     Everybody,
     TeamOnly

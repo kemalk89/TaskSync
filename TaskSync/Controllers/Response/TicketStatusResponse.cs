@@ -7,9 +7,9 @@ public class TicketStatusResponse
     public int Id { get; set; }
     public string Name { get; set; } = null!;
 
-    public TicketStatusResponse(TicketStatus status)
+    public TicketStatusResponse(TicketStatusModel statusModel)
     {
-        Id = status.Id;
-        Name = status.Name;
+        Id = statusModel.Id;
+        Name = statusModel.Name;
     }
 }

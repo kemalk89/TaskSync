@@ -3,10 +3,11 @@ using System.Net.Http.Json;
 
 using TaskSync.Controllers.Project;
 using TaskSync.Controllers.Response;
-using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Project.CreateProject;
-using TaskSync.Domain.Ticket.Command;
+using TaskSync.Domain.Project.AssignProjectLabel;
 using TaskSync.Domain.Shared;
+using TaskSync.Domain.Ticket.AssignTicketLabel;
+using TaskSync.Domain.Ticket.CreateTicket;
 
 namespace TaskSync.Tests.IntegrationTests;
 
@@ -83,7 +84,7 @@ public class TicketControllerTest : BaseIntegrationTest
         // next, create a label for the project
         var responseCreateLabel = await _client.PostAsJsonAsync(
             $"/api/project/{createdProject.Id}/labels", 
-            new CreateProjectLabelCommand { ProjectId = createdProject.Id, Text = "Quick Fix" });
+            new AssignProjectLabelCommand { ProjectId = createdProject.Id, Text = "Quick Fix" });
         
         Assert.Equal(HttpStatusCode.Created, responseCreateLabel.StatusCode);
         var createdLabel = await responseCreateLabel.Content.ReadFromJsonAsync<ProjectLabelResponse>();

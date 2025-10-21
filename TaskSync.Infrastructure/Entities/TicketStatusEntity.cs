@@ -11,9 +11,9 @@ public class TicketStatusEntity
 
     public string Name { get; set; } = null!;
 
-    public TicketStatus ToDomainObject()
+    public TicketStatusModel ToDomainObject()
     {
-        return new TicketStatus
+        return new TicketStatusModel
         {
             Id = Id,
             Name = Name

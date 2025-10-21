@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace TaskSync.Domain.Project.Commands;
+namespace TaskSync.Domain.Ticket.AssignTicketLabel;
 
 public class AssignTicketLabelCommandValidator :  AbstractValidator<AssignTicketLabelCommand>
 {

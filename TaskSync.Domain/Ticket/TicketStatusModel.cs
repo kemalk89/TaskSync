@@ -1,6 +1,6 @@
 namespace TaskSync.Domain.Ticket;
 
-public class TicketStatus
+public class TicketStatusModel
 {
     public int Id { get; set; }
 

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
 using TaskSync.Domain.Project;
-using TaskSync.Domain.Project.Commands;
 using TaskSync.Domain.Project.CreateProject;
+using TaskSync.Domain.Project.UpdateProject;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.User;
 using TaskSync.Infrastructure.Entities;

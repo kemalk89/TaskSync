@@ -1,6 +1,6 @@
 namespace TaskSync.Domain.Ticket.Command;
 
-public class CreateTicketCommentCommand
+public class AddTicketCommentCommand
 {
     public string Comment { get; set; } = string.Empty;
 }
