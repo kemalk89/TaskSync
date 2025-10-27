@@ -1,5 +1,6 @@
 ![build project](https://github.com/kemalk89/TaskSync/actions/workflows/dotnet.yml/badge.svg)
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=kemalk89_TaskSync)](https://sonarcloud.io/summary/new_code?id=kemalk89_TaskSync)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kemalk89_TaskSync&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kemalk89_TaskSync)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kemalk89_TaskSync&metric=coverage)](https://sonarcloud.io/summary/new_code?id=kemalk89_TaskSync)
 
 # Technical Overview
 
