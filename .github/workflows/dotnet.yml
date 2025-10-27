@@ -56,14 +56,13 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: pwsh
       run: |
-        ${{ runner.temp }}/scanner/dotnet-sonarscanner begin /k:"kemalk89_TaskSync" /o:"kemalk89" /d:sonar.token="${{ env.SONAR_TOKEN }}"  /d:sonar.cs.opencover.reportsPaths="./TestResults/*/coverage.cobertura.xml"
+        ${{ runner.temp }}/scanner/dotnet-sonarscanner begin /k:"kemalk89_TaskSync" /o:"kemalk89" /d:sonar.token="${{ env.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="./TestResults/coverage.xml"
       
     - name: Build
       run: dotnet build --no-restore
     
     - name: Test
-      run: dotnet test --no-build --collect:"XPlat Code Coverage" --results-directory ./TestResults
-      
+      run: dotnet test --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage.xml
     - name: End SonarCloud analysis
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
