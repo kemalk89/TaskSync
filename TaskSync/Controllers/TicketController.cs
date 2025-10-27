@@ -128,16 +128,19 @@ public class TicketController : ControllerBase
     [Route("{id}/comment")]
     public async Task<ActionResult<TicketCommentResponse>> AddComment([FromRoute] int id, [FromBody] CreateTicketCommentRequest req)
     {
-        try
+        var result = await _addTicketCommentCommandHandler.HandleAsync(id, req.ToCommand());
+
+        if (result.Success)
         {
-            var comment = await _addTicketCommentCommandHandler.HandleAsync(id, req.ToCommand());
-            var commentResponse = new TicketCommentResponse(comment);
-            return new ObjectResult(commentResponse) { StatusCode = StatusCodes.Status201Created };
-        }   
-        catch (ResourceNotFoundException)
-        {
-            return NotFound($"Ticket with id {id} could not be found.");
+            return CreatedAtAction(null, new { id }, req);
         }
+        
+        return result.Error switch
+        {
+            ResultCodes.ResultCodeResourceNotFound => NotFound(new ErrorResponse(result.Error, result.ErrorDetails)),
+            ResultCodes.ResultCodeValidationFailed => BadRequest(new ErrorResponse(result.Error, result.ErrorDetails)),
+            _ => throw new InvalidOperationException($"Unexpected result code: {result.Error}.")
+        };
     }
     
     [HttpGet]

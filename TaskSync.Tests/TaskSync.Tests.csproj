@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="IntegrationTests\Ticket\AddTicketComment\" />
     <Folder Include="IntegrationTests\Ticket\AssignTicketLabel\" />
     <Folder Include="IntegrationTests\Ticket\DeleteTicket\" />
   </ItemGroup>
