@@ -44,22 +44,19 @@ jobs:
       run: |
         New-Item -Path ${{ runner.temp }}/scanner -ItemType Directory
         dotnet tool update dotnet-sonarscanner --tool-path ${{ runner.temp }}/scanner
-    - name: Build and analyze
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      shell: pwsh
-      run: |
-        ${{ runner.temp }}/scanner/dotnet-sonarscanner begin /k:"kemalk89_TaskSync" /o:"kemalk89" /d:sonar.token="$SONAR_TOKEN"
-        dotnet build
-        ${{ runner.temp }}/scanner/dotnet-sonarscanner end /d:sonar.token="$SONAR_TOKEN"
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
+    - name: Build and analyze
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      shell: pwsh
+      run: |
+        ${{ runner.temp }}/scanner/dotnet-sonarscanner begin /k:"kemalk89_TaskSync" /o:"kemalk89" /d:sonar.token="${{ env.SONAR_TOKEN }}"
+        dotnet build --no-restore
+        ${{ runner.temp }}/scanner/dotnet-sonarscanner end /d:sonar.token="${{ env.SONAR_TOKEN }}"
     - name: Test
       run: dotnet test --no-build --verbosity normal
