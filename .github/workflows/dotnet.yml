@@ -49,9 +49,9 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: pwsh
       run: |
-        ${{ runner.temp }}/scanner/dotnet-sonarscanner begin /k:"kemalk89_TaskSync" /o:"kemalk89" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        ${{ runner.temp }}/scanner/dotnet-sonarscanner begin /k:"kemalk89_TaskSync" /o:"kemalk89" /d:sonar.token="$SONAR_TOKEN"
         dotnet build
-        ${{ runner.temp }}/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        ${{ runner.temp }}/scanner/dotnet-sonarscanner end /d:sonar.token="$SONAR_TOKEN"
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
