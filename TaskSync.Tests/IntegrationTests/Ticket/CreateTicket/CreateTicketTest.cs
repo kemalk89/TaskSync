@@ -1,28 +1,30 @@
 using System.Net;
 using System.Net.Http.Json;
 
-using TaskSync.Controllers.Project;
 using TaskSync.Controllers.Response;
-using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Project.AssignProjectLabel;
+using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket.AssignTicketLabel;
 using TaskSync.Domain.Ticket.CreateTicket;
 
-namespace TaskSync.Tests.IntegrationTests;
+namespace TaskSync.Tests.IntegrationTests.Ticket.CreateTicket;
 
-public class TicketControllerTest : BaseIntegrationTest
+public class CreateTicketTest : BaseIntegrationTest, IClassFixture<CreateProjectFixture>
 {
-    public TicketControllerTest(IntegrationTestWebAppFactory factory) : base(factory)
-    {
-    }
+    private readonly CreateProjectFixture _createProjectFixture;
     
+    public CreateTicketTest(
+        IntegrationTestWebAppFactory factory,  
+        CreateProjectFixture createProjectFixture) : base(factory)
+    {
+        _createProjectFixture = createProjectFixture;
+    }
+
     [Fact]
-    public async Task Api_ShouldReturn401_WhenNoAuthProvided()
+    public async Task CreateTicket_ShouldReturn401_WhenNoAuthProvided()
     {
         await AssertEndpointsReturnUnauthorized([
-            ("/api/ticket/123", HttpMethod.Get, null),
-            ("/api/ticket", HttpMethod.Get, null),
             ("/api/ticket", HttpMethod.Post, new CreateTicketCommand())
         ]);
     }
@@ -69,17 +71,8 @@ public class TicketControllerTest : BaseIntegrationTest
         SetAuthenticatedUser();
         
         // first, create a project
-        var createProjectCommand = new CreateProjectCommand
-        {
-            Title = "Test Project Title"
-        };
-        
-        var responseCreateProject = await _client.PostAsJsonAsync("/api/project", createProjectCommand);
-        
-        Assert.Equal(HttpStatusCode.Created, responseCreateProject.StatusCode);
-        
-        var createdProject = await responseCreateProject.Content.ReadFromJsonAsync<ProjectResponse>();
-        Assert.NotNull(createdProject);
+        var createdProject = await _createProjectFixture.InitIfNotExistsAsync(
+            _client, new CreateProjectCommand { Title = "Test Project Title" });
         
         // next, create a label for the project
         var responseCreateLabel = await _client.PostAsJsonAsync(
@@ -112,4 +105,5 @@ public class TicketControllerTest : BaseIntegrationTest
         Assert.Equal("Quick Fix", responseGetLabels.First().Text);
         Assert.Equal("Team A", responseGetLabels.Last().Text);
     }
+    
 }

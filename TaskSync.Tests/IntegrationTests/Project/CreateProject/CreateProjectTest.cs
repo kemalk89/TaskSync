@@ -6,14 +6,22 @@ using TaskSync.Controllers.Response;
 using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Shared;
 
-namespace TaskSync.Tests.IntegrationTests;
+namespace TaskSync.Tests.IntegrationTests.Project.CreateProject;
 
-public class ProjectControllerTests : BaseIntegrationTest
+public class CreateProjectTest : BaseIntegrationTest
 {
-    public ProjectControllerTests(IntegrationTestWebAppFactory factory) : base(factory)
+    public CreateProjectTest(IntegrationTestWebAppFactory factory) : base(factory)
     {
     }
-
+    
+    [Fact]
+    public async Task CreateTicket_ShouldReturn401_WhenNoAuthProvided()
+    {
+        await AssertEndpointsReturnUnauthorized([
+            ("/api/project", HttpMethod.Post, new CreateProjectCommand())
+        ]);
+    }
+    
     [Fact]
     public async Task CreateProject_ShouldReturn201_WhenValidRequest()
     {
@@ -41,15 +49,7 @@ public class ProjectControllerTests : BaseIntegrationTest
         Assert.Equal("Test Project Title", fetchedProject?.Title);
     }
 
-    [Fact]
-    public async Task Api_ShouldReturn401_WhenNoAuthProvided()
-    {
-        await AssertEndpointsReturnUnauthorized([
-            ("/api/project/123", HttpMethod.Get, null),
-            ("/api/project", HttpMethod.Get, null),
-            ("/api/project", HttpMethod.Post, new CreateProjectCommand())
-        ]);
-    }
+
     
     [Fact]
     public async Task CreateTicket_ShouldReturn400_WhenInvalidRequestProvided()
