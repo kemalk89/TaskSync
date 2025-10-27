@@ -50,13 +50,12 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build and analyze
+    - name: Build and Test
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: pwsh
       run: |
         ${{ runner.temp }}/scanner/dotnet-sonarscanner begin /k:"kemalk89_TaskSync" /o:"kemalk89" /d:sonar.token="${{ env.SONAR_TOKEN }}"
         dotnet build --no-restore
+        dotnet test --no-build --collect:"XPlat Code Coverage" --results-directory ./TestResults
         ${{ runner.temp }}/scanner/dotnet-sonarscanner end /d:sonar.token="${{ env.SONAR_TOKEN }}"
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
