@@ -40,14 +40,14 @@ jobs:
         restore-keys: ${{ runner.os }}-sonar-scanner
     - name: Install SonarQube Cloud scanner
       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-      shell: powershell
+      shell: pwsh
       run: |
         New-Item -Path ${{ runner.temp }}/scanner -ItemType Directory
         dotnet tool update dotnet-sonarscanner --tool-path ${{ runner.temp }}/scanner
     - name: Build and analyze
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      shell: powershell
+      shell: pwsh
       run: |
         ${{ runner.temp }}/scanner/dotnet-sonarscanner begin /k:"kemalk89_TaskSync" /o:"kemalk89" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
         dotnet build
