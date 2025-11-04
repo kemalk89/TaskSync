@@ -33,4 +33,9 @@ public class QueryTicketCommandHandler : ICommandHandler
         var tickets = await _ticketRepository.GetAllAsync(pageNumber, pageSize, filter);
         return tickets;
     }
+
+    public async Task<List<TicketStatusModel>> GetTicketStatusListAsync(CancellationToken cancellationToken)
+    {
+        return await _ticketRepository.GetTicketStatusListAsync(cancellationToken);
+    }
 }

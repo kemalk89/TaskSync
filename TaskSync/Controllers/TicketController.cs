@@ -196,4 +196,12 @@ public class TicketController : ControllerBase
                 message = "Unable to delete comment with ID " +  commentId
             });
     }
+
+    [HttpGet]
+    [Route("status")]
+    public async Task<ActionResult> GetTicketStatusList(CancellationToken cancellationToken)
+    {
+        var result =await _queryTicketCommandHandler.GetTicketStatusListAsync(cancellationToken);  
+        return Ok(result);
+    }
 }

@@ -295,4 +295,12 @@ public class TicketRepository : ITicketRepository
         
         return Result<int>.Ok(labelId);
     }
+
+    public async Task<List<TicketStatusModel>> GetTicketStatusListAsync(CancellationToken cancellationToken)
+    {
+        var entities = await _dbContext.TicketStatus
+            .ToListAsync(cancellationToken);
+        
+        return entities.Select(e => e.ToDomainObject()).ToList();
+    }
 }

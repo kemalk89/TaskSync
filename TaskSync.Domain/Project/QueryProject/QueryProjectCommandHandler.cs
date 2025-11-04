@@ -30,8 +30,6 @@ public class QueryProjectCommandHandler : ICommandHandler
         return projects;
     }
 
-
-
     public async Task<PagedResult<TicketModel>> GetProjectTicketsAsync(int projectId, int pageNumber = 1, int pageSize = 0)
     {
         var project = await GetProjectByIdAsync(projectId);

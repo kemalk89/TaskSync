@@ -80,7 +80,7 @@ public class ProjectController : ControllerBase
     [Route("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<TicketResponse>> GetProjectById([FromRoute] int id)
+    public async Task<ActionResult<ProjectResponse>> GetProjectById([FromRoute] int id)
     {
         var item = await _queryProjectCommandHandler.GetProjectByIdAsync(id);
         if (item == null)

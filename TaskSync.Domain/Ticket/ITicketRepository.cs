@@ -19,4 +19,5 @@ public interface ITicketRepository
     Task<int> DeleteTicketAsync(int id);
     Task<bool> DeleteTicketCommentAsync(int commentId);
     Task<Result<int>> AssignTicketLabelAsync(int projectId, int ticketId, int labelId);
+    Task<List<TicketStatusModel>> GetTicketStatusListAsync(CancellationToken cancellationToken);
 }
