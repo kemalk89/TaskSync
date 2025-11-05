@@ -55,7 +55,8 @@ public class TicketRepository : ITicketRepository
             Description = cmd.Description,
             Project = project,
             AssigneeId = cmd.Assignee,
-            Type = ticketType
+            Type = ticketType,
+            StatusId = cmd.StatusId
         };
 
         await _dbContext.Tickets.AddAsync(ticket);
@@ -168,6 +169,11 @@ public class TicketRepository : ITicketRepository
             query = dbSet.Where(t => EF.Functions.Like(t.Title.ToLower(), $"%{filter.SearchText.ToLower()}%"));
         }
 
+        if (filter?.Status != null && filter.Status.Count > 0)
+        {
+            query = dbSet.Where(t => t.StatusId.HasValue && filter.Status.Contains(t.StatusId.Value));
+        }
+        
         var tickets = query
             .OrderBy(t => t.CreatedDate)
             .Include(t => t.Project)

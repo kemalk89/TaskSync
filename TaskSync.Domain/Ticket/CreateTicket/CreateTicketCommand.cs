@@ -16,4 +16,6 @@ public class CreateTicketCommand
     public string? Type { get; set; }
     
     public List<AssignTicketLabelCommand>? Labels { get; set; }
+    
+    public int? StatusId { get; set; }
 }

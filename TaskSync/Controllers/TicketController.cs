@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskSync.Controllers.Request;
 using TaskSync.Controllers.Response;
-using TaskSync.Domain.Exceptions;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
 using TaskSync.Domain.Ticket.AddTicketComment;
@@ -46,9 +45,25 @@ public class TicketController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<PagedResult<TicketResponse>> GetTickets([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50, [FromQuery] string? searchText = null)
+    public async Task<PagedResult<TicketResponse>> GetTickets(
+        [FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 50, 
+        [FromQuery] string? searchText = null,
+        [FromQuery] string? status = null
+    )
     {
-        var searchFilter = new TicketSearchFilter { SearchText = searchText ?? string.Empty };
+        var statusIds = status?
+            .Split(",")?
+            .Select(s => int.TryParse(s, out var id) ? id : (int?)null)
+            .Where(id => id.HasValue)
+            .Select(id => id!.Value)
+            .ToList();
+        
+        var searchFilter = new TicketSearchFilter
+        {
+            SearchText = searchText ?? string.Empty,
+            Status = statusIds ?? []
+        };
         PagedResult<TicketModel> pagedResult = await _queryTicketCommandHandler.GetTicketsAsync(pageNumber, pageSize, searchFilter);
         return new PagedResult<TicketResponse>
         {
