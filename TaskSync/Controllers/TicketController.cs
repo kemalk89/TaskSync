@@ -49,7 +49,8 @@ public class TicketController : ControllerBase
         [FromQuery] int pageNumber = 1, 
         [FromQuery] int pageSize = 50, 
         [FromQuery] string? searchText = null,
-        [FromQuery] string? status = null
+        [FromQuery] string? status = null,
+        [FromQuery] string? projects = null
     )
     {
         var statusIds = status?
@@ -59,10 +60,18 @@ public class TicketController : ControllerBase
             .Select(id => id!.Value)
             .ToList();
         
+        var projectIds = projects?
+            .Split(",")?
+            .Select(s => int.TryParse(s, out var id) ? id : (int?)null)
+            .Where(id => id.HasValue)
+            .Select(id => id!.Value)
+            .ToList();
+        
         var searchFilter = new TicketSearchFilter
         {
             SearchText = searchText ?? string.Empty,
-            Status = statusIds ?? []
+            StatusIds = statusIds ?? [],
+            ProjectIds = projectIds ?? []
         };
         PagedResult<TicketModel> pagedResult = await _queryTicketCommandHandler.GetTicketsAsync(pageNumber, pageSize, searchFilter);
         return new PagedResult<TicketResponse>

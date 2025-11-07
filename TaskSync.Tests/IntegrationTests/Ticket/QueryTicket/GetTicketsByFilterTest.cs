@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 
 using TaskSync.Controllers.Response;
+using TaskSync.Controllers.Project;
 using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket.CreateTicket;
@@ -19,16 +20,16 @@ public class GetTicketsByFilterTest : BaseIntegrationTest, IClassFixture<CreateP
     }
     
     [Fact]
-    public async Task FilterTickets()
+    public async Task FilterTicketsByStatusIds()
     {
         SetAuthenticatedUser();
         
-        // Arrange
+        // Step 1: Create a project
         var createdProject = await _createProjectFixture.InitIfNotExistsAsync(
-            _client, new CreateProjectCommand() { Title = "Test Project Title" });
-        
+            _client, new CreateProjectCommand { Title = "Test Project Title" });
         Assert.NotNull(createdProject);
         
+        // Step 2: Create 2 tickets with different status
         var createTicketCommand_1 = new CreateTicketCommand
         {
             Title = "Ticket in TODO",
@@ -49,7 +50,7 @@ public class GetTicketsByFilterTest : BaseIntegrationTest, IClassFixture<CreateP
         var responseCreateTicket_2 = await _client.PostAsJsonAsync("/api/ticket", createTicketCommand_2);
         Assert.Equal(HttpStatusCode.Created, responseCreateTicket_2.StatusCode);
         
-        // Act
+        // Step 3: Run filters
         var onlyTicketsInTodo = 
             await _client.GetFromJsonAsync<PagedResult<TicketResponse>>($"/api/ticket?status=1");
         
@@ -71,5 +72,69 @@ public class GetTicketsByFilterTest : BaseIntegrationTest, IClassFixture<CreateP
         Assert.NotNull(onlyTicketsInTodoAndInProgress);
         Assert.Contains(onlyTicketsInTodoAndInProgress.Items, response => "Ticket in Progress".Equals(response.Title));
         Assert.Contains(onlyTicketsInTodoAndInProgress.Items, response => "Ticket in TODO".Equals(response.Title));
+    }
+
+
+    [Fact]
+    public async Task FilterTicketsByProjectIds()
+    {
+        SetAuthenticatedUser();
+        
+        // Step 1: Create two projects
+        var createdProject_1 = await _createProjectFixture.InitIfNotExistsAsync(
+            _client, new CreateProjectCommand { Title = "Test Project Title" });
+        Assert.NotNull(createdProject_1);
+        
+        var responseCreateProject_2 = await _client.PostAsJsonAsync("/api/project", new CreateProjectCommand { Title = "Test Project Title 2" });
+        Assert.Equal(HttpStatusCode.Created, responseCreateProject_2.StatusCode);
+        
+        var createdProject_2 = await responseCreateProject_2.Content.ReadFromJsonAsync<ProjectResponse>();
+        Assert.NotNull(createdProject_2);
+        
+        // Step 2: Assign tickets to both projects
+        var createTicketCommand_1 = new CreateTicketCommand
+        {
+            Title = "Ticket for project 1",
+            ProjectId = createdProject_1.Id,
+        };
+        
+        var responseCreateTicket_1 = await _client.PostAsJsonAsync("/api/ticket", createTicketCommand_1);
+        Assert.Equal(HttpStatusCode.Created, responseCreateTicket_1.StatusCode);
+        
+        var createTicketCommand_2 = new CreateTicketCommand
+        {
+            Title = "Ticket for project 2",
+            ProjectId = createdProject_2.Id
+        };
+        
+        var responseCreateTicket_2 = await _client.PostAsJsonAsync("/api/ticket", createTicketCommand_2);
+        Assert.Equal(HttpStatusCode.Created, responseCreateTicket_2.StatusCode);
+        
+        // Step 3: Run filters
+        var onlyTicketInProject1 = 
+            await _client.GetFromJsonAsync<PagedResult<TicketResponse>>($"/api/ticket?projects={createdProject_1.Id}");
+        
+        var onlyTicketInProject2 = 
+            await _client.GetFromJsonAsync<PagedResult<TicketResponse>>($"/api/ticket?projects={createdProject_2.Id}");
+        
+        var onlyTicketsInBothProjects = 
+            await _client.GetFromJsonAsync<PagedResult<TicketResponse>>($"/api/ticket?projects={createdProject_1.Id},{createdProject_2.Id}");
+        
+        // Assert
+        Assert.NotNull(onlyTicketInProject1);
+        Assert.Contains(onlyTicketInProject1.Items, response => "Ticket for project 1".Equals(response.Title));
+        Assert.DoesNotContain(onlyTicketInProject1.Items, response => "Ticket for project 2".Equals(response.Title));
+        
+        Assert.NotNull(onlyTicketInProject2);
+        Assert.Contains(onlyTicketInProject2.Items, response => "Ticket for project 2".Equals(response.Title));
+        Assert.DoesNotContain(onlyTicketInProject2.Items, response => "Ticket for project 1".Equals(response.Title));
+        
+        Assert.NotNull(onlyTicketsInBothProjects);
+        Assert.Contains(onlyTicketsInBothProjects.Items, response => "Ticket for project 1".Equals(response.Title));
+        Assert.Contains(onlyTicketsInBothProjects.Items, response => "Ticket for project 2".Equals(response.Title));
+        
+        // Cleanup only test project 2 -> The first one will be automatically cleaned up by fixture
+        var responseDeleteProject = await _client.DeleteAsync($"/api/project/{createdProject_2.Id}");
+        Assert.Equal(HttpStatusCode.NoContent, responseDeleteProject.StatusCode);
     }
 }

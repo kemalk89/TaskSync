@@ -41,9 +41,8 @@ public class CreateProjectFixture : IAsyncLifetime
     {
         if (ProjectResponse != null)
         {
-            Console.WriteLine("TODO: Delete the project");
+            var responseDeleteProject = await _httpClient.DeleteAsync($"/api/project/{ProjectResponse.Id}");
+            Assert.Equal(HttpStatusCode.NoContent, responseDeleteProject.StatusCode);
         }
-
-        await Task.Delay(50);
     }
 }

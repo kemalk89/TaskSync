@@ -92,6 +92,7 @@ public class ProjectController : ControllerBase
 
     [HttpDelete]
     [Route("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> DeleteProject([FromRoute] int id)
     {
         // TODO Permissions: Who can delete project? 

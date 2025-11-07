@@ -154,12 +154,12 @@ public class TicketRepository : ITicketRepository
 
         var dbSet = _dbContext.Tickets;
         IQueryable<TicketEntity> query = dbSet.Where(t => true);
-        if (projectId != null)
+        if (projectId is not null)
         {
             query = dbSet.Where(t => t.ProjectId == projectId);
         }
 
-        if (ticketId != null)
+        if (ticketId is not null)
         {
             query = dbSet.Where(t => t.Id == ticketId);
         }
@@ -169,9 +169,14 @@ public class TicketRepository : ITicketRepository
             query = dbSet.Where(t => EF.Functions.Like(t.Title.ToLower(), $"%{filter.SearchText.ToLower()}%"));
         }
 
-        if (filter?.Status != null && filter.Status.Count > 0)
+        if (filter?.StatusIds is not null && filter.StatusIds.Count > 0)
         {
-            query = dbSet.Where(t => t.StatusId.HasValue && filter.Status.Contains(t.StatusId.Value));
+            query = dbSet.Where(t => t.StatusId.HasValue && filter.StatusIds.Contains(t.StatusId.Value));
+        }
+        
+        if (filter?.ProjectIds is not null && filter.ProjectIds.Count > 0)
+        {
+            query = dbSet.Where(t => filter.ProjectIds.Contains(t.ProjectId));
         }
         
         var tickets = query
@@ -207,7 +212,7 @@ public class TicketRepository : ITicketRepository
         {
             User? createdBy = users?.FirstOrDefault(a => a.Id == ticket.CreatedBy);
 
-            if (ticket.AssigneeId != null)
+            if (ticket.AssigneeId is not null)
             {
                 User? assignee = users?.FirstOrDefault(a => a.Id == ticket.AssigneeId);
                 result.Add(ticket.ToTicket(assignee: assignee, createdBy: createdBy));
@@ -236,7 +241,7 @@ public class TicketRepository : ITicketRepository
     public async Task<bool> DeleteTicketCommentAsync(int commentId)
     {
         var comment = await _dbContext.TicketComments.FindAsync(commentId);
-        if (comment != null)
+        if (comment is not null)
         {
             comment.IsDeleted = true;
             await _dbContext.SaveChangesAsync();
@@ -249,7 +254,7 @@ public class TicketRepository : ITicketRepository
     public async Task<Result<bool>> UpdateTicketAsync(int ticketId, UpdateTicketCommand updateTicketCommand)
     {
         var ticket = await _dbContext.Tickets.FindAsync(ticketId);
-        if (ticket == null)
+        if (ticket is null)
         { 
             return Result<bool>.Fail($"Ticket with id {ticketId} could not be found.");
         }
@@ -257,7 +262,7 @@ public class TicketRepository : ITicketRepository
         if (updateTicketCommand.StatusId != null)
         {
             var status = _dbContext.TicketStatus.Find(updateTicketCommand.StatusId);
-            if (status == null)
+            if (status is null)
             {
                 return Result<bool>.Fail($"TicketStatus with id {updateTicketCommand.StatusId} could not be found.");
             }
@@ -270,7 +275,7 @@ public class TicketRepository : ITicketRepository
             ticket.Title = updateTicketCommand.Title;
         }
         
-        if (updateTicketCommand.Description != null)
+        if (updateTicketCommand.Description is not null)
         {
             ticket.Description = updateTicketCommand.Description;
         }
@@ -282,13 +287,13 @@ public class TicketRepository : ITicketRepository
     public async Task<Result<int>> AssignTicketLabelAsync(int projectId, int ticketId, int labelId)
     {
         var ticket = await _dbContext.Tickets.FindAsync(ticketId);
-        if (ticket == null)
+        if (ticket is null)
         { 
             return Result<int>.Fail($"Ticket with id {ticketId} could not be found.");
         }
 
         var label = await _dbContext.TicketLabels.FindAsync(labelId);
-        if (label == null)
+        if (label is null)
         {
             return Result<int>.Fail($"Ticket Label with id {labelId} could not be found.");
         }
