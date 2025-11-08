@@ -79,7 +79,6 @@ public class UserController : ControllerBase
         return users.Select(item => new UserResponse(item));
     }
 
-
     [HttpGet]
     public async Task<PagedResult<UserResponse>> GetUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
     {

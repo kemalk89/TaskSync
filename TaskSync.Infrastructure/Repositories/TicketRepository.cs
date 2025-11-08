@@ -152,41 +152,45 @@ public class TicketRepository : ITicketRepository
     {
         var skip = (pageNumber - 1) * pageSize;
 
-        var dbSet = _dbContext.Tickets;
-        IQueryable<TicketEntity> query = dbSet.Where(t => true);
+        IQueryable<TicketEntity> query = _dbContext.Tickets.AsQueryable();
         if (projectId is not null)
         {
-            query = dbSet.Where(t => t.ProjectId == projectId);
+            query = query.Where(t => t.ProjectId == projectId);
         }
 
         if (ticketId is not null)
         {
-            query = dbSet.Where(t => t.Id == ticketId);
+            query = query.Where(t => t.Id == ticketId);
         }
 
         if (!string.IsNullOrWhiteSpace(filter?.SearchText))
         {
-            query = dbSet.Where(t => EF.Functions.Like(t.Title.ToLower(), $"%{filter.SearchText.ToLower()}%"));
+            query = query.Where(t => EF.Functions.Like(t.Title.ToLower(), $"%{filter.SearchText.ToLower()}%"));
         }
 
         if (filter?.StatusIds is not null && filter.StatusIds.Count > 0)
         {
-            query = dbSet.Where(t => t.StatusId.HasValue && filter.StatusIds.Contains(t.StatusId.Value));
+            query = query.Where(t => t.StatusId.HasValue && filter.StatusIds.Contains(t.StatusId.Value));
         }
         
         if (filter?.ProjectIds is not null && filter.ProjectIds.Count > 0)
         {
-            query = dbSet.Where(t => filter.ProjectIds.Contains(t.ProjectId));
+            query = query.Where(t => filter.ProjectIds.Contains(t.ProjectId));
         }
         
-        var tickets = query
+        if (filter?.AssigneeIds is not null && filter.AssigneeIds.Count > 0)
+        {
+            query = query.Where(t => t.AssigneeId.HasValue && filter.AssigneeIds.Contains(t.AssigneeId.Value));
+        }
+
+        var tickets = await query
             .OrderBy(t => t.CreatedDate)
             .Include(t => t.Project)
             .Include(t => t.Status)
             .Include(t => t.Labels)
             .Skip(skip)
             .Take(pageSize)
-            .ToList();
+            .ToListAsync();
 
         List<int> assigneeIds = [];
         foreach (var t in tickets)

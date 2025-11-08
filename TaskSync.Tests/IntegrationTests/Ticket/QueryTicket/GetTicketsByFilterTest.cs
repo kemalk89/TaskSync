@@ -73,8 +73,7 @@ public class GetTicketsByFilterTest : BaseIntegrationTest, IClassFixture<CreateP
         Assert.Contains(onlyTicketsInTodoAndInProgress.Items, response => "Ticket in Progress".Equals(response.Title));
         Assert.Contains(onlyTicketsInTodoAndInProgress.Items, response => "Ticket in TODO".Equals(response.Title));
     }
-
-
+    
     [Fact]
     public async Task FilterTicketsByProjectIds()
     {
@@ -135,6 +134,108 @@ public class GetTicketsByFilterTest : BaseIntegrationTest, IClassFixture<CreateP
         
         // Cleanup only test project 2 -> The first one will be automatically cleaned up by fixture
         var responseDeleteProject = await _client.DeleteAsync($"/api/project/{createdProject_2.Id}");
+        Assert.Equal(HttpStatusCode.NoContent, responseDeleteProject.StatusCode);
+    }
+
+     [Fact]
+    public async Task FilterTicketsByAssigneeIds()
+    {
+        SetAuthenticatedUser();
+        
+        // Step 1: Create projects
+        var createdProject = await _createProjectFixture.InitIfNotExistsAsync(
+            _client, new CreateProjectCommand { Title = "Test Project Title" });
+        Assert.NotNull(createdProject);
+        
+        // Step 2: Assign ticket having assignee to the project
+        var createTicketCommand = new CreateTicketCommand
+        {
+            Title = "Ticket for project 1",
+            ProjectId = createdProject.Id,
+            Assignee = 1
+        };
+        
+        var responseCreateTicket = await _client.PostAsJsonAsync("/api/ticket", createTicketCommand);
+        Assert.Equal(HttpStatusCode.Created, responseCreateTicket.StatusCode);
+        
+        // Step 3: Run filters
+        var ticketsOfAssignee = 
+            await _client.GetFromJsonAsync<PagedResult<TicketResponse>>($"/api/ticket?assignees=1");
+        
+        var ticketsOfOtherAssignee = 
+            await _client.GetFromJsonAsync<PagedResult<TicketResponse>>($"/api/ticket?assignees=2");
+        
+        // Step 4: Assert
+        Assert.NotNull(ticketsOfAssignee);
+        Assert.Contains(ticketsOfAssignee.Items, response => "Ticket for project 1".Equals(response.Title));
+        
+        Assert.NotNull(ticketsOfOtherAssignee);
+        Assert.DoesNotContain(ticketsOfOtherAssignee.Items, response => "Ticket for project 1".Equals(response.Title));
+    }
+    
+    [Fact]
+    public async Task FilterTicketsByProjectIdsAndAssigneeIds()
+    {
+        SetAuthenticatedUser();
+
+        // Step 1: Create two projects
+        var createdProject1 = await _createProjectFixture.InitIfNotExistsAsync(
+            _client, new CreateProjectCommand { Title = "Project A" });
+        Assert.NotNull(createdProject1);
+
+        var responseCreateProject2 = await _client.PostAsJsonAsync("/api/project", new CreateProjectCommand { Title = "Test Project Title 2" });
+        Assert.Equal(HttpStatusCode.Created, responseCreateProject2.StatusCode);
+        
+        var createdProject2 = await responseCreateProject2.Content.ReadFromJsonAsync<ProjectResponse>();
+        Assert.NotNull(createdProject2);
+
+        // Step 2: Create two tickets with different projects and assignees
+        var createTicketCommand1 = new CreateTicketCommand
+        {
+            Title = "Ticket 1, Project 1, Assignee 1",
+            ProjectId = createdProject1.Id,
+            Assignee = 1 
+        };
+        
+        var createTicketCommand2 = new CreateTicketCommand
+        {
+            Title = "Ticket 2, Project 2, Assignee 2",
+            ProjectId = createdProject2.Id,
+            Assignee = 2
+        };
+
+        var responseCreateTicket1 = await _client.PostAsJsonAsync("/api/ticket", createTicketCommand1);
+        var responseCreateTicket2 = await _client.PostAsJsonAsync("/api/ticket", createTicketCommand2);
+        Assert.Equal(HttpStatusCode.Created, responseCreateTicket1.StatusCode);
+        Assert.Equal(HttpStatusCode.Created, responseCreateTicket2.StatusCode);
+
+        // Step 3: Run filters
+        var ticketsInProject1AndAssignee1 = 
+            await _client.GetFromJsonAsync<PagedResult<TicketResponse>>($"/api/ticket?projects={createdProject1.Id}&assignees=1");
+
+        var ticketsInProject2AndAssignee2 = 
+            await _client.GetFromJsonAsync<PagedResult<TicketResponse>>($"/api/ticket?projects={createdProject2.Id}&assignees=2");
+        
+        var ticketsInProject1AndAssignee2 = 
+            await _client.GetFromJsonAsync<PagedResult<TicketResponse>>($"/api/ticket?projects={createdProject1.Id}&assignees=2");
+        
+        // Step 4: Assert
+        Assert.NotNull(ticketsInProject1AndAssignee1);
+        Assert.Contains(ticketsInProject1AndAssignee1.Items, t => t.Title == createTicketCommand1.Title);
+        Assert.All(ticketsInProject1AndAssignee1.Items, t => Assert.Equal(1, t.Assignee?.Id));
+        Assert.DoesNotContain(ticketsInProject1AndAssignee1.Items, t => t.Title == createTicketCommand2.Title);
+
+        Assert.NotNull(ticketsInProject2AndAssignee2);
+        Assert.Contains(ticketsInProject2AndAssignee2.Items, t => t.Title == createTicketCommand2.Title);
+        Assert.All(ticketsInProject2AndAssignee2.Items, t => Assert.Equal(2, t.Assignee?.Id));
+        Assert.DoesNotContain(ticketsInProject2AndAssignee2.Items, t => t.Title == createTicketCommand1.Title);
+        
+        Assert.NotNull(ticketsInProject1AndAssignee2);
+        Assert.DoesNotContain(ticketsInProject1AndAssignee2.Items, t => t.Title == createTicketCommand1.Title);
+        Assert.DoesNotContain(ticketsInProject1AndAssignee2.Items, t => t.Title == createTicketCommand2.Title);
+        
+        // Step 5: Cleanup
+        var responseDeleteProject = await _client.DeleteAsync($"/api/project/{createdProject2.Id}");
         Assert.Equal(HttpStatusCode.NoContent, responseDeleteProject.StatusCode);
     }
 }

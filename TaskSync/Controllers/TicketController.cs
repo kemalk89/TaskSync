@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using TaskSync.Common;
 using TaskSync.Controllers.Request;
 using TaskSync.Controllers.Response;
 using TaskSync.Domain.Shared;
@@ -50,28 +52,16 @@ public class TicketController : ControllerBase
         [FromQuery] int pageSize = 50, 
         [FromQuery] string? searchText = null,
         [FromQuery] string? status = null,
-        [FromQuery] string? projects = null
+        [FromQuery] string? projects = null,
+        [FromQuery] string? assignees = null
     )
     {
-        var statusIds = status?
-            .Split(",")?
-            .Select(s => int.TryParse(s, out var id) ? id : (int?)null)
-            .Where(id => id.HasValue)
-            .Select(id => id!.Value)
-            .ToList();
-        
-        var projectIds = projects?
-            .Split(",")?
-            .Select(s => int.TryParse(s, out var id) ? id : (int?)null)
-            .Where(id => id.HasValue)
-            .Select(id => id!.Value)
-            .ToList();
-        
         var searchFilter = new TicketSearchFilter
         {
             SearchText = searchText ?? string.Empty,
-            StatusIds = statusIds ?? [],
-            ProjectIds = projectIds ?? []
+            StatusIds = Utils.ParseIntegerList(status),
+            ProjectIds =  Utils.ParseIntegerList(projects),
+            AssigneeIds = Utils.ParseIntegerList(assignees)
         };
         PagedResult<TicketModel> pagedResult = await _queryTicketCommandHandler.GetTicketsAsync(pageNumber, pageSize, searchFilter);
         return new PagedResult<TicketResponse>

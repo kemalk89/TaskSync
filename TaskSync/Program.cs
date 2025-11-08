@@ -97,31 +97,15 @@ try
 
     builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-    // Register command handlers
-    /*
-    builder.Services.AddScoped<QueryProjectCommandHandler>();
-    builder.Services.AddScoped<CreateProjectCommandHandler>();
-    builder.Services.AddScoped<UpdateProjectCommandHandler>();
-    builder.Services.AddScoped<DeleteProjectCommandHandler>();
-    builder.Services.AddScoped<AssignProjectLabelCommandHandler>();
-    builder.Services.AddScoped<AssignTeamMembersCommandHandler>();
-    
-    builder.Services.AddScoped<QueryTicketCommandHandler>();
-    builder.Services.AddScoped<CreateTicketCommandHandler>();
-    builder.Services.AddScoped<UpdateTicketCommandHandler>();
-    builder.Services.AddScoped<DeleteTicketCommandHandler>();
-    builder.Services.AddScoped<DeleteTicketCommentCommandHandler>();
-    builder.Services.AddScoped<AssignTicketLabelCommandHandler>();
-    builder.Services.AddScoped<AddTicketCommentCommandHandler>();
-    */
     builder.Services.AddValidatorsFromAssemblyContaining<CreateProjectCommandValidator>();
     builder.Services.AddCommandHandlersFromAssemblyContaining<QueryProjectCommandHandler>();
     
     builder.Services.AddAuth0();
 
     builder.Services.AddDbContext<DatabaseContext>(
-        o => o.UseNpgsql(configuration.GetConnectionString("db")));
-    //.LogTo(s => System.Diagnostics.Debug.WriteLine(s)));
+        o => o.UseNpgsql(configuration.GetConnectionString("db"))
+            .LogTo(Console.WriteLine,  LogLevel.Information)
+    );
 
     builder.Services.AddHttpContextAccessor();
     builder.Services
