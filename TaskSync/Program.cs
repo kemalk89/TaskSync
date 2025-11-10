@@ -18,18 +18,7 @@ using Microsoft.OpenApi.Models;
 using TaskSync.Auth.Auth0;
 using TaskSync.Common;
 using TaskSync.Domain.Project.CreateProject;
-using TaskSync.Domain.Project.AssignProjectLabel;
-using TaskSync.Domain.Project.AssignTeamMembers;
-using TaskSync.Domain.Project.DeleteProject;
 using TaskSync.Domain.Project.QueryProject;
-using TaskSync.Domain.Project.UpdateProject;
-using TaskSync.Domain.Ticket.AddTicketComment;
-using TaskSync.Domain.Ticket.AssignTicketLabel;
-using TaskSync.Domain.Ticket.CreateTicket;
-using TaskSync.Domain.Ticket.DeleteTicket;
-using TaskSync.Domain.Ticket.DeleteTicketComment;
-using TaskSync.Domain.Ticket.QueryTicket;
-using TaskSync.Domain.Ticket.UpdateTicket;
 using TaskSync.Extensions;
 
 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
@@ -112,6 +101,7 @@ try
         .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
+            options.Authority = configuration["Auth:Authority"];
             options.Audience = configuration["Auth:Audience"];
             options.MetadataAddress = configuration["Auth:MetadataAddress"] ?? string.Empty;
             options.TokenValidationParameters = new TokenValidationParameters
