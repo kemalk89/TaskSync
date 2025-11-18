@@ -109,6 +109,7 @@ try
                 NameClaimType = ClaimTypes.NameIdentifier,
                 ValidateIssuer = true,
                 ValidateAudience = true,
+                ValidateIssuerSigningKey = true
             };
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")

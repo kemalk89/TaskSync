@@ -67,7 +67,7 @@ public class Auth0UserRepository : IExternalUserRepository
             return data == null ? null : MapToUser(data);
         }
 
-        _logger.LogWarning($"Could not fetch user by id. Status Code: {response.StatusCode}, Message: {response.ErrorMessage}");
+        _logger.LogWarning("Could not fetch user by id. Status Code: {ResponseStatusCode}, Message: {ResponseErrorMessage}", response.StatusCode, response.ErrorMessage);
         return null;
     }
 
@@ -83,7 +83,7 @@ public class Auth0UserRepository : IExternalUserRepository
             return data == null ? null : MapToUser(data);
         }
 
-        _logger.LogWarning($"Could not fetch user by id. Status Code: {response.StatusCode}, Message: {response.ErrorMessage}");
+        _logger.LogWarning("Could not fetch user by id. Status Code: {ResponseStatusCode}, Message: {ResponseErrorMessage}", response.StatusCode, response.ErrorMessage);
         return null;
     }
 
