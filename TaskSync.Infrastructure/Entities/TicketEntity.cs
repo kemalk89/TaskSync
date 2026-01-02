@@ -17,7 +17,7 @@ public class TicketEntity : AuditedEntity
 
     public TicketStatusEntity? Status { get; set; }
 
-    public ProjectEntity Project { get; set; } = null!;
+    public ProjectEntity? Project { get; set; }
 
     public int? AssigneeId { get; set; }
 
@@ -37,7 +37,7 @@ public class TicketEntity : AuditedEntity
             CreatedDate = CreatedDate,
             ModifiedDate = ModifiedDate,
             Status = Status?.ToDomainObject(),
-            ProjectModel = Project.ToDomainObject(),
+            ProjectModel = Project?.ToDomainObject(),
             Labels = Labels.Select(i => new TicketLabelModel{Id = i.Id, Text = i.Text}).ToList(),
             Type = Type
         };

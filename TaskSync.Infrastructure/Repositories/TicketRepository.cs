@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
 using TaskSync.Domain.Exceptions;
+using TaskSync.Domain.Project.ReorderBacklogTickets;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
 using TaskSync.Domain.Ticket.Command;
@@ -376,18 +377,19 @@ public class TicketRepository : ITicketRepository
 
     public async Task<Result<int>> ReorderBacklogTickets(
         int projectId, 
-        Dictionary<int, int> ticketOrders, 
+        List<ReorderBacklogTicketCommand> ticketOrders, 
         CancellationToken cancellationToken
     )
     {
-        var filter = new TicketSearchFilter { ProjectIds = [projectId], TicketIds = ticketOrders.Keys.ToList() };
+        var ticketIds = ticketOrders.Select(i => i.TicketId).ToList();
+        var filter = new TicketSearchFilter { ProjectIds = [projectId], TicketIds = ticketIds };
         var tickets = await GetByFilterAsync(filter, null, cancellationToken);
-        foreach ((int ticketId, int position) in ticketOrders)
+        foreach (var ticketOrder in ticketOrders)
         {
-            var foundTicket = tickets.Find(e => e.Id == ticketId);
+            var foundTicket = tickets.Find(e => e.Id == ticketOrder.TicketId);
             if (foundTicket is not null)
             {
-                foundTicket.Position = position;
+                foundTicket.Position = ticketOrder.Position;
             }
         }
 

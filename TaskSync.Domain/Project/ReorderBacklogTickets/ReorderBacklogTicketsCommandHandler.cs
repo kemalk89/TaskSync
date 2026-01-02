@@ -13,7 +13,7 @@ public class ReorderBacklogTicketsCommandHandler : ICommandHandler
         _ticketRepository = ticketRepository;
     }
 
-    public async Task<Result<int>> HandleAsync(int projectId, Dictionary<int, int> ticketOrder, CancellationToken cancellationToken)
+    public async Task<Result<int>> HandleAsync(int projectId, List<ReorderBacklogTicketCommand> ticketOrder, CancellationToken cancellationToken)
     {
         // Validation 1
         if (ticketOrder.Count == 0)
@@ -22,7 +22,7 @@ public class ReorderBacklogTicketsCommandHandler : ICommandHandler
         }
         
         // Validation 2
-        var ticketIds = ticketOrder.Keys;
+        var ticketIds = ticketOrder.Select(i => i.TicketId);
         var filter = new TicketSearchFilter { ProjectIds = [projectId], TicketIds = ticketIds.ToList() };
         var foundTickets = await _ticketRepository.GetAllAsync(filter, cancellationToken);
         if (foundTickets.Count != ticketOrder.Count)

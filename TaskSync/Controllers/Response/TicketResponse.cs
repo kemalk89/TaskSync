@@ -18,7 +18,7 @@ public class TicketResponse
     public DateTimeOffset? ModifiedDate { get; set; }
     [JsonPropertyName("Status")]
     public TicketStatusResponse? Status { get; set; }
-    public ProjectResponse Project { get; set; } = null!;
+    public ProjectResponse? Project { get; set; } = null!;
     public string? Type { get; set; }
     public List<TicketLabelModel>? Labels { get; set; }
 
@@ -38,7 +38,7 @@ public class TicketResponse
         CreatedDate = ticket.CreatedDate;
         ModifiedDate = ticket.ModifiedDate;
         Status = ticket.Status != null ? new TicketStatusResponse(ticket.Status) : null;
-        Project = new ProjectResponse(ticket.ProjectModel);
+        Project = ticket.ProjectModel != null ? new ProjectResponse(ticket.ProjectModel) : null;
         Labels = ticket.Labels;
         Type = ticket.Type switch
         {

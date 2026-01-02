@@ -1,3 +1,4 @@
+using TaskSync.Domain.Project.ReorderBacklogTickets;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket.Command;
 using TaskSync.Domain.Ticket.CreateTicket;
@@ -24,5 +25,5 @@ public interface ITicketRepository
     Task<List<TicketStatusModel>> GetTicketStatusListAsync(CancellationToken cancellationToken);
     Task<List<TicketModel>> GetBacklogTicketsAsync(int projectId, CancellationToken cancellationToken);
     Task<Result<int>> ReorderBacklogTickets(
-        int projectId, Dictionary<int, int> ticketOrders, CancellationToken cancellationToken);
+        int projectId, List<ReorderBacklogTicketCommand> ticketOrders, CancellationToken cancellationToken);
 }

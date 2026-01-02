@@ -118,7 +118,7 @@ public class ProjectController : ControllerBase
     [Route("{projectId}/backlog/reorder")]
     public async Task<ActionResult> ReorderBacklogTickets(
         [FromRoute] int projectId, 
-        [FromBody] Dictionary<int, int> ticketOrder, 
+        [FromBody] List<ReorderBacklogTicketCommand> ticketOrder, 
         CancellationToken cancellationToken)
     {
         var result = await _reorderBacklogTicketsCommandHandler.HandleAsync(projectId, ticketOrder, cancellationToken);
