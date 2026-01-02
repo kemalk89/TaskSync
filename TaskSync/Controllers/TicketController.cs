@@ -48,6 +48,7 @@ public class TicketController : ControllerBase
 
     [HttpGet]
     public async Task<PagedResult<TicketResponse>> GetTickets(
+        CancellationToken cancellationToken,
         [FromQuery] int pageNumber = 1, 
         [FromQuery] int pageSize = 50, 
         [FromQuery] string? searchText = null,
@@ -63,7 +64,8 @@ public class TicketController : ControllerBase
             ProjectIds =  Utils.ParseIntegerList(projects),
             AssigneeIds = Utils.ParseIntegerList(assignees)
         };
-        PagedResult<TicketModel> pagedResult = await _queryTicketCommandHandler.GetTicketsAsync(pageNumber, pageSize, searchFilter);
+        PagedResult<TicketModel> pagedResult = await _queryTicketCommandHandler.GetTicketsAsync(
+            pageNumber, pageSize, searchFilter, cancellationToken);
         return new PagedResult<TicketResponse>
         {
             PageNumber = pagedResult.PageNumber,

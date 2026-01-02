@@ -6,4 +6,5 @@ public class TicketSearchFilter
     public List<int> StatusIds { get; set; } = [];
     public List<int> ProjectIds { get; set; } = [];
     public List<int> AssigneeIds { get; set; } = [];
+    public List<int> TicketIds { get; set; } = [];
 }

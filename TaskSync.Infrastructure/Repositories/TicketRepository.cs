@@ -1,7 +1,8 @@
+using System.Linq.Expressions;
+
 using Microsoft.EntityFrameworkCore;
 
 using TaskSync.Domain.Exceptions;
-using TaskSync.Domain.Project;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
 using TaskSync.Domain.Ticket.Command;
@@ -17,13 +18,11 @@ public class TicketRepository : ITicketRepository
 {
     private IUserRepository _userRepository;
     private readonly DatabaseContext _dbContext;
-    private readonly IProjectRepository _projectRepository;
 
-    public TicketRepository(DatabaseContext dbContext, IProjectRepository projectRepository,
+    public TicketRepository(DatabaseContext dbContext,
         IUserRepository userRepository)
     {
         _dbContext = dbContext;
-        _projectRepository = projectRepository;
         _userRepository = userRepository;
     }
 
@@ -67,23 +66,29 @@ public class TicketRepository : ITicketRepository
 
     public async Task<PagedResult<TicketModel>> GetByProjectIdAsync(int projectId, int pageNumber, int pageSize)
     {
-        return await GetByFilter(
+        return await GetByFilterAsync(
             pageNumber: pageNumber,
             pageSize: pageSize,
             projectId: projectId);
     }
 
-    public async Task<PagedResult<TicketModel>> GetAllAsync(int pageNumber, int pageSize, TicketSearchFilter filter)
+    public async Task<PagedResult<TicketModel>> GetAllAsync(
+        int pageNumber, int pageSize, TicketSearchFilter filter, CancellationToken cancellationToken)
     {
-        return await GetByFilter(
+        return await GetByFilterAsync(
             pageNumber: pageNumber,
             pageSize: pageSize,
             filter: filter);
     }
 
+    public async Task<List<TicketModel>> GetAllAsync(TicketSearchFilter filter, CancellationToken cancellationToken)
+    {
+        return await GetByFilterAndMapAsync(filter, null, cancellationToken);
+    }
+
     public async Task<TicketModel?> GetByIdAsync(int id)
     {
-        var tickets = await GetByFilter(
+        var tickets = await GetByFilterAsync(
             pageNumber: 1,
             pageSize: 1,
             ticketId: id);
@@ -142,7 +147,34 @@ public class TicketRepository : ITicketRepository
         return paged;
     }
 
-    private async Task<PagedResult<TicketModel>> GetByFilter(
+    private async Task<List<TicketModel>> GetByFilterAndMapAsync(
+        TicketSearchFilter filter,         
+        Expression<Func<TicketEntity, object>>? orderBy,
+        CancellationToken cancellationToken)
+    {
+        var tickets = await GetByFilterAsync(filter, orderBy, cancellationToken);
+        return tickets.Select(e => e.ToTicket()).ToList();
+    }
+    
+    private async Task<List<TicketEntity>> GetByFilterAsync(
+        TicketSearchFilter filter, 
+        Expression<Func<TicketEntity, object>>? orderBy,
+        CancellationToken cancellationToken)
+    {
+        IQueryable<TicketEntity> query = UpdateQueryByFilter(_dbContext.Tickets.AsQueryable(), filter);
+        
+        query = orderBy is null
+            ? query.OrderBy(t => t.CreatedDate)
+            : query.OrderBy(orderBy);
+        
+        var tickets = await query
+            .ToListAsync(cancellationToken);
+
+        return tickets;
+    }
+
+    
+    private async Task<PagedResult<TicketModel>> GetByFilterAsync(
         int pageNumber,
         int pageSize,
         int? projectId = null,
@@ -163,24 +195,9 @@ public class TicketRepository : ITicketRepository
             query = query.Where(t => t.Id == ticketId);
         }
 
-        if (!string.IsNullOrWhiteSpace(filter?.SearchText))
+        if (filter is not null)
         {
-            query = query.Where(t => EF.Functions.Like(t.Title.ToLower(), $"%{filter.SearchText.ToLower()}%"));
-        }
-
-        if (filter?.StatusIds is not null && filter.StatusIds.Count > 0)
-        {
-            query = query.Where(t => t.StatusId.HasValue && filter.StatusIds.Contains(t.StatusId.Value));
-        }
-        
-        if (filter?.ProjectIds is not null && filter.ProjectIds.Count > 0)
-        {
-            query = query.Where(t => filter.ProjectIds.Contains(t.ProjectId));
-        }
-        
-        if (filter?.AssigneeIds is not null && filter.AssigneeIds.Count > 0)
-        {
-            query = query.Where(t => t.AssigneeId.HasValue && filter.AssigneeIds.Contains(t.AssigneeId.Value));
+            query = UpdateQueryByFilter(query, filter);
         }
 
         var tickets = await query
@@ -203,7 +220,7 @@ public class TicketRepository : ITicketRepository
 
         var createdByIds = tickets.Select(t => t.CreatedBy);
 
-        var userIds = assigneeIds.Union<int>(createdByIds);
+        var userIds = assigneeIds.Union(createdByIds);
 
         User[]? users = null;
         if (userIds.Count() > 0)
@@ -234,6 +251,38 @@ public class TicketRepository : ITicketRepository
         };
 
         return paged;
+    }
+
+    
+    private IQueryable<TicketEntity> UpdateQueryByFilter(IQueryable<TicketEntity> query, TicketSearchFilter filter)
+    {
+        IQueryable<TicketEntity> updatedQuery = query;
+        if (!string.IsNullOrWhiteSpace(filter?.SearchText))
+        {
+            updatedQuery = query.Where(t => EF.Functions.Like(t.Title.ToLower(), $"%{filter.SearchText.ToLower()}%"));
+        }
+
+        if (filter?.StatusIds is not null && filter.StatusIds.Count > 0)
+        {
+            updatedQuery = query.Where(t => t.StatusId.HasValue && filter.StatusIds.Contains(t.StatusId.Value));
+        }
+        
+        if (filter?.TicketIds is not null && filter.TicketIds.Count > 0)
+        {
+            updatedQuery = query.Where(t => filter.TicketIds.Contains(t.Id));
+        }
+        
+        if (filter?.ProjectIds is not null && filter.ProjectIds.Count > 0)
+        {
+            updatedQuery = query.Where(t => filter.ProjectIds.Contains(t.ProjectId));
+        }
+        
+        if (filter?.AssigneeIds is not null && filter.AssigneeIds.Count > 0)
+        {
+            updatedQuery = query.Where(t => t.AssigneeId.HasValue && filter.AssigneeIds.Contains(t.AssigneeId.Value));
+        }
+
+        return updatedQuery;
     }
 
     public async Task<TicketCommentModel?> GetTicketCommentByIdAsync(int commentId)
@@ -317,5 +366,32 @@ public class TicketRepository : ITicketRepository
             .ToListAsync(cancellationToken);
         
         return entities.Select(e => e.ToDomainObject()).ToList();
+    }
+
+    public async Task<List<TicketModel>> GetBacklogTicketsAsync(int projectId, CancellationToken cancellationToken)
+    {
+        var filter = new TicketSearchFilter { ProjectIds = [projectId] };
+        return await GetByFilterAndMapAsync(filter, (t => t.Position), cancellationToken);
+    }
+
+    public async Task<Result<int>> ReorderBacklogTickets(
+        int projectId, 
+        Dictionary<int, int> ticketOrders, 
+        CancellationToken cancellationToken
+    )
+    {
+        var filter = new TicketSearchFilter { ProjectIds = [projectId], TicketIds = ticketOrders.Keys.ToList() };
+        var tickets = await GetByFilterAsync(filter, null, cancellationToken);
+        foreach ((int ticketId, int position) in ticketOrders)
+        {
+            var foundTicket = tickets.Find(e => e.Id == ticketId);
+            if (foundTicket is not null)
+            {
+                foundTicket.Position = position;
+            }
+        }
+
+        var numberOfAffectedTickets = await _dbContext.SaveChangesAsync(cancellationToken);
+        return Result<int>.Ok(numberOfAffectedTickets);
     }
 }

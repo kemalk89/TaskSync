@@ -51,4 +51,9 @@ public class QueryProjectCommandHandler : ICommandHandler
         var result = await _projectRepository.GetLabelsAsync(projectId);
         return Result<List<ProjectLabelModel>>.Ok(result);
     }
+    
+    public async Task<List<TicketModel>> GetBacklogTicketsAsync(int projectId, CancellationToken cancellationToken)
+    {
+        return await _queryTicketCommandHandler.GetBacklogTicketsAsync(projectId, cancellationToken);
+    }
 }

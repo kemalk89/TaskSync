@@ -28,14 +28,21 @@ public class QueryTicketCommandHandler : ICommandHandler
         return ticket;
     }
 
-    public async Task<PagedResult<TicketModel>> GetTicketsAsync(int pageNumber, int pageSize, TicketSearchFilter filter)
+    public async Task<PagedResult<TicketModel>> GetTicketsAsync(
+        int pageNumber, int pageSize, TicketSearchFilter filter, CancellationToken cancellationToken)
     {
-        var tickets = await _ticketRepository.GetAllAsync(pageNumber, pageSize, filter);
+        var tickets = 
+            await _ticketRepository.GetAllAsync(pageNumber, pageSize, filter, cancellationToken);
         return tickets;
     }
 
     public async Task<List<TicketStatusModel>> GetTicketStatusListAsync(CancellationToken cancellationToken)
     {
         return await _ticketRepository.GetTicketStatusListAsync(cancellationToken);
+    }
+
+    public async Task<List<TicketModel>> GetBacklogTicketsAsync(int projectId, CancellationToken cancellationToken)
+    {
+        return await _ticketRepository.GetBacklogTicketsAsync(projectId, cancellationToken);
     }
 }

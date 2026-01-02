@@ -9,6 +9,7 @@ using TaskSync.Domain.Project.AssignProjectLabel;
 using TaskSync.Domain.Project.AssignTeamMembers;
 using TaskSync.Domain.Project.DeleteProject;
 using TaskSync.Domain.Project.QueryProject;
+using TaskSync.Domain.Project.ReorderBacklogTickets;
 using TaskSync.Domain.Project.UpdateProject;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Ticket;
@@ -26,6 +27,7 @@ public class ProjectController : ControllerBase
     private readonly DeleteProjectCommandHandler _deleteProjectCommandHandler;
     private readonly AssignProjectLabelCommandHandler _assignProjectLabelCommandHandler;
     private readonly AssignTeamMembersCommandHandler _assignTeamMembersCommandHandler;
+    private readonly ReorderBacklogTicketsCommandHandler _reorderBacklogTicketsCommandHandler;
 
     public ProjectController(
         CreateProjectCommandHandler createProjectCommandHandler, 
@@ -33,7 +35,8 @@ public class ProjectController : ControllerBase
         AssignTeamMembersCommandHandler assignTeamMembersCommandHandler, 
         UpdateProjectCommandHandler updateProjectCommandHandler, 
         DeleteProjectCommandHandler deleteProjectCommandHandler, 
-        QueryProjectCommandHandler queryProjectCommandHandler)
+        QueryProjectCommandHandler queryProjectCommandHandler, 
+        ReorderBacklogTicketsCommandHandler reorderBacklogTicketsCommandHandler)
     {
         _createProjectCommandHandler = createProjectCommandHandler;
         _assignProjectLabelCommandHandler = assignProjectLabelCommandHandler;
@@ -41,6 +44,7 @@ public class ProjectController : ControllerBase
         _updateProjectCommandHandler = updateProjectCommandHandler;
         _deleteProjectCommandHandler = deleteProjectCommandHandler;
         _queryProjectCommandHandler = queryProjectCommandHandler;
+        _reorderBacklogTicketsCommandHandler = reorderBacklogTicketsCommandHandler;
     }
 
     [HttpPost]
@@ -104,10 +108,21 @@ public class ProjectController : ControllerBase
 
     [HttpGet]
     [Route("{projectId}/backlog")]
-    public Task GetBacklog([FromRoute] int projectId)
+    public async Task<List<TicketModel>> GetBacklog([FromRoute] int projectId, CancellationToken cancellationToken)
     {
-        // TODO
-        throw new NotImplementedException();
+        var result = await _queryProjectCommandHandler.GetBacklogTicketsAsync(projectId, cancellationToken);
+        return result;
+    }
+
+    [HttpPost]
+    [Route("{projectId}/backlog/reorder")]
+    public async Task<ActionResult> ReorderBacklogTickets(
+        [FromRoute] int projectId, 
+        [FromBody] Dictionary<int, int> ticketOrder, 
+        CancellationToken cancellationToken)
+    {
+        var result = await _reorderBacklogTicketsCommandHandler.HandleAsync(projectId, ticketOrder, cancellationToken);
+        return Ok(result);
     }
 
     [HttpPost]

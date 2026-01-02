@@ -9,6 +9,7 @@ namespace TaskSync.Controllers.Response;
 public class TicketResponse
 {
     public int Id { get; set; }
+    public int Position { get; set; }
     public string Title { get; set; } = string.Empty;
     public string? Description { get; set; }
     public User? Assignee { get; set; }
@@ -29,6 +30,7 @@ public class TicketResponse
     public TicketResponse(TicketModel ticket)
     {
         Id = ticket.Id;
+        Position = ticket.Position;
         Title = ticket.Title;
         Description = ticket.Description;
         Assignee = ticket.Assignee;

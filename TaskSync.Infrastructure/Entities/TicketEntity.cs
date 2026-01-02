@@ -6,6 +6,7 @@ namespace TaskSync.Infrastructure.Entities;
 public class TicketEntity : AuditedEntity
 {
     public int Id { get; set; }
+    public int Position { get; set; }
     public string Title { get; set; } = "";
     public string? Description { get; set; }
 
@@ -27,6 +28,7 @@ public class TicketEntity : AuditedEntity
         return new TicketModel
         {
             Id = Id,
+            Position = Position,
             Title = Title,
             Description = Description,
             ProjectId = ProjectId,

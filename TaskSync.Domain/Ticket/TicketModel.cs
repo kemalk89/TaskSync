@@ -3,6 +3,7 @@ namespace TaskSync.Domain.Ticket;
 public class TicketModel
 {
     public int Id { get; set; }
+    public int Position { get; set; }
     public string Title { get; set; } = string.Empty;
     public string? Description { get; set; }
 
