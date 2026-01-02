@@ -258,29 +258,29 @@ public class TicketRepository : ITicketRepository
     private IQueryable<TicketEntity> UpdateQueryByFilter(IQueryable<TicketEntity> query, TicketSearchFilter filter)
     {
         IQueryable<TicketEntity> updatedQuery = query;
-        if (!string.IsNullOrWhiteSpace(filter?.SearchText))
+        if (!string.IsNullOrWhiteSpace(filter.SearchText))
         {
-            updatedQuery = query.Where(t => EF.Functions.Like(t.Title.ToLower(), $"%{filter.SearchText.ToLower()}%"));
+            updatedQuery = updatedQuery.Where(t => EF.Functions.Like(t.Title.ToLower(), $"%{filter.SearchText.ToLower()}%"));
         }
 
         if (filter?.StatusIds is not null && filter.StatusIds.Count > 0)
         {
-            updatedQuery = query.Where(t => t.StatusId.HasValue && filter.StatusIds.Contains(t.StatusId.Value));
+            updatedQuery = updatedQuery.Where(t => t.StatusId.HasValue && filter.StatusIds.Contains(t.StatusId.Value));
         }
         
         if (filter?.TicketIds is not null && filter.TicketIds.Count > 0)
         {
-            updatedQuery = query.Where(t => filter.TicketIds.Contains(t.Id));
+            updatedQuery = updatedQuery.Where(t => filter.TicketIds.Contains(t.Id));
         }
         
         if (filter?.ProjectIds is not null && filter.ProjectIds.Count > 0)
         {
-            updatedQuery = query.Where(t => filter.ProjectIds.Contains(t.ProjectId));
+            updatedQuery = updatedQuery.Where(t => filter.ProjectIds.Contains(t.ProjectId));
         }
         
         if (filter?.AssigneeIds is not null && filter.AssigneeIds.Count > 0)
         {
-            updatedQuery = query.Where(t => t.AssigneeId.HasValue && filter.AssigneeIds.Contains(t.AssigneeId.Value));
+            updatedQuery = updatedQuery.Where(t => t.AssigneeId.HasValue && filter.AssigneeIds.Contains(t.AssigneeId.Value));
         }
 
         return updatedQuery;

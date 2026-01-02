@@ -108,10 +108,10 @@ public class ProjectController : ControllerBase
 
     [HttpGet]
     [Route("{projectId}/backlog")]
-    public async Task<List<TicketModel>> GetBacklog([FromRoute] int projectId, CancellationToken cancellationToken)
+    public async Task<List<TicketResponse>> GetBacklog([FromRoute] int projectId, CancellationToken cancellationToken)
     {
         var result = await _queryProjectCommandHandler.GetBacklogTicketsAsync(projectId, cancellationToken);
-        return result;
+        return result.Select(item => new TicketResponse(item)).ToList();
     }
 
     [HttpPost]
