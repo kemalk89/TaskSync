@@ -19,6 +19,7 @@ using TaskSync.Auth.Auth0;
 using TaskSync.Common;
 using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Project.QueryProject;
+using TaskSync.Domain.Sprint;
 using TaskSync.Extensions;
 
 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
@@ -80,6 +81,7 @@ try
     builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
     builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+    builder.Services.AddScoped<ISprintRepository, SprintRepository>();
     
     builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();

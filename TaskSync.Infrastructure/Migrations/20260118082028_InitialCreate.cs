@@ -65,6 +65,32 @@ namespace TaskSync.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Sprints",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    EndDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sprints", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sprints_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TicketLabels",
                 columns: table => new
                 {
@@ -82,39 +108,6 @@ namespace TaskSync.Infrastructure.Migrations
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tickets",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Position = table.Column<int>(type: "integer", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Type = table.Column<int>(type: "integer", nullable: false),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false),
-                    StatusId = table.Column<int>(type: "integer", nullable: true),
-                    AssigneeId = table.Column<int>(type: "integer", nullable: true),
-                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    ModifiedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tickets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tickets_Projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Tickets_TicketStatus_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "TicketStatus",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -140,6 +133,45 @@ namespace TaskSync.Infrastructure.Migrations
                         name: "FK_ProjectMemberEntity_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tickets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Position = table.Column<int>(type: "integer", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Type = table.Column<int>(type: "integer", nullable: false),
+                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    StatusId = table.Column<int>(type: "integer", nullable: true),
+                    SprintId = table.Column<int>(type: "integer", nullable: true),
+                    AssigneeId = table.Column<int>(type: "integer", nullable: true),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tickets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tickets_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tickets_Sprints_SprintId",
+                        column: x => x.SprintId,
+                        principalTable: "Sprints",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Tickets_TicketStatus_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "TicketStatus",
                         principalColumn: "Id");
                 });
 
@@ -211,12 +243,12 @@ namespace TaskSync.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "Email", "ExternalUserId", "ModifiedDate", "Picture", "Username" },
                 values: new object[,]
                 {
-                    { 1, 0, new DateTimeOffset(new DateTime(2026, 1, 2, 8, 27, 12, 860, DateTimeKind.Unspecified).AddTicks(4050), new TimeSpan(0, 0, 0, 0, 0)), "Kerem.Karacay@tasksync.test", null, null, "", "Kerem Karacay" },
-                    { 2, 0, new DateTimeOffset(new DateTime(2026, 1, 2, 8, 27, 12, 860, DateTimeKind.Unspecified).AddTicks(4080), new TimeSpan(0, 0, 0, 0, 0)), "Deniz.Aslansu@tasksync.test", null, null, "", "Deniz Aslansu" },
-                    { 3, 0, new DateTimeOffset(new DateTime(2026, 1, 2, 8, 27, 12, 860, DateTimeKind.Unspecified).AddTicks(4090), new TimeSpan(0, 0, 0, 0, 0)), "Ali.Balci@tasksync.test", null, null, "", "Ali Balcı" },
-                    { 4, 0, new DateTimeOffset(new DateTime(2026, 1, 2, 8, 27, 12, 860, DateTimeKind.Unspecified).AddTicks(4100), new TimeSpan(0, 0, 0, 0, 0)), "Sven.Imker@tasksync.test", null, null, "", "Sven Imker" },
-                    { 5, 0, new DateTimeOffset(new DateTime(2026, 1, 2, 8, 27, 12, 860, DateTimeKind.Unspecified).AddTicks(4110), new TimeSpan(0, 0, 0, 0, 0)), "Mina.Koch@tasksync.test", null, null, "", "Mina Koch" },
-                    { 6, 0, new DateTimeOffset(new DateTime(2026, 1, 2, 8, 27, 12, 860, DateTimeKind.Unspecified).AddTicks(4150), new TimeSpan(0, 0, 0, 0, 0)), "IntegrationTests.User1@tasksync.test", "integration_tests|01", null, "", "Test User1" }
+                    { 1, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9340), new TimeSpan(0, 0, 0, 0, 0)), "Kerem.Karacay@tasksync.test", null, null, "", "Kerem Karacay" },
+                    { 2, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9370), new TimeSpan(0, 0, 0, 0, 0)), "Deniz.Aslansu@tasksync.test", null, null, "", "Deniz Aslansu" },
+                    { 3, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9380), new TimeSpan(0, 0, 0, 0, 0)), "Ali.Balci@tasksync.test", null, null, "", "Ali Balcı" },
+                    { 4, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9390), new TimeSpan(0, 0, 0, 0, 0)), "Sven.Imker@tasksync.test", null, null, "", "Sven Imker" },
+                    { 5, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9410), new TimeSpan(0, 0, 0, 0, 0)), "Mina.Koch@tasksync.test", null, null, "", "Mina Koch" },
+                    { 6, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9430), new TimeSpan(0, 0, 0, 0, 0)), "IntegrationTests.User1@tasksync.test", "integration_tests|01", null, "", "Test User1" }
                 });
 
             migrationBuilder.InsertData(
@@ -240,21 +272,21 @@ namespace TaskSync.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Tickets",
-                columns: new[] { "Id", "AssigneeId", "CreatedBy", "CreatedDate", "Description", "ModifiedDate", "Position", "ProjectId", "StatusId", "Title", "Type" },
+                columns: new[] { "Id", "AssigneeId", "CreatedBy", "CreatedDate", "Description", "ModifiedDate", "Position", "ProjectId", "SprintId", "StatusId", "Title", "Type" },
                 values: new object[,]
                 {
-                    { 13, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #13.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 2, "Demo Ticket of type Task #13", 1 },
-                    { 14, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #14.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, "Demo Ticket of type Task #14", 1 },
-                    { 15, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #15.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 2, "Demo Ticket of type Story #15", 2 },
-                    { 16, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #16.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 3, "Demo Ticket of type Story #16", 2 },
-                    { 17, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #17.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 2, "Demo Ticket of type Task #17", 1 },
-                    { 18, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #18.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 2, "Demo Ticket of type Bug #18", 0 },
-                    { 19, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #19.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, "Demo Ticket of type Task #19", 1 },
-                    { 20, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #20.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 2, "Demo Ticket of type Story #20", 2 },
-                    { 21, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #21.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 2, "Demo Ticket of type Task #21", 1 },
-                    { 22, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #22.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 2, "Demo Ticket of type Bug #22", 0 },
-                    { 23, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #23.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 2, "Demo Ticket of type Story #23", 2 },
-                    { 24, null, 0, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #24.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 3, "Demo Ticket of type Story #24", 2 }
+                    { 13, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9710), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #13.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Demo Ticket of type Story #13", 2 },
+                    { 14, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9730), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #14.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 2, "Demo Ticket of type Task #14", 1 },
+                    { 15, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9750), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #15.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Demo Ticket of type Story #15", 2 },
+                    { 16, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9770), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #16.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 2, "Demo Ticket of type Bug #16", 0 },
+                    { 17, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9790), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #17.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 2, "Demo Ticket of type Bug #17", 0 },
+                    { 18, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9810), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #18.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 3, "Demo Ticket of type Story #18", 2 },
+                    { 19, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9830), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #19.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 2, "Demo Ticket of type Story #19", 2 },
+                    { 20, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9850), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #20.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 2, "Demo Ticket of type Story #20", 2 },
+                    { 21, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9860), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #21.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 3, "Demo Ticket of type Story #21", 2 },
+                    { 22, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9880), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #22.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Demo Ticket of type Story #22", 2 },
+                    { 23, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9900), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #23.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 2, "Demo Ticket of type Task #23", 1 },
+                    { 24, null, 0, new DateTimeOffset(new DateTime(2026, 1, 18, 8, 20, 27, 904, DateTimeKind.Unspecified).AddTicks(9920), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #24.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 3, "Demo Ticket of type Bug #24", 0 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -266,6 +298,11 @@ namespace TaskSync.Infrastructure.Migrations
                 name: "IX_ProjectMemberEntity_UserId",
                 table: "ProjectMemberEntity",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sprints_ProjectId",
+                table: "Sprints",
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TicketComments_TicketId",
@@ -286,6 +323,11 @@ namespace TaskSync.Infrastructure.Migrations
                 name: "IX_Tickets_ProjectId",
                 table: "Tickets",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_SprintId",
+                table: "Tickets",
+                column: "SprintId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_StatusId",
@@ -321,10 +363,13 @@ namespace TaskSync.Infrastructure.Migrations
                 name: "Tickets");
 
             migrationBuilder.DropTable(
-                name: "Projects");
+                name: "Sprints");
 
             migrationBuilder.DropTable(
                 name: "TicketStatus");
+
+            migrationBuilder.DropTable(
+                name: "Projects");
         }
     }
 }

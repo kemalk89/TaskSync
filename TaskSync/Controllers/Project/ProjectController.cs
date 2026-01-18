@@ -12,6 +12,7 @@ using TaskSync.Domain.Project.QueryProject;
 using TaskSync.Domain.Project.ReorderBacklogTickets;
 using TaskSync.Domain.Project.UpdateProject;
 using TaskSync.Domain.Shared;
+using TaskSync.Domain.Sprint.AddSprint;
 using TaskSync.Domain.Ticket;
 
 namespace TaskSync.Controllers.Project;
@@ -28,6 +29,7 @@ public class ProjectController : ControllerBase
     private readonly AssignProjectLabelCommandHandler _assignProjectLabelCommandHandler;
     private readonly AssignTeamMembersCommandHandler _assignTeamMembersCommandHandler;
     private readonly ReorderBacklogTicketsCommandHandler _reorderBacklogTicketsCommandHandler;
+    private readonly AddSprintCommandHandler _addSprintCommandHandler;
 
     public ProjectController(
         CreateProjectCommandHandler createProjectCommandHandler, 
@@ -36,7 +38,8 @@ public class ProjectController : ControllerBase
         UpdateProjectCommandHandler updateProjectCommandHandler, 
         DeleteProjectCommandHandler deleteProjectCommandHandler, 
         QueryProjectCommandHandler queryProjectCommandHandler, 
-        ReorderBacklogTicketsCommandHandler reorderBacklogTicketsCommandHandler)
+        ReorderBacklogTicketsCommandHandler reorderBacklogTicketsCommandHandler, 
+        AddSprintCommandHandler addSprintCommandHandler)
     {
         _createProjectCommandHandler = createProjectCommandHandler;
         _assignProjectLabelCommandHandler = assignProjectLabelCommandHandler;
@@ -45,6 +48,7 @@ public class ProjectController : ControllerBase
         _deleteProjectCommandHandler = deleteProjectCommandHandler;
         _queryProjectCommandHandler = queryProjectCommandHandler;
         _reorderBacklogTicketsCommandHandler = reorderBacklogTicketsCommandHandler;
+        _addSprintCommandHandler = addSprintCommandHandler;
     }
 
     [HttpPost]
@@ -122,6 +126,18 @@ public class ProjectController : ControllerBase
         CancellationToken cancellationToken)
     {
         var result = await _reorderBacklogTicketsCommandHandler.HandleAsync(projectId, ticketOrder, cancellationToken);
+        return Ok(result);
+    }
+    
+    [HttpPost]
+    [Route("{projectId}/sprint")]
+    public async Task<ActionResult> CreateNewSprint(
+        [FromRoute] int projectId, 
+        [FromBody] AddSprintCommand command,
+        CancellationToken cancellationToken)
+    {
+        command.ProjectId = projectId;
+        var result = await _addSprintCommandHandler.HandleAsync(command, cancellationToken);
         return Ok(result);
     }
 

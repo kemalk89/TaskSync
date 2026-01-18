@@ -14,6 +14,8 @@ public class TicketEntity : AuditedEntity
 
     public int ProjectId { get; set; }
     public int? StatusId { get; set; }
+    
+    public int? SprintId { get; set; }
 
     public TicketStatusEntity? Status { get; set; }
 

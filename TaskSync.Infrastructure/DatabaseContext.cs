@@ -16,6 +16,7 @@ public class DatabaseContext : DbContext
     public DbSet<TicketLabelEntity> TicketLabels { get; set; }
     
     public DbSet<ProjectEntity> Projects { get; set; }
+    public DbSet<SprintEntity> Sprints { get; set; }
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IHostEnvironment _env;
 
@@ -31,6 +32,17 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ProjectEntity>()
+            .HasMany<SprintEntity>()
+            .WithOne()
+            .HasForeignKey(e => e.ProjectId)
+            .IsRequired();
+
+        modelBuilder.Entity<SprintEntity>()
+            .HasMany<TicketEntity>()
+            .WithOne()
+            .HasForeignKey(e => e.SprintId);
+        
         modelBuilder.Entity<TicketEntity>()
             .HasMany(t => t.Labels)
             .WithMany()
@@ -154,11 +166,16 @@ public class DatabaseContext : DbContext
                 Description = GetDescription($"This is the description of the demo ticket #{_ticketIdTracker}."),
                 CreatedBy = 0,
                 ProjectId = projectId,
-                StatusId = new Random().Next(1, 4) // Generates a random number between 1 (inclusive) and 4 (exclusive)
+                StatusId = new Random().Next(1, 4), // Generates a random number between 1 (inclusive) and 4 (exclusive),
+                CreatedDate = DateTimeOffset.UtcNow
             });
         }
     }
 
+    /**
+     * Not executed during migrations.
+     * Called only during normal application runtime.
+     */
     public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var inserted = this.ChangeTracker.Entries()
