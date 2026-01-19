@@ -7,4 +7,6 @@ public class TicketSearchFilter
     public List<int> ProjectIds { get; set; } = [];
     public List<int> AssigneeIds { get; set; } = [];
     public List<int> TicketIds { get; set; } = [];
+    public int SprintId { get; set; }
+    public bool OnlyBacklogTickets { get; set; } = false;
 }

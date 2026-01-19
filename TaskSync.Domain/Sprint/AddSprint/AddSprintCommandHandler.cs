@@ -13,8 +13,8 @@ public class AddSprintCommandHandler : ICommandHandler
 
     public async Task<Result<SprintModel>> HandleAsync(AddSprintCommand cmd, CancellationToken cancellationToken)
     {
-        var model = await _sprintRepository.CreateAsync(cmd, cancellationToken);
-        return Result<SprintModel>.Ok(model);
+        var result = await _sprintRepository.CreateAsync(cmd, cancellationToken);
+        return result;
     }
     
 }

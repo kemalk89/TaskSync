@@ -1,3 +1,5 @@
+using TaskSync.Domain.Ticket;
+
 namespace TaskSync.Domain.Sprint;
 
 public class SprintModel
@@ -9,4 +11,5 @@ public class SprintModel
     public DateTimeOffset? EndDate { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
     public bool IsActive { get; set; }
+    public List<TicketModel> Tickets { get; set; } = [];
 }

@@ -13,6 +13,8 @@ using TaskSync.Domain.Project.ReorderBacklogTickets;
 using TaskSync.Domain.Project.UpdateProject;
 using TaskSync.Domain.Shared;
 using TaskSync.Domain.Sprint.AddSprint;
+using TaskSync.Domain.Sprint.AssignTicket;
+using TaskSync.Domain.Sprint.QuerySprint;
 using TaskSync.Domain.Ticket;
 
 namespace TaskSync.Controllers.Project;
@@ -29,7 +31,10 @@ public class ProjectController : ControllerBase
     private readonly AssignProjectLabelCommandHandler _assignProjectLabelCommandHandler;
     private readonly AssignTeamMembersCommandHandler _assignTeamMembersCommandHandler;
     private readonly ReorderBacklogTicketsCommandHandler _reorderBacklogTicketsCommandHandler;
+    
     private readonly AddSprintCommandHandler _addSprintCommandHandler;
+    private readonly AssignTicketToSprintCommandHandler _assignTicketToSprintCommandHandler;
+    private readonly QuerySprintCommandHandler _querySprintCommandHandler;
 
     public ProjectController(
         CreateProjectCommandHandler createProjectCommandHandler, 
@@ -39,7 +44,9 @@ public class ProjectController : ControllerBase
         DeleteProjectCommandHandler deleteProjectCommandHandler, 
         QueryProjectCommandHandler queryProjectCommandHandler, 
         ReorderBacklogTicketsCommandHandler reorderBacklogTicketsCommandHandler, 
-        AddSprintCommandHandler addSprintCommandHandler)
+        AddSprintCommandHandler addSprintCommandHandler, 
+        AssignTicketToSprintCommandHandler assignTicketToSprintCommandHandler, 
+        QuerySprintCommandHandler querySprintCommandHandler)
     {
         _createProjectCommandHandler = createProjectCommandHandler;
         _assignProjectLabelCommandHandler = assignProjectLabelCommandHandler;
@@ -49,6 +56,8 @@ public class ProjectController : ControllerBase
         _queryProjectCommandHandler = queryProjectCommandHandler;
         _reorderBacklogTicketsCommandHandler = reorderBacklogTicketsCommandHandler;
         _addSprintCommandHandler = addSprintCommandHandler;
+        _assignTicketToSprintCommandHandler = assignTicketToSprintCommandHandler;
+        _querySprintCommandHandler = querySprintCommandHandler;
     }
 
     [HttpPost]
@@ -140,7 +149,31 @@ public class ProjectController : ControllerBase
         var result = await _addSprintCommandHandler.HandleAsync(command, cancellationToken);
         return Ok(result);
     }
+        
+    [HttpPost]
+    [Route("{projectId}/sprint/{sprintId}/ticket/{ticketId}")]
+    public async Task<ActionResult> AssignTicketToSprint(
+        [FromRoute] int projectId, 
+        [FromRoute] int sprintId, 
+        [FromRoute] int ticketId, 
+        [FromQuery] int newPosition,
+        CancellationToken cancellationToken)
+    {
+        var result = await _assignTicketToSprintCommandHandler.HandleAsync(projectId, sprintId, ticketId, cancellationToken);
+        return Ok(result);
+    }
 
+    /**
+     * Returns the sprint which is in draft mode (this means, the sprint is not active yet) including the tickets.
+     */
+    [HttpGet]
+    [Route("{projectId}/sprint/draft")]
+    public async Task<ActionResult> GetDraftSprint([FromRoute] int projectId, CancellationToken cancellationToken)
+    {
+        var result = await _querySprintCommandHandler.GetDraftSprintAsync(projectId, cancellationToken);
+        return Ok(result);
+    }
+    
     [HttpPost]
     [Route("{id}/labels")]
     [ProducesResponseType(StatusCodes.Status201Created)]

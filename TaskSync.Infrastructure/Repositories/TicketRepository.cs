@@ -263,26 +263,34 @@ public class TicketRepository : ITicketRepository
             updatedQuery = updatedQuery.Where(t => EF.Functions.Like(t.Title.ToLower(), $"%{filter.SearchText.ToLower()}%"));
         }
 
-        if (filter?.StatusIds is not null && filter.StatusIds.Count > 0)
+        if (filter.StatusIds.Count > 0)
         {
             updatedQuery = updatedQuery.Where(t => t.StatusId.HasValue && filter.StatusIds.Contains(t.StatusId.Value));
         }
         
-        if (filter?.TicketIds is not null && filter.TicketIds.Count > 0)
+        if (filter.TicketIds.Count > 0)
         {
             updatedQuery = updatedQuery.Where(t => filter.TicketIds.Contains(t.Id));
         }
         
-        if (filter?.ProjectIds is not null && filter.ProjectIds.Count > 0)
+        if (filter.ProjectIds.Count > 0)
         {
             updatedQuery = updatedQuery.Where(t => filter.ProjectIds.Contains(t.ProjectId));
         }
         
-        if (filter?.AssigneeIds is not null && filter.AssigneeIds.Count > 0)
+        if (filter.AssigneeIds.Count > 0)
         {
             updatedQuery = updatedQuery.Where(t => t.AssigneeId.HasValue && filter.AssigneeIds.Contains(t.AssigneeId.Value));
         }
 
+        if (filter.OnlyBacklogTickets)
+        {
+            updatedQuery = updatedQuery.Where(t => t.SprintId == null);
+        } else if (filter.SprintId > 0)
+        {
+            updatedQuery = updatedQuery.Where(t => t.SprintId == filter.SprintId);
+        }
+        
         return updatedQuery;
     }
 
@@ -371,7 +379,7 @@ public class TicketRepository : ITicketRepository
 
     public async Task<List<TicketModel>> GetBacklogTicketsAsync(int projectId, CancellationToken cancellationToken)
     {
-        var filter = new TicketSearchFilter { ProjectIds = [projectId] };
+        var filter = new TicketSearchFilter { ProjectIds = [projectId], OnlyBacklogTickets = true};
         return await GetByFilterAndMapAsync(filter, (t => t.Position), cancellationToken);
     }
 
