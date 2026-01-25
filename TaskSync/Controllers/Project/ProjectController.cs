@@ -30,7 +30,7 @@ public class ProjectController : ControllerBase
     private readonly DeleteProjectCommandHandler _deleteProjectCommandHandler;
     private readonly AssignProjectLabelCommandHandler _assignProjectLabelCommandHandler;
     private readonly AssignTeamMembersCommandHandler _assignTeamMembersCommandHandler;
-    private readonly ReorderBacklogTicketsCommandHandler _reorderBacklogTicketsCommandHandler;
+    private readonly ReorderBoardTicketsCommandHandler _reorderBoardTicketsCommandHandler;
     
     private readonly AddSprintCommandHandler _addSprintCommandHandler;
     private readonly AssignTicketToSprintCommandHandler _assignTicketToSprintCommandHandler;
@@ -43,7 +43,7 @@ public class ProjectController : ControllerBase
         UpdateProjectCommandHandler updateProjectCommandHandler, 
         DeleteProjectCommandHandler deleteProjectCommandHandler, 
         QueryProjectCommandHandler queryProjectCommandHandler, 
-        ReorderBacklogTicketsCommandHandler reorderBacklogTicketsCommandHandler, 
+        ReorderBoardTicketsCommandHandler reorderBoardTicketsCommandHandler, 
         AddSprintCommandHandler addSprintCommandHandler, 
         AssignTicketToSprintCommandHandler assignTicketToSprintCommandHandler, 
         QuerySprintCommandHandler querySprintCommandHandler)
@@ -54,7 +54,7 @@ public class ProjectController : ControllerBase
         _updateProjectCommandHandler = updateProjectCommandHandler;
         _deleteProjectCommandHandler = deleteProjectCommandHandler;
         _queryProjectCommandHandler = queryProjectCommandHandler;
-        _reorderBacklogTicketsCommandHandler = reorderBacklogTicketsCommandHandler;
+        _reorderBoardTicketsCommandHandler = reorderBoardTicketsCommandHandler;
         _addSprintCommandHandler = addSprintCommandHandler;
         _assignTicketToSprintCommandHandler = assignTicketToSprintCommandHandler;
         _querySprintCommandHandler = querySprintCommandHandler;
@@ -128,14 +128,16 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPost]
-    [Route("{projectId}/backlog/reorder")]
-    public async Task<ActionResult> ReorderBacklogTickets(
+    [Route("{projectId}/board/{boardId}/reorder")]
+    public async Task<ActionResult> ReorderBoardTickets(
         [FromRoute] int projectId, 
-        [FromBody] List<ReorderBacklogTicketCommand> ticketOrder, 
-        CancellationToken cancellationToken)
+        [FromRoute] int boardId, 
+        [FromBody] List<ReorderTicketCommand> ticketOrder, 
+        CancellationToken cancellationToken
+    )
     {
-        var result = await _reorderBacklogTicketsCommandHandler.HandleAsync(projectId, ticketOrder, cancellationToken);
-        return Ok(result);
+        var result = await _reorderBoardTicketsCommandHandler.HandleAsync(projectId, boardId, ticketOrder, cancellationToken);
+        return Ok(result);    
     }
     
     [HttpPost]

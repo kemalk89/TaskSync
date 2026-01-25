@@ -24,6 +24,14 @@ public interface ITicketRepository
     Task<Result<int>> AssignTicketLabelAsync(int projectId, int ticketId, int labelId);
     Task<List<TicketStatusModel>> GetTicketStatusListAsync(CancellationToken cancellationToken);
     Task<List<TicketModel>> GetBacklogTicketsAsync(int projectId, CancellationToken cancellationToken);
-    Task<Result<int>> ReorderBacklogTickets(
-        int projectId, List<ReorderBacklogTicketCommand> ticketOrders, CancellationToken cancellationToken);
+    /// <summary>
+    /// Assigns given list of tickets to a board.
+    /// </summary>
+    /// <param name="projectId"></param>
+    /// <param name="boardId">boardId can be null which represents the backlog board</param>
+    /// <param name="ticketOrders"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<Result<int>> ReorderBoardTickets(
+        int projectId, int? boardId, List<ReorderTicketCommand> ticketOrders, CancellationToken cancellationToken);
 }

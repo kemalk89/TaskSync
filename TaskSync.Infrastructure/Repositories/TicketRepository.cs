@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-
 using Microsoft.EntityFrameworkCore;
 
 using TaskSync.Domain.Exceptions;
@@ -84,7 +82,7 @@ public class TicketRepository : ITicketRepository
 
     public async Task<List<TicketModel>> GetAllAsync(TicketSearchFilter filter, CancellationToken cancellationToken)
     {
-        return await GetByFilterAndMapAsync(filter, null, cancellationToken);
+        return await GetByFilterAndMapAsync(filter, cancellationToken);
     }
 
     public async Task<TicketModel?> GetByIdAsync(int id)
@@ -150,23 +148,27 @@ public class TicketRepository : ITicketRepository
 
     private async Task<List<TicketModel>> GetByFilterAndMapAsync(
         TicketSearchFilter filter,         
-        Expression<Func<TicketEntity, object>>? orderBy,
         CancellationToken cancellationToken)
     {
-        var tickets = await GetByFilterAsync(filter, orderBy, cancellationToken);
+        var tickets = await GetByFilterAsync(filter, cancellationToken);
         return tickets.Select(e => e.ToTicket()).ToList();
     }
     
     private async Task<List<TicketEntity>> GetByFilterAsync(
         TicketSearchFilter filter, 
-        Expression<Func<TicketEntity, object>>? orderBy,
         CancellationToken cancellationToken)
     {
         IQueryable<TicketEntity> query = UpdateQueryByFilter(_dbContext.Tickets.AsQueryable(), filter);
-        
-        query = orderBy is null
-            ? query.OrderBy(t => t.CreatedDate)
-            : query.OrderBy(orderBy);
+
+        if (filter.OrderBy is not null && filter.OrderBy.Equals(TicketModel.OrderByPosition))
+        {
+            query = query.OrderBy(t => t.Position);
+        }
+        else
+        {
+            query = query.OrderBy(t => t.CreatedDate);
+        }
+
         
         var tickets = await query
             .ToListAsync(cancellationToken);
@@ -286,9 +288,9 @@ public class TicketRepository : ITicketRepository
         if (filter.OnlyBacklogTickets)
         {
             updatedQuery = updatedQuery.Where(t => t.SprintId == null);
-        } else if (filter.SprintId > 0)
+        } else if (filter.BoardId > 0)
         {
-            updatedQuery = updatedQuery.Where(t => t.SprintId == filter.SprintId);
+            updatedQuery = updatedQuery.Where(t => t.SprintId == filter.BoardId);
         }
         
         return updatedQuery;
@@ -379,25 +381,30 @@ public class TicketRepository : ITicketRepository
 
     public async Task<List<TicketModel>> GetBacklogTicketsAsync(int projectId, CancellationToken cancellationToken)
     {
-        var filter = new TicketSearchFilter { ProjectIds = [projectId], OnlyBacklogTickets = true};
-        return await GetByFilterAndMapAsync(filter, (t => t.Position), cancellationToken);
+        var filter = new TicketSearchFilter
+        {
+            ProjectIds = [projectId], OnlyBacklogTickets = true, OrderBy = TicketModel.OrderByPosition
+        };
+        return await GetByFilterAndMapAsync(filter,  cancellationToken);
     }
 
-    public async Task<Result<int>> ReorderBacklogTickets(
+    public async Task<Result<int>> ReorderBoardTickets(
         int projectId, 
-        List<ReorderBacklogTicketCommand> ticketOrders, 
+        int? boardId,
+        List<ReorderTicketCommand> ticketOrders, 
         CancellationToken cancellationToken
     )
     {
         var ticketIds = ticketOrders.Select(i => i.TicketId).ToList();
         var filter = new TicketSearchFilter { ProjectIds = [projectId], TicketIds = ticketIds };
-        var tickets = await GetByFilterAsync(filter, null, cancellationToken);
+        var tickets = await GetByFilterAsync(filter, cancellationToken);
         foreach (var ticketOrder in ticketOrders)
         {
             var foundTicket = tickets.Find(e => e.Id == ticketOrder.TicketId);
             if (foundTicket is not null)
             {
                 foundTicket.Position = ticketOrder.Position;
+                foundTicket.SprintId = boardId;
             }
         }
 

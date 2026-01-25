@@ -25,7 +25,8 @@ public class QuerySprintCommandHandler : ICommandHandler
         
         var tickets = await _ticketRepository.GetAllAsync(new TicketSearchFilter
         {
-            SprintId = sprint.Value!.Id,
+            BoardId = sprint.Value!.Id,
+            OrderBy = TicketModel.OrderByPosition,
         }, cancellationToken);
 
         sprint.Value.Tickets = tickets;

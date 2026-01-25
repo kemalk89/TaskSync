@@ -2,6 +2,8 @@ namespace TaskSync.Domain.Ticket;
 
 public class TicketModel
 {
+    public const string OrderByPosition = "position";
+
     public int Id { get; set; }
     public int Position { get; set; }
     public string Title { get; set; } = string.Empty;
