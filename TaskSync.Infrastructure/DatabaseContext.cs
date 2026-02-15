@@ -32,6 +32,15 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<UserEntity>(entity =>
+        {
+            entity.Property<byte[]>("HashedPassword")
+                .HasColumnType("bytea");
+
+            entity.Property<byte[]>("Salt")
+                .HasColumnType("bytea");
+        });
+        
         modelBuilder.Entity<ProjectEntity>()
             .HasMany<SprintEntity>()
             .WithOne()
@@ -199,7 +208,6 @@ public class DatabaseContext : DbContext
 
                 var currentUserId = 0;
                 var currentUser = await Users.FirstOrDefaultAsync(u => u.ExternalUserId == authenticatedUserId, cancellationToken);
-                var users = await Users.ToListAsync();
                 if (currentUser == null)
                 {
                     // Throw an exception unless we're inserting a new User record - because in this case the user is not yet available in the users table!

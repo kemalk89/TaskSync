@@ -10,9 +10,11 @@ using TaskSync.Infrastructure.Services;
 
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using System.Text;
 
 using FluentValidation;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 
 using TaskSync.Auth.Auth0;
@@ -101,11 +103,23 @@ try
     builder.Services.AddHttpContextAccessor();
     builder.Services
         .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
+        .AddJwtBearer("LocalAuth", options =>
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(configuration["LocalAuth:JwtSecret"]!);
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(bytes),
+                ValidIssuers = [configuration["LocalAuth:ValidIssuer"]!]
+            };
+        })
+        .AddJwtBearer("Auth0", options =>
         {
             options.Authority = configuration["Auth:Authority"];
             options.Audience = configuration["Auth:Audience"];
-            options.MetadataAddress = configuration["Auth:MetadataAddress"] ?? string.Empty;
+            options.MetadataAddress = configuration["Auth:MetadataAddress"]!;
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 NameClaimType = ClaimTypes.NameIdentifier,
@@ -119,6 +133,15 @@ try
                 options.RequireHttpsMetadata = false; // Allow HTTP in development
             }
         });
+
+    builder.Services.AddAuthorization(options =>
+    {
+        var authPolicy = new AuthorizationPolicyBuilder("Auth0", "LocalAuth")
+            .RequireAuthenticatedUser()
+            .Build();
+        
+        options.DefaultPolicy = authPolicy;
+    });
     // end: dependency injection
     ////////////////////////////////////////////////////////////////
 

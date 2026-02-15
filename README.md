@@ -2,6 +2,12 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kemalk89_TaskSync&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kemalk89_TaskSync)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kemalk89_TaskSync&metric=coverage)](https://sonarcloud.io/summary/new_code?id=kemalk89_TaskSync)
 
+# TaskSync
+
+A lightweight task management solution for software development teams. 
+This repository contains the backend part of the application. 
+For the frontend, refer to the companion repository: https://github.com/kemalk89/TaskSync-Frontend.
+
 # Technical Overview
 
 - Architecture: The solution adopts principles from Clean Architecture and Domain-Driven Design (DDD)

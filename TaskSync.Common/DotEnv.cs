@@ -39,8 +39,14 @@ public static class DotEnv
                 // ignore comments
                 continue;
             }
+
+            var value = parts[1];
+            if (line.EndsWith("="))
+            {
+                value += "=";
+            }
             
-            Environment.SetEnvironmentVariable(parts[0], parts[1]);
+            Environment.SetEnvironmentVariable(parts[0], value);
         }
     }
 }
