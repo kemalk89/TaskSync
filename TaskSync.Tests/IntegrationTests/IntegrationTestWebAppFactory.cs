@@ -41,6 +41,8 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
     public Task InitializeAsync()
     {
+        Environment.SetEnvironmentVariable("LocalAuth__JwtSecret", "any-value");
+        
         return _postgres.StartAsync();
     }
     

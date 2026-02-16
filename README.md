@@ -52,6 +52,11 @@ dotnet build TaskSync.sln
 ```
 
 # Testing
+## Unit Tests
+```sh
+dotnet test
+```
+
 ## Manual Testing with SwaggerUI
 ### Auth0
 Generate token:

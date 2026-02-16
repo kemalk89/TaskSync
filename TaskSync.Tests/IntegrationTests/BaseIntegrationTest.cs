@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -32,6 +33,14 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
                 // Add test authentication handler
                 services.AddAuthentication("TestScheme")
                     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", options => { });
+                services.AddAuthorization(options =>
+                {
+                    var authPolicy = new AuthorizationPolicyBuilder("TestScheme")
+                        .RequireAuthenticatedUser()
+                        .Build();
+        
+                    options.DefaultPolicy = authPolicy;
+                });
             });
         }).CreateClient();
     }
