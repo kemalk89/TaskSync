@@ -126,7 +126,7 @@ try
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = configuration["Auth:Authority"]
+                ValidIssuer = configuration["Auth:ValidIssuer"]
             };
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
