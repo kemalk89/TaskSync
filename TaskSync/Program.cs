@@ -97,7 +97,7 @@ try
 
     builder.Services.AddDbContext<DatabaseContext>(
         o => o.UseNpgsql(configuration.GetConnectionString("db"))
-            .LogTo(Console.WriteLine,  LogLevel.Information)
+            //.LogTo(Console.WriteLine,  LogLevel.Information)
     );
 
     builder.Services.AddHttpContextAccessor();
@@ -125,7 +125,8 @@ try
                 NameClaimType = ClaimTypes.NameIdentifier,
                 ValidateIssuer = true,
                 ValidateAudience = true,
-                ValidateIssuerSigningKey = true
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["Auth:Authority"]
             };
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
