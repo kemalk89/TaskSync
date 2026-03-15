@@ -38,7 +38,7 @@ public class UserController : ControllerBase
     /// </summary>
     [HttpPost]
     [Route("external")]
-    public async Task<ActionResult<string>> SyncExternalUser([FromBody] SyncExternalUserRequest request)
+    public async Task<ActionResult> SyncExternalUser([FromBody] SyncExternalUserRequest request)
     {
         var externalUser = await _externalUserRepository.FindUserByIdFromExternalSourceAsync(request.ExternalUserId);
         if (externalUser == null)
@@ -52,7 +52,7 @@ public class UserController : ControllerBase
         {
             _logger.LogInformation("Adding new external user with ID: {id}", request.ExternalUserId);
             await _userRepository.SaveNewUserAsync(externalUser);
-            return Created();
+            return StatusCode(201);
         }
         
         _logger.LogDebug("Updating data of external user with ID: {id}", request.ExternalUserId);
