@@ -210,6 +210,12 @@ public class DatabaseContext : DbContext
                 var currentUser = await Users.FirstOrDefaultAsync(u => u.ExternalUserId == authenticatedUserId, cancellationToken);
                 if (currentUser == null)
                 {
+                    var users = await Users.ToListAsync(cancellationToken);
+                    foreach (UserEntity user in users)
+                    {
+                        Console.WriteLine(" > > > External User ID in DB: " + user.ExternalUserId);
+                    }
+                    
                     // Throw an exception unless we're inserting a new User record - because in this case the user is not yet available in the users table!
                     if (audited.GetType().Name != nameof(UserEntity))
                     {
