@@ -159,8 +159,6 @@ public class Auth0UserRepository : IExternalUserRepository
 
         var domain = _config["Auth:MachineToMachineApplication:Domain"];
         
-        Console.WriteLine("> > > Debug " + domain);
-        
         var client = new RestClient($"{domain}/api/v2");
         client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
 

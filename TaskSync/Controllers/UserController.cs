@@ -52,7 +52,6 @@ public class UserController : ControllerBase
         {
             _logger.LogInformation("Adding new external user with ID: {id}", request.ExternalUserId);
             await _userRepository.SaveNewUserAsync(externalUser);
-            _logger.LogInformation("Added new external user with ID: {id}", request.ExternalUserId);
             return StatusCode(201);
         }
         
