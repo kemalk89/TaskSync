@@ -15,7 +15,7 @@ namespace TaskSync.Tests.IntegrationTests;
 /// </summary>
 public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
+    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder("postgres:18")
         .WithImage("postgres:18-bookworm")
         .WithDatabase("tasksync_test")
         .WithUsername("postgres")

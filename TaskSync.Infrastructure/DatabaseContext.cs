@@ -20,14 +20,12 @@ public class DatabaseContext : DbContext
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IHostEnvironment _env;
 
-    private int _ticketIdTracker;
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options, IHttpContextAccessor httpContextAccessor, IHostEnvironment env)
         : base(options)
     {
         _httpContextAccessor = httpContextAccessor;
         _env = env;
-        _ticketIdTracker = 0;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -106,7 +104,8 @@ public class DatabaseContext : DbContext
             Id = 1,
             Title = "My First Project",
             Description = GetDescription("This is the description of the first project. This project has one member as well."),
-            CreatedBy = 1
+            CreatedBy = 1,
+            CreatedDate = new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero)
         });
         
         // demo project has 3 labels
@@ -125,60 +124,73 @@ public class DatabaseContext : DbContext
             Id = 2, ProjectId = 1, UserId = 2, Role = "UI / UX"
         });
         
-        CreateDemoTickets(modelBuilder, projectId: 1, amount: 12);
-    }
-
-    private static TicketType GetRandomTicketType()
-    {
-        var values = Enum.GetValues(typeof(TicketType));
-        var randomType = values.GetValue(new Random().Next(values.Length));
-        return randomType != null ? (TicketType) randomType : TicketType.Task;
+        CreateDemoTickets(modelBuilder, projectId: 1);
     }
 
     private void CreateDemoUsers(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 1, Email = "Kerem.Karacay@tasksync.test", Username = "Kerem Karacay", Picture = "", CreatedDate = DateTimeOffset.UtcNow });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 2, Email = "Deniz.Aslansu@tasksync.test", Username = "Deniz Aslansu", Picture = "", CreatedDate = DateTimeOffset.UtcNow });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 3, Email = "Ali.Balci@tasksync.test", Username = "Ali Balcı", Picture = "", CreatedDate = DateTimeOffset.UtcNow });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 4, Email = "Sven.Imker@tasksync.test", Username = "Sven Imker", Picture = "", CreatedDate = DateTimeOffset.UtcNow });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 5, Email = "Mina.Koch@tasksync.test", Username = "Mina Koch", Picture = "", CreatedDate = DateTimeOffset.UtcNow });
+        var createdDate = new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero);
+        
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 1, Email = "Kerem.Karacay@tasksync.test", Username = "Kerem Karacay", Picture = "", CreatedDate = createdDate });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 2, Email = "Deniz.Aslansu@tasksync.test", Username = "Deniz Aslansu", Picture = "", CreatedDate = createdDate });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 3, Email = "Ali.Balci@tasksync.test", Username = "Ali Balcı", Picture = "", CreatedDate = createdDate });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 4, Email = "Sven.Imker@tasksync.test", Username = "Sven Imker", Picture = "", CreatedDate = createdDate });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 5, Email = "Mina.Koch@tasksync.test", Username = "Mina Koch", Picture = "", CreatedDate = createdDate });
         if (_env.IsDevelopment())
         {
-            modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 6, Email = "IntegrationTests.User1@tasksync.test", Username = "Test User1", Picture = "", ExternalUserId = "integration_tests|01", CreatedDate = DateTimeOffset.UtcNow });
+            modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 6, Email = "IntegrationTests.User1@tasksync.test", Username = "Test User1", Picture = "", ExternalUserId = "integration_tests|01", CreatedDate = createdDate });
         }
     }
     
-    private void CreateDemoTickets(ModelBuilder modelBuilder, int projectId, int amount)
+    private void CreateDemoTickets(ModelBuilder modelBuilder, int projectId)
     {
-        for (int i = 0; i < amount; i++)
+        modelBuilder.Entity<TicketEntity>().HasData(new TicketEntity
         {
-            _ticketIdTracker++;
-
-            var title = "Not set";
-            var ticketType = GetRandomTicketType();
-            if (ticketType == TicketType.Task)
-            {
-                title = $"Demo Ticket of type Task #{_ticketIdTracker}";
-            } else if (ticketType == TicketType.Story)
-            {
-                title = $"Demo Ticket of type Story #{_ticketIdTracker}";
-            } else if (ticketType == TicketType.Bug)
-            {
-                title = $"Demo Ticket of type Bug #{_ticketIdTracker}";
-            }
-            
-            modelBuilder.Entity<TicketEntity>().HasData(new TicketEntity
-            {
-                Id = _ticketIdTracker,
-                Type = ticketType,
-                Title = title,
-                Description = GetDescription($"This is the description of the demo ticket #{_ticketIdTracker}."),
-                CreatedBy = 0,
-                ProjectId = projectId,
-                StatusId = new Random().Next(1, 4), // Generates a random number between 1 (inclusive) and 4 (exclusive),
-                CreatedDate = DateTimeOffset.UtcNow
-            });
-        }
+            Id = 1,
+            Type = TicketType.Bug,
+            Title = "Profilbild wird nach dem Upload nicht aktualisiert",
+            Description = GetDescription("Wenn der Benutzer ein Profilbild hochgeladen hat, wird weiterhin das alte angezeigt."),
+            CreatedBy = 0,
+            ProjectId = projectId,
+            StatusId = 1,
+            CreatedDate = new DateTimeOffset(2026, 3, 9, 9, 17, 0, TimeSpan.Zero)
+        });
+        
+        modelBuilder.Entity<TicketEntity>().HasData(new TicketEntity
+        {
+            Id = 2,
+            Type = TicketType.Task,
+            Title = "Secrets rotieren",
+            Description = GetDescription("Die Secrets laufen Ende Februar aus."),
+            CreatedBy = 0,
+            ProjectId = projectId,
+            StatusId = 1,
+            CreatedDate = new DateTimeOffset(2026, 2, 18, 10, 5, 0, TimeSpan.Zero)
+        });
+        
+        modelBuilder.Entity<TicketEntity>().HasData(new TicketEntity
+        {
+            Id = 3,
+            Type = TicketType.Story,
+            Title = "Teammitglieder in Kommentaren erwähnen",
+            Description = GetDescription(""),
+            CreatedBy = 0,
+            ProjectId = projectId,
+            StatusId = 1,
+            CreatedDate = new DateTimeOffset(2026, 3, 10, 14, 15, 0, TimeSpan.Zero)
+        });
+        
+        modelBuilder.Entity<TicketEntity>().HasData(new TicketEntity
+        {
+            Id = 4,
+            Type = TicketType.Story,
+            Title = "Signup Form",
+            Description = GetDescription("Required fields: username and password. API-KEY Protection des /signup endpoints."),
+            CreatedBy = 0,
+            ProjectId = projectId,
+            StatusId = 1,
+            CreatedDate = new DateTimeOffset(2026, 3, 10, 8, 15, 0, TimeSpan.Zero)
+        });
     }
 
     /**
