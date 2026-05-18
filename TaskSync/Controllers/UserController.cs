@@ -21,9 +21,9 @@ public class UserController : ControllerBase
     private readonly ILogger<UserController> _logger;
 
     public UserController(
-        IUserService userService, 
+        IUserService userService,
         IUserRepository userRepository,
-        IExternalUserRepository externalUserRepository, 
+        IExternalUserRepository externalUserRepository,
         ILogger<UserController> logger)
     {
         _userService = userService;
@@ -57,11 +57,11 @@ public class UserController : ControllerBase
         
         _logger.LogDebug("Updating data of external user with ID: {id}", request.ExternalUserId);
 
-        if (user.Picture.IsNullOrEmpty())
+        if (string.IsNullOrWhiteSpace(user.Picture))
         {
             user.Picture = externalUser.Picture;
         }
-        if (user.Username.IsNullOrEmpty())
+        if (string.IsNullOrWhiteSpace(user.Username))
         {
             user.Username = externalUser.Username;
         }

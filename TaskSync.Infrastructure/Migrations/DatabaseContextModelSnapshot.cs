@@ -17,7 +17,7 @@ namespace TaskSync.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "9.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -58,7 +58,7 @@ namespace TaskSync.Infrastructure.Migrations
                         {
                             Id = 1,
                             CreatedBy = 1,
-                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the first project. This project has one member as well.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Title = "My First Project"
                         });
@@ -236,146 +236,50 @@ namespace TaskSync.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 13,
+                            Id = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(510), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #13.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 9, 9, 17, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Wenn der Benutzer ein Profilbild hochgeladen hat, wird weiterhin das alte angezeigt.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #13",
+                            StatusId = 1,
+                            Title = "Profilbild wird nach dem Upload nicht aktualisiert",
                             Type = 0
                         },
                         new
                         {
-                            Id = 14,
+                            Id = 2,
                             CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(540), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #14.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 18, 10, 5, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Die Secrets laufen Ende Februar aus.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
                             ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #14",
+                            StatusId = 1,
+                            Title = "Secrets rotieren",
                             Type = 1
                         },
                         new
                         {
-                            Id = 15,
+                            Id = 3,
                             CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(560), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #15.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 14, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Bug #15",
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(570), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #16.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
-                            Position = 0,
-                            ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Bug #16",
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(590), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #17.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
-                            Position = 0,
-                            ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Task #17",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 18,
-                            CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(610), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #18.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
-                            Position = 0,
-                            ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Bug #18",
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(630), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #19.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
-                            Position = 0,
-                            ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #19",
+                            Title = "Teammitglieder in Kommentaren erwähnen",
                             Type = 2
                         },
                         new
                         {
-                            Id = 20,
+                            Id = 4,
                             CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(660), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #20.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
-                            Position = 0,
-                            ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Story #20",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 21,
-                            CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(680), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #21.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
-                            Position = 0,
-                            ProjectId = 1,
-                            StatusId = 2,
-                            Title = "Demo Ticket of type Task #21",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 22,
-                            CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(700), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #22.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Required fields: username and password. API-KEY Protection des /signup endpoints.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
                             ProjectId = 1,
                             StatusId = 1,
-                            Title = "Demo Ticket of type Task #22",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 23,
-                            CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(720), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #23.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
-                            Position = 0,
-                            ProjectId = 1,
-                            StatusId = 1,
-                            Title = "Demo Ticket of type Story #23",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 24,
-                            CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(740), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the demo ticket #24.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
-                            Position = 0,
-                            ProjectId = 1,
-                            StatusId = 3,
-                            Title = "Demo Ticket of type Story #24",
+                            Title = "Signup Form",
                             Type = 2
                         });
                 });
@@ -504,7 +408,7 @@ namespace TaskSync.Infrastructure.Migrations
                         {
                             Id = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(150), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "Kerem.Karacay@tasksync.test",
                             Picture = "",
                             Username = "Kerem Karacay"
@@ -513,7 +417,7 @@ namespace TaskSync.Infrastructure.Migrations
                         {
                             Id = 2,
                             CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(170), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "Deniz.Aslansu@tasksync.test",
                             Picture = "",
                             Username = "Deniz Aslansu"
@@ -522,7 +426,7 @@ namespace TaskSync.Infrastructure.Migrations
                         {
                             Id = 3,
                             CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(190), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "Ali.Balci@tasksync.test",
                             Picture = "",
                             Username = "Ali Balcı"
@@ -531,7 +435,7 @@ namespace TaskSync.Infrastructure.Migrations
                         {
                             Id = 4,
                             CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(200), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "Sven.Imker@tasksync.test",
                             Picture = "",
                             Username = "Sven Imker"
@@ -540,7 +444,7 @@ namespace TaskSync.Infrastructure.Migrations
                         {
                             Id = 5,
                             CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(210), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "Mina.Koch@tasksync.test",
                             Picture = "",
                             Username = "Mina Koch"
@@ -549,7 +453,7 @@ namespace TaskSync.Infrastructure.Migrations
                         {
                             Id = 6,
                             CreatedBy = 0,
-                            CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 16, 8, 46, 17, 243, DateTimeKind.Unspecified).AddTicks(240), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "IntegrationTests.User1@tasksync.test",
                             ExternalUserId = "integration_tests|01",
                             Picture = "",
