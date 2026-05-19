@@ -11,8 +11,8 @@ For the frontend, refer to the companion repository: https://github.com/kemalk89
 # Technical Overview
 
 - Architecture: The solution adopts principles from Clean Architecture and Domain-Driven Design (DDD)
-- Target Framework: .NET 9
-- EF Core 9 with PostgreSQL
+- Target Framework: .NET 10
+- EF Core 10 with PostgreSQL
 - Validation through FluentValidation
 - For security, JWT Bearer authentication is configured
 - Testing is implemented using xUnit with Testcontainers for PostgreSQL
