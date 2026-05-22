@@ -2,7 +2,13 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kemalk89_TaskSync&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kemalk89_TaskSync)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kemalk89_TaskSync&metric=coverage)](https://sonarcloud.io/summary/new_code?id=kemalk89_TaskSync)
 
-# TaskSync
+---
+
+<h1 align="center">
+    <img src="https://raw.githubusercontent.com/kemalk89/TaskSync-Frontend/refs/heads/main/apps/web/public/images/logo.svg" width="84" height="84" /> 
+    <br> 
+    TaskSync
+</h1>
 
 A lightweight task management solution for software development teams. 
 This repository contains the backend part of the application. 
