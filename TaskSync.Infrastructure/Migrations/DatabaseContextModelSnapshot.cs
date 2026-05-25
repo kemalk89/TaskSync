@@ -17,7 +17,7 @@ namespace TaskSync.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "10.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -392,6 +392,9 @@ namespace TaskSync.Infrastructure.Migrations
 
                     b.Property<byte[]>("Salt")
                         .HasColumnType("bytea");
+
+                    b.Property<string>("SelectedLanguage")
+                        .HasColumnType("text");
 
                     b.Property<string>("Username")
                         .HasColumnType("text");

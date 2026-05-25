@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 using TaskSync.Controllers.Request;
 using TaskSync.Controllers.Response;
@@ -16,6 +15,7 @@ namespace TaskSync.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly ICurrentUserService _currentUserService;
     private readonly IUserRepository _userRepository;
     private readonly IExternalUserRepository _externalUserRepository;
     private readonly ILogger<UserController> _logger;
@@ -24,11 +24,13 @@ public class UserController : ControllerBase
         IUserService userService,
         IUserRepository userRepository,
         IExternalUserRepository externalUserRepository,
+        ICurrentUserService currentUserService,
         ILogger<UserController> logger)
     {
         _userService = userService;
         _userRepository = userRepository;
         _externalUserRepository = externalUserRepository;
+        _currentUserService = currentUserService;
         _logger = logger;
     }
 
@@ -91,5 +93,28 @@ public class UserController : ControllerBase
             Items = pagedResult.Items.Select(item => new UserResponse(item)),
             Total = pagedResult.Total
         };
+    }
+
+    [HttpPatch]
+    [Route("changeLanguage/{language}")]
+    public async Task<ActionResult<string>> ChangeUserLanguage([FromRoute] string language)
+    {
+        var result = await _currentUserService.ChangeLanguageAsync(language);
+
+        if (!result.Success)
+        {
+            return BadRequest(result);
+        }
+        
+        return Ok(result.Value);
+    }
+    
+    [HttpGet]
+    [Route("current-user")]
+    public async Task<ActionResult<User>> GetCurrentUser()
+    {
+        var result = await _currentUserService.GetCurrentUserAsync();
+
+        return Ok(result);
     }
 }

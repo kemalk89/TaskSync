@@ -34,7 +34,7 @@ public class DeleteTicketCommandHandler : ICommandHandler
         if (author != null)
         {
             var currentUser = await _currentUserService.GetCurrentUserAsync();
-            if (currentUser?.Id == author.Id)
+            if (currentUser.Value?.Id == author.Id)
             {
                 await _ticketRepository.DeleteTicketAsync(id);
                 return Result<bool>.Ok(true);

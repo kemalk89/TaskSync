@@ -83,7 +83,7 @@ public class UserRepository : IUserRepository
 
         if (entity == null)
         {
-            throw new NotImplementedException();
+            return 0;
         }
         
         entity.Update(user);

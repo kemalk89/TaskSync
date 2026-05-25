@@ -9,6 +9,10 @@ public class UserResponse
     public string Email { get; set; }
     public string? Picture { get; set; }
     public string? ExternalSource { get; set; }
+    /// <summary>
+    /// The selected language of the user. Example values: "de" or "en"
+    /// </summary>
+    public string? SelectedLanguage { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset? ModifiedDate { get; set; }
     
@@ -21,5 +25,6 @@ public class UserResponse
         CreatedDate = user.CreatedDate;
         ModifiedDate = user.ModifiedDate;
         ExternalSource = user.ExternalUserId != null && user.ExternalUserId.StartsWith("auth0") ? "auth0" : null;
+        SelectedLanguage = user.SelectedLanguage;
     }
 }

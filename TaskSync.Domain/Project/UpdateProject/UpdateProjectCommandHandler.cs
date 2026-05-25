@@ -31,7 +31,7 @@ public class UpdateProjectCommandHandler : ICommandHandler
         }
         
         var currentUser = await _currentUserService.GetCurrentUserAsync();
-        if (project.CreatedBy != null && project.CreatedBy.Id != currentUser?.Id)
+        if (project.CreatedBy != null && project.CreatedBy.Id != currentUser.Value?.Id)
         {
             _logger.LogInformation("No permissions: Current user cannot assign project manager to project with ID {ProjectId}", projectId);
             return Result<bool>.Fail(ResultCodes.ResultCodeNoPermissions);

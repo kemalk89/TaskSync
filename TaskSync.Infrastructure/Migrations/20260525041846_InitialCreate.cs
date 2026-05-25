@@ -55,6 +55,7 @@ namespace TaskSync.Infrastructure.Migrations
                     Username = table.Column<string>(type: "text", nullable: true),
                     ExternalUserId = table.Column<string>(type: "text", nullable: true),
                     Picture = table.Column<string>(type: "text", nullable: true),
+                    SelectedLanguage = table.Column<string>(type: "text", nullable: true),
                     HashedPassword = table.Column<byte[]>(type: "bytea", nullable: true),
                     Salt = table.Column<byte[]>(type: "bytea", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
@@ -242,15 +243,15 @@ namespace TaskSync.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "CreatedBy", "CreatedDate", "Email", "ExternalUserId", "HashedPassword", "ModifiedDate", "Picture", "Salt", "Username" },
+                columns: new[] { "Id", "CreatedBy", "CreatedDate", "Email", "ExternalUserId", "HashedPassword", "ModifiedDate", "Picture", "Salt", "SelectedLanguage", "Username" },
                 values: new object[,]
                 {
-                    { 1, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Kerem.Karacay@tasksync.test", null, null, null, "", null, "Kerem Karacay" },
-                    { 2, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Deniz.Aslansu@tasksync.test", null, null, null, "", null, "Deniz Aslansu" },
-                    { 3, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Ali.Balci@tasksync.test", null, null, null, "", null, "Ali Balcı" },
-                    { 4, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Sven.Imker@tasksync.test", null, null, null, "", null, "Sven Imker" },
-                    { 5, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Mina.Koch@tasksync.test", null, null, null, "", null, "Mina Koch" },
-                    { 6, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "IntegrationTests.User1@tasksync.test", "integration_tests|01", null, null, "", null, "Test User1" }
+                    { 1, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Kerem.Karacay@tasksync.test", null, null, null, "", null, null, "Kerem Karacay" },
+                    { 2, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Deniz.Aslansu@tasksync.test", null, null, null, "", null, null, "Deniz Aslansu" },
+                    { 3, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Ali.Balci@tasksync.test", null, null, null, "", null, null, "Ali Balcı" },
+                    { 4, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Sven.Imker@tasksync.test", null, null, null, "", null, null, "Sven Imker" },
+                    { 5, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Mina.Koch@tasksync.test", null, null, null, "", null, null, "Mina Koch" },
+                    { 6, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "IntegrationTests.User1@tasksync.test", "integration_tests|01", null, null, "", null, null, "Test User1" }
                 });
 
             migrationBuilder.InsertData(

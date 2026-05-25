@@ -9,4 +9,8 @@ public class User
     public string? Picture { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset? ModifiedDate { get; set; }
+    /// <summary>
+    /// The selected language of the user. Example values: "de" or "en"
+    /// </summary>
+    public string? SelectedLanguage { get; set; }
 }

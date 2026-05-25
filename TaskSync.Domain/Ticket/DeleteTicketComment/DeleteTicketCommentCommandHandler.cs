@@ -25,7 +25,7 @@ public class DeleteTicketCommentCommandHandler : ICommandHandler
         // if the current user is author of the comment, allow deletion
         var authorId = comment.CreatedById;
         var currentUser = await _currentUserService.GetCurrentUserAsync();
-        if (currentUser?.Id == authorId)
+        if (currentUser.Value?.Id == authorId)
         {
             var result = await _ticketRepository.DeleteTicketCommentAsync(commentId);
             return result ? Result<bool>.Ok(result) : Result<bool>.Fail("Could not delete the ticket comment with ID " + commentId);
