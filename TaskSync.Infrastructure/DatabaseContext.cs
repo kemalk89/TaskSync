@@ -14,7 +14,7 @@ public class DatabaseContext : DbContext
     public DbSet<TicketCommentEntity> TicketComments { get; set; }
     public DbSet<TicketStatusEntity> TicketStatus { get; set; }
     public DbSet<TicketLabelEntity> TicketLabels { get; set; }
-    
+
     public DbSet<ProjectEntity> Projects { get; set; }
     public DbSet<SprintEntity> Sprints { get; set; }
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -38,7 +38,7 @@ public class DatabaseContext : DbContext
             entity.Property<byte[]>("Salt")
                 .HasColumnType("bytea");
         });
-        
+
         modelBuilder.Entity<ProjectEntity>()
             .HasMany<SprintEntity>()
             .WithOne()
@@ -49,15 +49,15 @@ public class DatabaseContext : DbContext
             .HasMany<TicketEntity>()
             .WithOne()
             .HasForeignKey(e => e.SprintId);
-        
+
         modelBuilder.Entity<TicketEntity>()
             .HasMany(t => t.Labels)
             .WithMany()
             .UsingEntity("TicketLabelMapping"); // assign custom name to mapping table
-        
+
         modelBuilder.Entity<ProjectMemberEntity>()
-            .HasOne<ProjectEntity>() 
-            .WithMany(p => p.ProjectMembers) 
+            .HasOne<ProjectEntity>()
+            .WithMany(p => p.ProjectMembers)
             .HasForeignKey(pm => pm.ProjectId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired(false);
@@ -68,11 +68,11 @@ public class DatabaseContext : DbContext
             .WithOne()
             .HasForeignKey(e => e.UserId)
             .IsRequired(false);
-        
+
         modelBuilder.Entity<UserEntity>()
             .HasIndex(u => u.Email)
             .IsUnique();
-        
+
         modelBuilder.Entity<TicketEntity>()
             .HasOne(t => t.Project)
             .WithMany()
@@ -84,20 +84,20 @@ public class DatabaseContext : DbContext
             .WithMany()
             .HasForeignKey(entity => entity.TicketId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         modelBuilder.Entity<TicketLabelEntity>()
             .HasOne<ProjectEntity>()
             .WithMany()
             .HasForeignKey(e => e.ProjectId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         // seed data: https://learn.microsoft.com/en-us/ef/core/modeling/data-seeding
         CreateDemoUsers(modelBuilder);
-        
+
         modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = 1, Name = "Todo" });
         modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = 2, Name = "In Progress" });
         modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = 3, Name = "Done" });
-        
+
         // demo project
         modelBuilder.Entity<ProjectEntity>().HasData(new ProjectEntity
         {
@@ -107,12 +107,12 @@ public class DatabaseContext : DbContext
             CreatedBy = 1,
             CreatedDate = new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero)
         });
-        
+
         // demo project has 3 labels
         modelBuilder.Entity<TicketLabelEntity>().HasData(new TicketLabelEntity { Id = 1, Text = "Need's Design", ProjectId = 1 });
         modelBuilder.Entity<TicketLabelEntity>().HasData(new TicketLabelEntity { Id = 2, Text = "Need's Discussion", ProjectId = 1 });
         modelBuilder.Entity<TicketLabelEntity>().HasData(new TicketLabelEntity { Id = 3, Text = "Quick Fix", ProjectId = 1 });
-        
+
         // demo project has 2 team members
         modelBuilder.Entity<ProjectMemberEntity>().HasData(new ProjectMemberEntity
         {
@@ -123,14 +123,14 @@ public class DatabaseContext : DbContext
         {
             Id = 2, ProjectId = 1, UserId = 2, Role = "UI / UX"
         });
-        
+
         CreateDemoTickets(modelBuilder, projectId: 1);
     }
 
     private void CreateDemoUsers(ModelBuilder modelBuilder)
     {
         var createdDate = new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero);
-        
+
         modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 1, Email = "Kerem.Karacay@tasksync.test", Username = "Kerem Karacay", Picture = "", CreatedDate = createdDate });
         modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 2, Email = "Deniz.Aslansu@tasksync.test", Username = "Deniz Aslansu", Picture = "", CreatedDate = createdDate });
         modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 3, Email = "Ali.Balci@tasksync.test", Username = "Ali Balcı", Picture = "", CreatedDate = createdDate });
@@ -141,7 +141,7 @@ public class DatabaseContext : DbContext
             modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 6, Email = "IntegrationTests.User1@tasksync.test", Username = "Test User1", Picture = "", ExternalUserId = "integration_tests|01", CreatedDate = createdDate });
         }
     }
-    
+
     private void CreateDemoTickets(ModelBuilder modelBuilder, int projectId)
     {
         modelBuilder.Entity<TicketEntity>().HasData(new TicketEntity
@@ -155,7 +155,7 @@ public class DatabaseContext : DbContext
             StatusId = 1,
             CreatedDate = new DateTimeOffset(2026, 3, 9, 9, 17, 0, TimeSpan.Zero)
         });
-        
+
         modelBuilder.Entity<TicketEntity>().HasData(new TicketEntity
         {
             Id = 2,
@@ -167,7 +167,7 @@ public class DatabaseContext : DbContext
             StatusId = 1,
             CreatedDate = new DateTimeOffset(2026, 2, 18, 10, 5, 0, TimeSpan.Zero)
         });
-        
+
         modelBuilder.Entity<TicketEntity>().HasData(new TicketEntity
         {
             Id = 3,
@@ -179,7 +179,7 @@ public class DatabaseContext : DbContext
             StatusId = 1,
             CreatedDate = new DateTimeOffset(2026, 3, 10, 14, 15, 0, TimeSpan.Zero)
         });
-        
+
         modelBuilder.Entity<TicketEntity>().HasData(new TicketEntity
         {
             Id = 4,
@@ -206,34 +206,51 @@ public class DatabaseContext : DbContext
         var modified = this.ChangeTracker.Entries()
             .Where(x => x.State == EntityState.Modified)
             .Select(x => x.Entity);
-        
+
         foreach (var e in inserted)
         {
             var audited = e as AuditedEntity;
             if (audited != null)
             {
-                var authenticatedUserId = _httpContextAccessor.HttpContext?.User.Identity?.Name;
-                if (authenticatedUserId == null)
+                UserEntity? currentUser = null;
+                string userIdentifier = string.Empty;
+
+                // Try to get current user by claim "id" (for local users)
+                var claimId = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == "id");
+                var userId = claimId?.Value;
+                if (userId != null && int.TryParse(userId, out int parsed))
                 {
-                    throw new Exception("No authenticated user");
+                    userIdentifier = userId;
+                    currentUser = await Users.FirstOrDefaultAsync(u => u.Id == parsed, cancellationToken);
+                }
+                else
+                {
+                    // Try to get current user by claim identity name (for external users)
+                    var identityName = _httpContextAccessor.HttpContext?.User.Identity?.Name;
+                    if (identityName == null)
+                    {
+                        throw new Exception("No authenticated user");
+                    }
+
+                    userIdentifier = identityName;
+                    currentUser = await Users.FirstOrDefaultAsync(u => u.ExternalUserId == identityName, cancellationToken);
                 }
 
-                var currentUserId = 0;
-                var currentUser = await Users.FirstOrDefaultAsync(u => u.ExternalUserId == authenticatedUserId, cancellationToken);
                 if (currentUser == null)
                 {
                     // Throw an exception unless we're inserting a new User record - because in this case the user is not yet available in the users table!
                     if (audited.GetType().Name != nameof(UserEntity))
                     {
-                        throw new Exception($"No user found for external user id {authenticatedUserId}");
+                        throw new Exception($"No user found for identifier {userIdentifier}");
                     }
                 }
                 else
                 {
+                    var currentUserId = 0;
                     currentUserId = currentUser.Id;
+                    audited.CreatedBy = currentUserId;
                 }
 
-                audited.CreatedBy = currentUserId;
                 audited.CreatedDate = DateTimeOffset.UtcNow;
             }
         }
