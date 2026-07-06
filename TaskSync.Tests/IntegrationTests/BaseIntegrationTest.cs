@@ -18,7 +18,7 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
 {
     protected readonly HttpClient _client;
     protected readonly IntegrationTestWebAppFactory _factory;
-    
+
     public BaseIntegrationTest(IntegrationTestWebAppFactory factory)
     {
         _factory = factory;
@@ -29,14 +29,14 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
                 // Remove the original implementation and add our mock
                 services.RemoveAll<IExternalUserRepository>();
                 services.AddSingleton<IExternalUserRepository>(new MockExternalUserRepository());
-                
+
                 services.Configure<AuthenticationOptions>(options =>
                 {
                     options.DefaultAuthenticateScheme = "TestScheme";
                     options.DefaultChallengeScheme = "TestScheme";
                     options.DefaultScheme = "TestScheme";
                 });
-                
+
                 // Add test authentication handler
                 services.AddAuthentication("TestScheme")
                     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", options => { });
@@ -45,13 +45,13 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
                     var authPolicy = new AuthorizationPolicyBuilder("TestScheme")
                         .RequireAuthenticatedUser()
                         .Build();
-        
+
                     options.DefaultPolicy = authPolicy;
                 });
             });
         }).CreateClient();
     }
-    
+
     /// <summary>
     /// Sets Authorization Header for requests.
     /// </summary>
@@ -60,7 +60,7 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
     protected void SetAuthenticatedUser(string[]? roles = null, string externalUserId = "integration_tests|01")
     {
         roles ??= ["User"];
-        
+
         var authData = new TestAuthData
         {
             Roles = roles,
@@ -80,10 +80,11 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
             if (method == HttpMethod.Post)
             {
                 response = await _client.PostAsJsonAsync(url, payload);
-            } else if (method == HttpMethod.Get)
+            }
+            else if (method == HttpMethod.Get)
             {
                 response = await _client.GetAsync(url);
-            
+
             }
             else
             {
@@ -92,6 +93,15 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
 
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
+    }
+
+    protected List<string> GetErrorDetails(JsonDocument? document)
+    {
+        var errorList = (document?.RootElement.GetProperty("errorDetails")
+            .EnumerateArray()
+            .Select(e => e.ToString())
+            .ToList()) ?? [];
+        return errorList;
     }
 }
 
@@ -125,7 +135,7 @@ public class MockExternalUserRepository : IExternalUserRepository
         {
             return Task.FromResult<Domain.User.User?>(null);
         }
-        
+
         var user = new Domain.User.User
         {
             Id = 1,

@@ -31,21 +31,21 @@ public class ProjectController : ControllerBase
     private readonly AssignProjectLabelCommandHandler _assignProjectLabelCommandHandler;
     private readonly AssignTeamMembersCommandHandler _assignTeamMembersCommandHandler;
     private readonly ReorderBoardTicketsCommandHandler _reorderBoardTicketsCommandHandler;
-    
+
     private readonly AddSprintCommandHandler _addSprintCommandHandler;
     private readonly AssignTicketToSprintCommandHandler _assignTicketToSprintCommandHandler;
     private readonly QuerySprintCommandHandler _querySprintCommandHandler;
 
     public ProjectController(
-        CreateProjectCommandHandler createProjectCommandHandler, 
-        AssignProjectLabelCommandHandler assignProjectLabelCommandHandler, 
-        AssignTeamMembersCommandHandler assignTeamMembersCommandHandler, 
-        UpdateProjectCommandHandler updateProjectCommandHandler, 
-        DeleteProjectCommandHandler deleteProjectCommandHandler, 
-        QueryProjectCommandHandler queryProjectCommandHandler, 
-        ReorderBoardTicketsCommandHandler reorderBoardTicketsCommandHandler, 
-        AddSprintCommandHandler addSprintCommandHandler, 
-        AssignTicketToSprintCommandHandler assignTicketToSprintCommandHandler, 
+        CreateProjectCommandHandler createProjectCommandHandler,
+        AssignProjectLabelCommandHandler assignProjectLabelCommandHandler,
+        AssignTeamMembersCommandHandler assignTeamMembersCommandHandler,
+        UpdateProjectCommandHandler updateProjectCommandHandler,
+        DeleteProjectCommandHandler deleteProjectCommandHandler,
+        QueryProjectCommandHandler queryProjectCommandHandler,
+        ReorderBoardTicketsCommandHandler reorderBoardTicketsCommandHandler,
+        AddSprintCommandHandler addSprintCommandHandler,
+        AssignTicketToSprintCommandHandler assignTicketToSprintCommandHandler,
         QuerySprintCommandHandler querySprintCommandHandler)
     {
         _createProjectCommandHandler = createProjectCommandHandler;
@@ -79,7 +79,7 @@ public class ProjectController : ControllerBase
 
         return BadRequest(new ErrorResponse(result.Error, result.ErrorDetails));
     }
-    
+
     [HttpGet]
     public async Task<PagedResult<ProjectResponse>> GetProjects([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
     {
@@ -130,34 +130,46 @@ public class ProjectController : ControllerBase
     [HttpPost]
     [Route("{projectId}/board/{boardId}/reorder")]
     public async Task<ActionResult> ReorderBoardTickets(
-        [FromRoute] int projectId, 
-        [FromRoute] int boardId, 
-        [FromBody] List<ReorderTicketCommand> ticketOrder, 
+        [FromRoute] int projectId,
+        [FromRoute] int boardId,
+        [FromBody] List<ReorderTicketCommand> ticketOrder,
         CancellationToken cancellationToken
     )
     {
         var result = await _reorderBoardTicketsCommandHandler.HandleAsync(projectId, boardId, ticketOrder, cancellationToken);
-        return Ok(result);    
+        return Ok(result);
     }
-    
+
     [HttpPost]
     [Route("{projectId}/sprint")]
     public async Task<ActionResult> CreateNewSprint(
-        [FromRoute] int projectId, 
+        [FromRoute] int projectId,
         [FromBody] AddSprintCommand command,
         CancellationToken cancellationToken)
     {
         command.ProjectId = projectId;
         var result = await _addSprintCommandHandler.HandleAsync(command, cancellationToken);
-        return Ok(result);
+        if (result.Success)
+        {
+            return CreatedAtAction(
+                null,
+                new IdResponse(result.Value?.Id));
+        }
+
+        if (ResultCodes.ResultCodeValidationFailed.Equals(result.Error))
+        {
+            return BadRequest(result);
+        }
+
+        throw new DomainException("Unknown error.");
     }
-        
+
     [HttpPost]
     [Route("{projectId}/sprint/{sprintId}/ticket/{ticketId}")]
     public async Task<ActionResult> AssignTicketToSprint(
-        [FromRoute] int projectId, 
-        [FromRoute] int sprintId, 
-        [FromRoute] int ticketId, 
+        [FromRoute] int projectId,
+        [FromRoute] int sprintId,
+        [FromRoute] int ticketId,
         [FromQuery] int newPosition,
         CancellationToken cancellationToken)
     {
@@ -175,7 +187,7 @@ public class ProjectController : ControllerBase
         var result = await _querySprintCommandHandler.GetDraftSprintAsync(projectId, cancellationToken);
         return Ok(result);
     }
-    
+
     [HttpPost]
     [Route("{id}/labels")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -188,17 +200,17 @@ public class ProjectController : ControllerBase
         {
             return CreatedAtAction(
                 null,
-                new ProjectLabelResponse { Id = result.Value, Text = command.Text});
+                new ProjectLabelResponse { Id = result.Value, Text = command.Text });
         }
-        
+
         if (ResultCodes.ResultCodeValidationFailed.Equals(result.Error))
         {
             return BadRequest(result);
         }
-        
+
         throw new DomainException("Unknown error.");
     }
-    
+
     [HttpGet]
     [Route("{id}/labels")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -212,12 +224,12 @@ public class ProjectController : ControllerBase
             {
                 Id = e.Id,
                 Text = e.Text
-            }).ToList();   
+            }).ToList();
         }
 
         throw new DomainException("Unexpected result.");
     }
-    
+
     [HttpGet]
     [Route("{id}/tickets")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -236,7 +248,7 @@ public class ProjectController : ControllerBase
             Total = pagedResult.Total
         };
     }
-    
+
     [HttpPost]
     [Route("{projectId}/team")]
     public async Task<ActionResult> AssignTeamMembers(
@@ -247,11 +259,11 @@ public class ProjectController : ControllerBase
         await _assignTeamMembersCommandHandler.HandleAsync(projectId, command);
         return NoContent();
     }
-    
+
     [HttpPatch]
     [Route("{projectId}")]
-    public async Task<Result<bool>> UpdateProject( 
-        [FromRoute] int projectId, 
+    public async Task<Result<bool>> UpdateProject(
+        [FromRoute] int projectId,
         [FromBody] UpdateProjectCommand updateProjectCommand)
     {
         return await _updateProjectCommandHandler.HandleAsync(projectId, updateProjectCommand);
