@@ -7,7 +7,7 @@ using TaskSync.Infrastructure.Entities;
 
 namespace TaskSync.Infrastructure.Repositories;
 
-public class SprintRepository: ISprintRepository
+public class SprintRepository : ISprintRepository
 {
     private readonly DatabaseContext _dbContext;
 
@@ -16,7 +16,7 @@ public class SprintRepository: ISprintRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Result<SprintModel>> CreateAsync(AddSprintCommand command,CancellationToken cancellationToken)
+    public async Task<Result<SprintModel>> CreateAsync(AddSprintCommand command, CancellationToken cancellationToken)
     {
         var entity = new SprintEntity
         {
@@ -24,7 +24,7 @@ public class SprintRepository: ISprintRepository
             StartDate = command.StartDate,
             EndDate = command.EndDate,
             IsActive = command.IsActive,
-            ProjectId =  command.ProjectId
+            ProjectId = command.ProjectId
         };
 
         await _dbContext.Sprints.AddAsync(entity, cancellationToken);
@@ -46,13 +46,22 @@ public class SprintRepository: ISprintRepository
         return Result<bool>.Ok(true);
     }
 
+    public async Task<Result<bool>> HasRunningSprintAsync(int projectId, DateTimeOffset startDate, CancellationToken cancellationToken)
+    {
+        var exists = await _dbContext.Sprints
+            .AnyAsync(s => s.ProjectId == projectId &&
+                           s.StartDate != null &&
+                           startDate <= s.EndDate, cancellationToken);
+        return Result<bool>.Ok(exists);
+    }
+
     public async Task<Result<SprintModel>> GetDraftSprintAsync(int projectId, CancellationToken cancellationToken)
     {
         var result = await _dbContext.Sprints
             .Where(s => s.ProjectId == projectId)
             .Where(s => !s.IsActive)
             .ToListAsync(cancellationToken);
-        
+
         if (result.Count == 0)
         {
             return Result<SprintModel>.Fail(ResultCodes.ResultCodeResourceNotFound);
