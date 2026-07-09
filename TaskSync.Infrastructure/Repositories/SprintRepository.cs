@@ -70,4 +70,30 @@ public class SprintRepository : ISprintRepository
         var sprint = result.FirstOrDefault();
         return Result<SprintModel>.Ok(sprint!.ToModel());
     }
+
+    public async Task<PagedResult<SprintModel>> GetSprintsAsync(int projectId, PaginationQuery paginationQuery, CancellationToken cancellationToken)
+    {
+        var query = _dbContext.Sprints
+            .Where(s => s.ProjectId == projectId)
+            .Where(s => s.StartDate != null);
+
+        var total = await query.CountAsync(cancellationToken);
+
+        var pageNumber = paginationQuery.PageNumber;
+        var pageSize = paginationQuery.PageSize;
+        var skip = (pageNumber - 1) * pageSize;
+
+        var sprints = await query
+            .Skip(skip)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return new PagedResult<SprintModel>
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            Total = total,
+            Items = sprints.Select(s => s.ToModel())
+        };
+    }
 }

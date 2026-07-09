@@ -12,6 +12,7 @@ using TaskSync.Domain.Project.QueryProject;
 using TaskSync.Domain.Project.ReorderBacklogTickets;
 using TaskSync.Domain.Project.UpdateProject;
 using TaskSync.Domain.Shared;
+using TaskSync.Domain.Sprint;
 using TaskSync.Domain.Sprint.AddSprint;
 using TaskSync.Domain.Sprint.AssignTicket;
 using TaskSync.Domain.Sprint.QuerySprint;
@@ -186,6 +187,30 @@ public class ProjectController : ControllerBase
     {
         var result = await _querySprintCommandHandler.GetDraftSprintAsync(projectId, cancellationToken);
         return Ok(result);
+    }
+
+    [HttpGet]
+    [Route("{projectId}/sprints")]
+    public async Task<ActionResult> GetProjectSprints(
+        [FromRoute] int projectId,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 50,
+        CancellationToken cancellationToken = default)
+    {
+        var paginationQuery = new PaginationQuery(pageNumber, pageSize);
+        var result = await _querySprintCommandHandler.GetProjectSprintsAsync(projectId, paginationQuery, cancellationToken);
+        if (result.Success && result.Value != null)
+        {
+            return Ok(new PagedResult<SprintResponse>
+            {
+                PageNumber = result.Value.PageNumber,
+                PageSize = result.Value.PageSize,
+                Items = result.Value.Items.Select(item => new SprintResponse(item)),
+                Total = result.Value.Total
+            });
+        }
+
+        return BadRequest(result);
     }
 
     [HttpPost]
