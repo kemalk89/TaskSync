@@ -59,7 +59,7 @@ public class SprintRepository : ISprintRepository
     {
         var result = await _dbContext.Sprints
             .Where(s => s.ProjectId == projectId)
-            .Where(s => !s.IsActive)
+            .Where(s => s.StartDate == null && s.EndDate == null)
             .ToListAsync(cancellationToken);
 
         if (result.Count == 0)

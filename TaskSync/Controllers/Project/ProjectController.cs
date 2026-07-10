@@ -12,7 +12,6 @@ using TaskSync.Domain.Project.QueryProject;
 using TaskSync.Domain.Project.ReorderBacklogTickets;
 using TaskSync.Domain.Project.UpdateProject;
 using TaskSync.Domain.Shared;
-using TaskSync.Domain.Sprint;
 using TaskSync.Domain.Sprint.AddSprint;
 using TaskSync.Domain.Sprint.AssignTicket;
 using TaskSync.Domain.Sprint.QuerySprint;
@@ -125,7 +124,7 @@ public class ProjectController : ControllerBase
     public async Task<List<TicketResponse>> GetBacklog([FromRoute] int projectId, CancellationToken cancellationToken)
     {
         var result = await _queryProjectCommandHandler.GetBacklogTicketsAsync(projectId, cancellationToken);
-        return result.Select(item => new TicketResponse(item)).ToList();
+        return [.. result.Select(item => new TicketResponse(item))];
     }
 
     [HttpPost]
