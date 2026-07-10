@@ -28,6 +28,8 @@ COPY --from=build /https/aspnetapp.pfx /https/aspnetapp.pfx
 COPY .env ./.env
 
 # expose https port
-EXPOSE 7190 
+EXPOSE 7190
 
+# use non-root user for security reasons
+USER app
 ENTRYPOINT ["dotnet", "TaskSync.dll"]

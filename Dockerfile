@@ -12,4 +12,7 @@ RUN dotnet publish -o out
 FROM mcr.microsoft.com/dotnet/aspnet:10.0.8-alpine3.23
 WORKDIR /App
 COPY --from=build /App/out .
+
+# use non-root user for security reasons
+USER app
 ENTRYPOINT ["dotnet", "TaskSync.dll"]
