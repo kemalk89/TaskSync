@@ -12,7 +12,7 @@ using TaskSync.Infrastructure;
 namespace TaskSync.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260525041846_InitialCreate")]
+    [Migration("20260710050218_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -62,7 +62,7 @@ namespace TaskSync.Infrastructure.Migrations
                             Id = 1,
                             CreatedBy = 1,
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the first project. This project has one member as well.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
+                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the first project.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Title = "My First Project"
                         });
                 });
@@ -107,6 +107,13 @@ namespace TaskSync.Infrastructure.Migrations
                             ProjectId = 1,
                             Role = "UI / UX",
                             UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ProjectId = 1,
+                            Role = "ProjectManager",
+                            UserId = 3
                         });
                 });
 
@@ -148,6 +155,19 @@ namespace TaskSync.Infrastructure.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Sprints");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedBy = 1,
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 9, 10, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            EndDate = new DateTimeOffset(new DateTime(2026, 3, 23, 10, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsActive = false,
+                            Name = "",
+                            ProjectId = 1,
+                            StartDate = new DateTimeOffset(new DateTime(2026, 3, 9, 10, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
+                        });
                 });
 
             modelBuilder.Entity("TaskSync.Infrastructure.Entities.TicketCommentEntity", b =>
@@ -284,6 +304,74 @@ namespace TaskSync.Infrastructure.Migrations
                             StatusId = 1,
                             Title = "Signup Form",
                             Type = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedBy = 3,
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Documentation\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
+                            Position = 0,
+                            ProjectId = 1,
+                            SprintId = 1,
+                            StatusId = 1,
+                            Title = "Setup Documentation",
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AssigneeId = 1,
+                            CreatedBy = 3,
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Repository\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
+                            Position = 0,
+                            ProjectId = 1,
+                            SprintId = 1,
+                            StatusId = 3,
+                            Title = "Setup Repository",
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AssigneeId = 1,
+                            CreatedBy = 3,
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup database\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
+                            Position = 0,
+                            ProjectId = 1,
+                            SprintId = 1,
+                            StatusId = 2,
+                            Title = "Setup Database",
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedBy = 3,
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Build Pipeline\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
+                            Position = 0,
+                            ProjectId = 1,
+                            SprintId = 1,
+                            StatusId = 1,
+                            Title = "Setup Build Pipeline",
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AssigneeId = 2,
+                            CreatedBy = 3,
+                            CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Design System\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
+                            Position = 0,
+                            ProjectId = 1,
+                            SprintId = 1,
+                            StatusId = 2,
+                            Title = "Setup Design System",
+                            Type = 1
                         });
                 });
 

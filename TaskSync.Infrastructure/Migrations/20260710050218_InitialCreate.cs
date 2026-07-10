@@ -229,7 +229,7 @@ namespace TaskSync.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Projects",
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "Description", "ModifiedDate", "Title", "Visibility" },
-                values: new object[] { 1, 1, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the first project. This project has one member as well.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, "My First Project", null });
+                values: new object[] { 1, 1, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the first project.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, "My First Project", null });
 
             migrationBuilder.InsertData(
                 table: "TicketStatus",
@@ -260,8 +260,14 @@ namespace TaskSync.Infrastructure.Migrations
                 values: new object[,]
                 {
                     { 1, 1, "Software Developer", 1 },
-                    { 2, 1, "UI / UX", 2 }
+                    { 2, 1, "UI / UX", 2 },
+                    { 3, 1, "ProjectManager", 3 }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Sprints",
+                columns: new[] { "Id", "CreatedBy", "CreatedDate", "EndDate", "IsActive", "ModifiedDate", "Name", "ProjectId", "StartDate" },
+                values: new object[] { 1, 1, new DateTimeOffset(new DateTime(2026, 3, 9, 10, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new DateTimeOffset(new DateTime(2026, 3, 23, 10, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), false, null, "", 1, new DateTimeOffset(new DateTime(2026, 3, 9, 10, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)) });
 
             migrationBuilder.InsertData(
                 table: "TicketLabels",
@@ -281,7 +287,12 @@ namespace TaskSync.Infrastructure.Migrations
                     { 1, null, 0, new DateTimeOffset(new DateTime(2026, 3, 9, 9, 17, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Wenn der Benutzer ein Profilbild hochgeladen hat, wird weiterhin das alte angezeigt.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Profilbild wird nach dem Upload nicht aktualisiert", 0 },
                     { 2, null, 0, new DateTimeOffset(new DateTime(2026, 2, 18, 10, 5, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Die Secrets laufen Ende Februar aus.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Secrets rotieren", 1 },
                     { 3, null, 0, new DateTimeOffset(new DateTime(2026, 3, 10, 14, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Teammitglieder in Kommentaren erwähnen", 2 },
-                    { 4, null, 0, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Required fields: username and password. API-KEY Protection des /signup endpoints.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Signup Form", 2 }
+                    { 4, null, 0, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Required fields: username and password. API-KEY Protection des /signup endpoints.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Signup Form", 2 },
+                    { 5, null, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Documentation\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, 1, "Setup Documentation", 1 },
+                    { 6, 1, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Repository\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, 3, "Setup Repository", 1 },
+                    { 7, 1, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup database\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, 2, "Setup Database", 1 },
+                    { 8, null, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Build Pipeline\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, 1, "Setup Build Pipeline", 1 },
+                    { 9, 2, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Design System\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, 2, "Setup Design System", 1 }
                 });
 
             migrationBuilder.CreateIndex(
