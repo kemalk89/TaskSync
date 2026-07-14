@@ -55,6 +55,23 @@ public class SprintRepository : ISprintRepository
         return Result<bool>.Ok(exists);
     }
 
+    public async Task<Result<SprintModel>> GetActiveSprintAsync(int projectId, CancellationToken cancellationToken)
+    {
+        var now = DateTimeOffset.UtcNow;
+        var sprint = await _dbContext.Sprints
+            .AsNoTracking()
+            .FirstOrDefaultAsync(s => s.ProjectId == projectId
+                                      && s.StartDate <= now
+                                      && s.EndDate >= now, cancellationToken);
+
+        if (sprint == null)
+        {
+            return Result<SprintModel>.Fail(ResultCodes.ResultCodeResourceNotFound);
+        }
+
+        return Result<SprintModel>.Ok(sprint.ToModel());
+    }
+
     public async Task<Result<SprintModel>> GetDraftSprintAsync(int projectId, CancellationToken cancellationToken)
     {
         var result = await _dbContext.Sprints

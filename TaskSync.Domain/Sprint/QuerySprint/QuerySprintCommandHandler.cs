@@ -52,4 +52,25 @@ public class QuerySprintCommandHandler : ICommandHandler
 
         return Result<PagedResult<SprintModel>>.Fail(ResultCodes.ResultCodeValidationFailed, validationResult);
     }
+
+    public async Task<Result<SprintModel>> GetActiveSprintAsync(int projectId, CancellationToken cancellationToken)
+    {
+        var sprintResult = await _sprintRepository.GetActiveSprintAsync(projectId, cancellationToken);
+        if (!sprintResult.Success)
+        {
+            return sprintResult;
+        }
+
+        var sprint = sprintResult.Value!;
+
+        var tickets = await _ticketRepository.GetAllAsync(new TicketSearchFilter
+        {
+            BoardId = sprint.Id,
+            OrderBy = TicketModel.OrderByPosition,
+        }, cancellationToken);
+
+        sprint.Tickets = tickets;
+
+        return sprintResult;
+    }
 }

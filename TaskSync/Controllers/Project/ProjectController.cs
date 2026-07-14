@@ -177,6 +177,23 @@ public class ProjectController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet]
+    [Route("{projectId}/sprint/active")]
+    public async Task<ActionResult> GetActiveSprint([FromRoute] int projectId, CancellationToken cancellationToken)
+    {
+        var result = await _querySprintCommandHandler.GetActiveSprintAsync(projectId, cancellationToken);
+        if (!result.Success)
+        {
+            if (result.Error == ResultCodes.ResultCodeResourceNotFound)
+            {
+                return NotFound(result);
+            }
+            return BadRequest(result);
+        }
+
+        return Ok(new SprintResponse(result.Value!));
+    }
+
     /**
      * Returns the sprint which is in draft mode (this means, the sprint is not active yet) including the tickets.
      */

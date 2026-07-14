@@ -8,6 +8,7 @@ public interface ISprintRepository
     Task<Result<SprintModel>> CreateAsync(AddSprintCommand command, CancellationToken cancellationToken);
     Task<Result<bool>> AssignTicketAsync(int sprintId, int ticketId, CancellationToken cancellationToken);
     Task<Result<SprintModel>> GetDraftSprintAsync(int projectId, CancellationToken cancellationToken);
+    Task<Result<SprintModel>> GetActiveSprintAsync(int projectId, CancellationToken cancellationToken);
     Task<Result<bool>> HasRunningSprintAsync(int projectId, DateTimeOffset startDate, CancellationToken cancellationToken);
     Task<PagedResult<SprintModel>> GetSprintsAsync(int projectId, PaginationQuery paginationQuery, CancellationToken cancellationToken);
 }

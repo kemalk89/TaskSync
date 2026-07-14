@@ -9,6 +9,7 @@ public class SprintResponse
     public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? EndDate { get; set; }
     public bool IsActive { get; set; }
+    public List<TicketResponse>? Tickets { get; set; }
 
     // Parameterless constructor for integration tests (deserialization)
     public SprintResponse() { }
@@ -20,5 +21,6 @@ public class SprintResponse
         StartDate = sprint.StartDate;
         EndDate = sprint.EndDate;
         IsActive = sprint.IsActive;
+        Tickets = sprint.Tickets?.Select(t => new TicketResponse(t)).ToList();
     }
 }
