@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using TaskSync.Infrastructure.Repositories;
+using TaskSync.Tests.IntegrationTests.User;
 
 namespace TaskSync.Tests.IntegrationTests;
 
@@ -104,47 +105,3 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
         return errorList;
     }
 }
-
-
-// Mock implementation for testing
-public class MockExternalUserRepository : IExternalUserRepository
-{
-    public Task<Domain.User.User[]> SearchUsersAsync(string searchText)
-    {
-        return Task.FromResult(Array.Empty<Domain.User.User>());
-    }
-
-    public Task<Domain.User.User[]> FindUsersAsync(string[] userIds)
-    {
-        return Task.FromResult(Array.Empty<Domain.User.User>());
-    }
-
-    public Task<Domain.User.User?> FindUserByIdAsync(string userId)
-    {
-        return Task.FromResult<Domain.User.User?>(null);
-    }
-
-    public Task<Domain.User.User[]> FindUsersAsync(int pageNumber, int pageSize)
-    {
-        return Task.FromResult(Array.Empty<Domain.User.User>());
-    }
-
-    public Task<Domain.User.User?> FindUserByIdFromExternalSourceAsync(string externalUserId)
-    {
-        if (externalUserId == "non_existent_external_id")
-        {
-            return Task.FromResult<Domain.User.User?>(null);
-        }
-
-        var user = new Domain.User.User
-        {
-            Id = 1,
-            Email = "test@example.com",
-            Username = "testuser",
-            Picture = "https://example.com/picture.jpg",
-            ExternalUserId = externalUserId
-        };
-        return Task.FromResult<Domain.User.User?>(user);
-    }
-}
-

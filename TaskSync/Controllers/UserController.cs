@@ -56,24 +56,20 @@ public class UserController : ControllerBase
             await _userRepository.SaveNewUserAsync(externalUser);
             return StatusCode(201);
         }
-        
+
         _logger.LogDebug("Updating data of external user with ID: {id}", request.ExternalUserId);
 
-        if (string.IsNullOrWhiteSpace(user.Picture))
-        {
-            user.Picture = externalUser.Picture;
-        }
         if (string.IsNullOrWhiteSpace(user.Username))
         {
             user.Username = externalUser.Username;
         }
-        
+
         user.ExternalUserId = request.ExternalUserId;
         await _userRepository.UpdateUserAsync(user);
 
         return Ok();
     }
-    
+
     [HttpPost]
     public async Task<IEnumerable<UserResponse>> SearchUsersAsync([FromBody] SearchUserRequest req)
     {
@@ -105,10 +101,10 @@ public class UserController : ControllerBase
         {
             return BadRequest(result);
         }
-        
+
         return Ok(result.Value);
     }
-    
+
     [HttpGet]
     [Route("current-user")]
     public async Task<ActionResult<User>> GetCurrentUser()
