@@ -29,6 +29,20 @@ public class SprintRepository : ISprintRepository
         await _dbContext.Sprints.AddAsync(entity, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
+        if (command.TicketIds.Count > 0)
+        {
+            var tickets = await _dbContext.Tickets
+                .Where(t => command.TicketIds.Contains(t.Id) && t.ProjectId == command.ProjectId)
+                .ToListAsync(cancellationToken);
+
+            foreach (var ticket in tickets)
+            {
+                ticket.SprintId = entity.Id;
+            }
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
         return Result<SprintModel>.Ok(entity.ToModel());
     }
 

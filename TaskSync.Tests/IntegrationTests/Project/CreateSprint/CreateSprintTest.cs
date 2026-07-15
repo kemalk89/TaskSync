@@ -3,11 +3,12 @@ using System.Net.Http.Json;
 using System.Text.Json;
 
 using TaskSync.Controllers.Project;
+using TaskSync.Controllers.Request;
 
 using TaskSync.Controllers.Response;
 using TaskSync.Domain.Project.CreateProject;
-
 using TaskSync.Domain.Sprint.AddSprint;
+using TaskSync.Domain.Ticket.CreateTicket;
 
 namespace TaskSync.Tests.IntegrationTests.Project.CreateProject;
 
@@ -132,6 +133,46 @@ public class CreateSprintTest : BaseIntegrationTest
         Assert.True(idResponse?.Id > 0);
     }
 
+    [Fact]
+    public async Task CreateSprint_ShouldAssignTicketsToSprint_WhenTicketIdsProvided()
+    {
+        SetAuthenticatedUser();
+
+        var projectId = await CreateNewProjectAsync();
+        var otherProjectId = await CreateNewProjectAsync();
+
+        // create two tickets for the project
+        var ticket1 = await CreateTicketAsync(projectId!.Value, "Ticket 1");
+        var ticket2 = await CreateTicketAsync(projectId.Value, "Ticket 2");
+        var ticket3 = await CreateTicketAsync(otherProjectId!.Value, "Ticket 3");
+
+        // create sprint with tickets
+        var cmd = new AddSprintCommand
+        {
+            EndDate = DateTime.Today.AddDays(3 * 7).ToUniversalTime(),
+            TicketIds = [ticket1.TicketId, ticket2.TicketId, ticket3.TicketId]
+        };
+
+        var responseCreate = await _client.PostAsJsonAsync($"/api/project/{projectId}/sprint", cmd);
+
+        Assert.Equal(HttpStatusCode.Created, responseCreate.StatusCode);
+
+        var idResponse = await responseCreate.Content.ReadFromJsonAsync<IdResponse>();
+        Assert.True(idResponse?.Id > 0);
+
+        // fetch active sprint and assert both tickets are assigned
+        var activeSprintResponse = await _client.GetFromJsonAsync<SprintResponse>($"/api/project/{projectId}/sprint/active");
+        Assert.NotNull(activeSprintResponse);
+        Assert.NotNull(activeSprintResponse.Tickets);
+        Assert.Equal(2, activeSprintResponse.Tickets.Count);
+
+        var ticketIds = activeSprintResponse.Tickets.Select(t => t.Id).ToList();
+        Assert.Contains(ticket1.TicketId, ticketIds);
+        Assert.Contains(ticket2.TicketId, ticketIds);
+        Assert.DoesNotContain(ticket3.TicketId, ticketIds);
+
+    }
+
     private async Task<int?> CreateNewProjectAsync()
     {
         var newProjectCmd = new CreateProjectCommand
@@ -148,5 +189,22 @@ public class CreateSprintTest : BaseIntegrationTest
         Assert.NotNull(projectId);
 
         return projectId;
+    }
+
+    private async Task<CreateTicketResponse> CreateTicketAsync(int projectId, string title)
+    {
+        var cmd = new CreateTicketCommand
+        {
+            Title = title,
+            ProjectId = projectId
+        };
+        var response = await _client.PostAsJsonAsync("/api/ticket", cmd);
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+        var ticket = await response.Content.ReadFromJsonAsync<CreateTicketResponse>();
+        Assert.NotNull(ticket);
+
+        return ticket;
     }
 }

@@ -6,4 +6,5 @@ public class AddSprintCommand
     public string Name { get; set; } = string.Empty;
     public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? EndDate { get; set; }
+    public List<int> TicketIds { get; set; } = [];
 }

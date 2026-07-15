@@ -10,6 +10,7 @@ public class TicketModel
     public string? Description { get; set; }
 
     public int ProjectId { get; set; }
+    public int? SprintId { get; set; }
     public User.User? Assignee { get; set; }
 
     public List<TicketLabelModel> Labels { get; set; } = [];

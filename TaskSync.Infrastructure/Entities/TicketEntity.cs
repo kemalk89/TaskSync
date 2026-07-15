@@ -34,6 +34,7 @@ public class TicketEntity : AuditedEntity
             Title = Title,
             Description = Description,
             ProjectId = ProjectId,
+            SprintId = SprintId,
             Assignee = assignee,
             CreatedBy = createdBy,
             CreatedDate = CreatedDate,
