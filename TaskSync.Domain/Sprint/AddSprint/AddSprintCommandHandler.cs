@@ -18,6 +18,8 @@ public class AddSprintCommandHandler : ICommandHandler
 
     public async Task<Result<SprintModel>> HandleAsync(AddSprintCommand cmd, CancellationToken cancellationToken)
     {
+        cmd.StartDate ??= DateTimeOffset.UtcNow;
+
         var validationResult = await _validator.ValidateAsync(cmd);
         if (!validationResult.IsValid)
         {

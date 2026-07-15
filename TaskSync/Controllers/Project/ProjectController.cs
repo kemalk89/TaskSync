@@ -194,9 +194,6 @@ public class ProjectController : ControllerBase
         return Ok(new SprintResponse(result.Value!));
     }
 
-    /**
-     * Returns the sprint which is in draft mode (this means, the sprint is not active yet) including the tickets.
-     */
     [HttpGet]
     [Route("{projectId}/sprint/draft")]
     public async Task<ActionResult> GetDraftSprint([FromRoute] int projectId, CancellationToken cancellationToken)

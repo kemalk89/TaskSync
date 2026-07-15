@@ -23,7 +23,6 @@ public class SprintRepository : ISprintRepository
             Name = command.Name,
             StartDate = command.StartDate,
             EndDate = command.EndDate,
-            IsActive = command.IsActive,
             ProjectId = command.ProjectId
         };
 

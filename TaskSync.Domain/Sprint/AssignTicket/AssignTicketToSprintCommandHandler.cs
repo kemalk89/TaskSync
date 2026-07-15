@@ -23,7 +23,7 @@ public class AssignTicketToSprintCommandHandler : ICommandHandler
         {
             return Result<bool>.Fail(ResultCodes.ResultCodeResourceNotFound, "Project not found");
         }
-        
+
         // If sprintId == 0, we are going to assign ticket to draft sprint
         if (sprintId == 0)
         {
@@ -35,18 +35,20 @@ public class AssignTicketToSprintCommandHandler : ICommandHandler
                 draftSprint = await _sprintRepository.CreateAsync(new AddSprintCommand
                 {
                     ProjectId = projectId,
-                    IsActive = false
+                    // draft sprint should have start and end date NULL
+                    StartDate = null,
+                    EndDate = null
                 }, cancellationToken);
-                
+
                 if (!draftSprint.Success)
                 {
                     return Result<bool>.Fail(ResultCodes.ResultCodeResourceNotFound, "No sprint in draft mode found");
                 }
             }
-            
+
             sprintId = draftSprint.Value!.Id;
         }
-        
+
         var result = await _sprintRepository.AssignTicketAsync(sprintId, ticketId, cancellationToken);
         return result;
     }
