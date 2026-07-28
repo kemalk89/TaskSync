@@ -4,4 +4,5 @@ public class ReorderTicketCommand
 {
     public int TicketId { get; set; }
     public int Position { get; set; }
+    public int? StatusId { get; set; }
 }

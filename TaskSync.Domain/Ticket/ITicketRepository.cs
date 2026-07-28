@@ -29,7 +29,7 @@ public interface ITicketRepository
     /// </summary>
     /// <param name="projectId"></param>
     /// <param name="boardId">boardId can be null which represents the backlog board</param>
-    /// <param name="ticketOrders"></param>
+    /// <param name="ticketOrders">Position and statusId (optional) of tickets</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<Result<int>> ReorderBoardTickets(

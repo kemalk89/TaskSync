@@ -163,6 +163,8 @@ public class TicketRepository : ITicketRepository
     {
         IQueryable<TicketEntity> query = UpdateQueryByFilter(_dbContext.Tickets.AsQueryable(), filter);
 
+        query = query.Include(t => t.Status);
+
         if (filter.OrderBy is not null && filter.OrderBy.Equals(TicketModel.OrderByPosition))
         {
             query = query.OrderBy(t => t.Position);
@@ -414,6 +416,11 @@ public class TicketRepository : ITicketRepository
             {
                 foundTicket.Position = ticketOrder.Position;
                 foundTicket.SprintId = boardId;
+
+                if (ticketOrder.StatusId.HasValue)
+                {
+                    foundTicket.StatusId = ticketOrder.StatusId.Value;
+                }
             }
         }
 

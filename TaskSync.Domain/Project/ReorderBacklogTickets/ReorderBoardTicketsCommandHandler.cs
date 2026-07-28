@@ -29,13 +29,25 @@ public class ReorderBoardTicketsCommandHandler : ICommandHandler
         var ticketIds = ticketOrder.Select(i => i.TicketId);
         var filter = new TicketSearchFilter
         {
-            ProjectIds = [projectId], TicketIds = ticketIds.ToList()
+            ProjectIds = [projectId], TicketIds = [.. ticketIds]
         };
-        
+
         var foundTickets = await _ticketRepository.GetAllAsync(filter, cancellationToken);
         if (foundTickets.Count != ticketOrder.Count)
         {
             return Result<int>.Fail("One or more tickets were not found.");
+        }
+
+        // Validation 3
+        var statusList = await _ticketRepository.GetTicketStatusListAsync(cancellationToken);
+        var validStatusIds = new HashSet<int>(statusList.Select(s => s.Id));
+        foreach (var cmd in ticketOrder.Where(c => c.StatusId.HasValue))
+        {
+            var statusId = cmd.StatusId!.Value;
+            if (!validStatusIds.Contains(statusId))
+            {
+                return Result<int>.Fail($"TicketStatus with id {statusId} not found.");
+            }
         }
         
         // Update
