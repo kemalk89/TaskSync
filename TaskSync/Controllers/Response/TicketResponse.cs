@@ -12,6 +12,7 @@ public class TicketResponse
     public int Position { get; set; }
     public string Title { get; set; } = string.Empty;
     public string? Description { get; set; }
+    public int? ParentId { get; set; }
     public User? Assignee { get; set; }
     public User? CreatedBy { get; set; }
     public DateTimeOffset CreatedDate { get; set; } 
@@ -33,6 +34,7 @@ public class TicketResponse
         Position = ticket.Position;
         Title = ticket.Title;
         Description = ticket.Description;
+        ParentId = ticket.ParentId;
         Assignee = ticket.Assignee;
         CreatedBy = ticket.CreatedBy;
         CreatedDate = ticket.CreatedDate;

@@ -54,7 +54,8 @@ public class TicketRepository : ITicketRepository
             Project = project,
             AssigneeId = cmd.Assignee,
             Type = ticketType,
-            StatusId = cmd.StatusId
+            StatusId = cmd.StatusId,
+            ParentId = cmd.ParentId
         };
 
         await _dbContext.Tickets.AddAsync(ticket);

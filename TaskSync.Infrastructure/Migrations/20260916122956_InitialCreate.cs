@@ -152,6 +152,7 @@ namespace TaskSync.Infrastructure.Migrations
                     ProjectId = table.Column<int>(type: "integer", nullable: false),
                     StatusId = table.Column<int>(type: "integer", nullable: true),
                     SprintId = table.Column<int>(type: "integer", nullable: true),
+                    ParentId = table.Column<int>(type: "integer", nullable: true),
                     AssigneeId = table.Column<int>(type: "integer", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -175,6 +176,11 @@ namespace TaskSync.Infrastructure.Migrations
                         name: "FK_Tickets_TicketStatus_StatusId",
                         column: x => x.StatusId,
                         principalTable: "TicketStatus",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Tickets_Tickets_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Tickets",
                         principalColumn: "Id");
                 });
 
@@ -281,18 +287,18 @@ namespace TaskSync.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Tickets",
-                columns: new[] { "Id", "AssigneeId", "CreatedBy", "CreatedDate", "Description", "ModifiedDate", "Position", "ProjectId", "SprintId", "StatusId", "Title", "Type" },
+                columns: new[] { "Id", "AssigneeId", "CreatedBy", "CreatedDate", "Description", "ModifiedDate", "ParentId", "Position", "ProjectId", "SprintId", "StatusId", "Title", "Type" },
                 values: new object[,]
                 {
-                    { 1, null, 0, new DateTimeOffset(new DateTime(2026, 3, 9, 9, 17, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Wenn der Benutzer ein Profilbild hochgeladen hat, wird weiterhin das alte angezeigt.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Profilbild wird nach dem Upload nicht aktualisiert", 0 },
-                    { 2, null, 0, new DateTimeOffset(new DateTime(2026, 2, 18, 10, 5, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Die Secrets laufen Ende Februar aus.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Secrets rotieren", 1 },
-                    { 3, null, 0, new DateTimeOffset(new DateTime(2026, 3, 10, 14, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Teammitglieder in Kommentaren erwähnen", 2 },
-                    { 4, null, 0, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Required fields: username and password. API-KEY Protection des /signup endpoints.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, null, 1, "Signup Form", 2 },
-                    { 5, null, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Documentation\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, 1, "Setup Documentation", 1 },
-                    { 6, 1, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Repository\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, 3, "Setup Repository", 1 },
-                    { 7, 1, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup database\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, 2, "Setup Database", 1 },
-                    { 8, null, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Build Pipeline\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, 1, "Setup Build Pipeline", 1 },
-                    { 9, 2, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Design System\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, 0, 1, 1, 2, "Setup Design System", 1 }
+                    { 1, null, 0, new DateTimeOffset(new DateTime(2026, 3, 9, 9, 17, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Wenn der Benutzer ein Profilbild hochgeladen hat, wird weiterhin das alte angezeigt.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, null, 0, 1, null, 1, "Profilbild wird nach dem Upload nicht aktualisiert", 0 },
+                    { 2, null, 0, new DateTimeOffset(new DateTime(2026, 2, 18, 10, 5, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Die Secrets laufen Ende Februar aus.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, null, 0, 1, null, 1, "Secrets rotieren", 1 },
+                    { 3, null, 0, new DateTimeOffset(new DateTime(2026, 3, 10, 14, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, null, 0, 1, null, 1, "Teammitglieder in Kommentaren erwähnen", 2 },
+                    { 4, null, 0, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Required fields: username and password. API-KEY Protection des /signup endpoints.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, null, 0, 1, null, 1, "Signup Form", 2 },
+                    { 5, null, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Documentation\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, null, 0, 1, 1, 1, "Setup Documentation", 1 },
+                    { 6, 1, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Repository\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, null, 0, 1, 1, 3, "Setup Repository", 1 },
+                    { 7, 1, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup database\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, null, 0, 1, 1, 2, "Setup Database", 1 },
+                    { 8, null, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Build Pipeline\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, null, 0, 1, 1, 1, "Setup Build Pipeline", 1 },
+                    { 9, 2, 3, new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Design System\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}", null, null, 0, 1, 1, 2, "Setup Design System", 1 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -324,6 +330,11 @@ namespace TaskSync.Infrastructure.Migrations
                 name: "IX_TicketLabels_ProjectId",
                 table: "TicketLabels",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_ParentId",
+                table: "Tickets",
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_ProjectId",

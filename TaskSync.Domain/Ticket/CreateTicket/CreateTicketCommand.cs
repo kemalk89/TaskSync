@@ -1,5 +1,4 @@
 using TaskSync.Domain.Ticket.AssignTicketLabel;
-using TaskSync.Domain.Ticket.Command;
 
 namespace TaskSync.Domain.Ticket.CreateTicket;
 
@@ -12,6 +11,8 @@ public class CreateTicketCommand
     public string? Description { get; set; }
 
     public int? Assignee { get; set; }
+    
+    public int? ParentId { get; set; }
     
     public string? Type { get; set; }
     

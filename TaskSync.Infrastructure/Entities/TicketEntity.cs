@@ -16,12 +16,15 @@ public class TicketEntity : AuditedEntity
     public int? StatusId { get; set; }
     
     public int? SprintId { get; set; }
+    public int? ParentId { get; set; }
 
     public TicketStatusEntity? Status { get; set; }
 
     public ProjectEntity? Project { get; set; }
 
     public int? AssigneeId { get; set; }
+    public TicketEntity? Parent { get; set; }
+    public ICollection<TicketEntity> SubTasks { get; set; } = [];
 
     public ICollection<TicketLabelEntity> Labels { get; set; } = [];
     
@@ -35,6 +38,7 @@ public class TicketEntity : AuditedEntity
             Description = Description,
             ProjectId = ProjectId,
             SprintId = SprintId,
+            ParentId = ParentId,
             Assignee = assignee,
             CreatedBy = createdBy,
             CreatedDate = CreatedDate,

@@ -132,6 +132,34 @@ public class TicketController : ControllerBase
         };
     }
 
+    [HttpPost]
+    [Route("{parentId}/subtask")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<CreateTicketResponse>> CreateSubtask(
+        [FromRoute] int parentId,
+        [FromBody] CreateTicketCommand command)
+    {
+        command.ParentId = parentId;
+        var result = await _createTicketCommandHandler.HandleAsync(command);
+        if (result.Success)
+        {
+            return CreatedAtAction(
+                nameof(GetTicketById),
+                new { id = result.Value },
+                new CreateTicketResponse { TicketId = result.Value});
+        }
+
+        return result.Error switch
+        {
+            ResultCodes.ResultCodeResourceNotFound => NotFound(new ErrorResponse(result.Error, result.ErrorDetails)),
+            ResultCodes.ResultCodeValidationFailed => BadRequest(new ErrorResponse(result.Error, result.ErrorDetails)),
+            _ => throw new InvalidOperationException($"Unexpected result code: {result.Error}.")
+        };
+    }
+
     [HttpPatch]
     [Route("{id}")]
     public async Task<ActionResult<Result<bool>>> UpdateTicket([FromRoute] int id, [FromBody] UpdateTicketCommand updateTicketCommand)

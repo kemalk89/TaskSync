@@ -12,7 +12,7 @@ using TaskSync.Infrastructure;
 namespace TaskSync.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260710050218_InitialCreate")]
+    [Migration("20260916122956_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -227,6 +227,9 @@ namespace TaskSync.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Position")
                         .HasColumnType("integer");
 
@@ -247,6 +250,8 @@ namespace TaskSync.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("ProjectId");
 
@@ -604,6 +609,10 @@ namespace TaskSync.Infrastructure.Migrations
 
             modelBuilder.Entity("TaskSync.Infrastructure.Entities.TicketEntity", b =>
                 {
+                    b.HasOne("TaskSync.Infrastructure.Entities.TicketEntity", "Parent")
+                        .WithMany("SubTasks")
+                        .HasForeignKey("ParentId");
+
                     b.HasOne("TaskSync.Infrastructure.Entities.ProjectEntity", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
@@ -617,6 +626,8 @@ namespace TaskSync.Infrastructure.Migrations
                     b.HasOne("TaskSync.Infrastructure.Entities.TicketStatusEntity", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
+
+                    b.Navigation("Parent");
 
                     b.Navigation("Project");
 
@@ -650,6 +661,11 @@ namespace TaskSync.Infrastructure.Migrations
             modelBuilder.Entity("TaskSync.Infrastructure.Entities.ProjectEntity", b =>
                 {
                     b.Navigation("ProjectMembers");
+                });
+
+            modelBuilder.Entity("TaskSync.Infrastructure.Entities.TicketEntity", b =>
+                {
+                    b.Navigation("SubTasks");
                 });
 #pragma warning restore 612, 618
         }
