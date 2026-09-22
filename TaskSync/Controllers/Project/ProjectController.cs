@@ -301,9 +301,10 @@ public class ProjectController : ControllerBase
         {
             return Ok(result.Value!.Select(m => new ProjectMemberResponse(m)).ToList());
         }
-        
+
         return result.Error switch
         {
+            ResultCodes.ResultCodeResourceNotFound => NotFound(new ErrorResponse(result.Error, result.ErrorDetails)),
             ResultCodes.ResultCodeValidationFailed => BadRequest(new ErrorResponse(result.Error, result.ErrorDetails)),
             _ => throw new InvalidOperationException($"Unexpected result code: {result.Error}.")
         };
