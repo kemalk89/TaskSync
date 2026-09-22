@@ -87,6 +87,23 @@ public class TicketController : ControllerBase
         return Ok(new TicketResponse(ticket));
     }
     
+    [HttpGet]
+    [Route("{id}/subtask")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<TicketResponse>>> GetSubtasks(
+        [FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var ticket = await _queryTicketCommandHandler.GetTicketByIdAsync(id);
+        if (ticket == null)
+        {
+            return NotFound("Ticket not found");
+        }
+
+        var subtasks = await _queryTicketCommandHandler.GetSubtasksAsync(id, cancellationToken);
+        return Ok(subtasks.Select(subtask => new TicketResponse(subtask)).ToList());
+    }
+
     [HttpPost("{ticketId}/labels")]
     public async Task<ActionResult<bool>> AssignTicketLabel(int ticketId, [FromBody] AssignTicketLabelCommand cmd)
     {

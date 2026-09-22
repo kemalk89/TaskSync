@@ -11,6 +11,7 @@ public interface ITicketRepository
 {
     Task<int?> CreateAsync(CreateTicketCommand cmd);
     Task<TicketModel?> GetByIdAsync(int id);
+    Task<List<TicketModel>> GetSubtasksAsync(int parentId, CancellationToken cancellationToken);
     Task<PagedResult<TicketModel>> GetByProjectIdAsync(int projectId, int pageNumber, int pageSize);
     Task<PagedResult<TicketModel>> GetAllAsync(
         int pageNumber, int pageSize, TicketSearchFilter filter, CancellationToken cancellationToken);

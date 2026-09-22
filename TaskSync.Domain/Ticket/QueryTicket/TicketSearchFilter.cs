@@ -9,6 +9,7 @@ public class TicketSearchFilter
     public List<int> ProjectIds { get; set; } = [];
     public List<int> AssigneeIds { get; set; } = [];
     public List<int> TicketIds { get; set; } = [];
+    public int? ParentId { get; set; }
     public int BoardId { get; set; }
     public bool OnlyBacklogTickets { get; set; }
     public string? OrderBy { get; set; }

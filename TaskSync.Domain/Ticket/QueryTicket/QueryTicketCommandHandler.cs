@@ -28,6 +28,11 @@ public class QueryTicketCommandHandler : ICommandHandler
         return ticket;
     }
 
+    public async Task<List<TicketModel>> GetSubtasksAsync(int ticketId, CancellationToken cancellationToken)
+    {
+        return await _ticketRepository.GetSubtasksAsync(ticketId, cancellationToken);
+    }
+
     public async Task<PagedResult<TicketModel>> GetTicketsAsync(
         int pageNumber, int pageSize, TicketSearchFilter filter, CancellationToken cancellationToken)
     {

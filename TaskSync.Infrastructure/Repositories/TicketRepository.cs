@@ -266,6 +266,19 @@ public class TicketRepository : ITicketRepository
     }
 
 
+    public async Task<List<TicketModel>> GetSubtasksAsync(int parentId, CancellationToken cancellationToken)
+    {
+        var filter = new TicketSearchFilter { ParentId = parentId };
+
+        // Paging is not needed for subtasks: load all of them in one request.
+        var result = await GetByFilterAsync(
+            pageNumber: 1,
+            pageSize: int.MaxValue,
+            filter: filter);
+
+        return result.Items.ToList();
+    }
+
     private IQueryable<TicketEntity> UpdateQueryByFilter(IQueryable<TicketEntity> query, TicketSearchFilter filter)
     {
         IQueryable<TicketEntity> updatedQuery = query;
@@ -282,6 +295,11 @@ public class TicketRepository : ITicketRepository
         if (filter.TicketIds.Count > 0)
         {
             updatedQuery = updatedQuery.Where(t => filter.TicketIds.Contains(t.Id));
+        }
+
+        if (filter.ParentId.HasValue)
+        {
+            updatedQuery = updatedQuery.Where(t => t.ParentId == filter.ParentId.Value);
         }
 
         if (filter.ProjectIds.Count > 0)
