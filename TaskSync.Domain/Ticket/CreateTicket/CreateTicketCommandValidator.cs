@@ -22,6 +22,16 @@ public class CreateTicketCommandValidator : AbstractValidator<CreateTicketComman
             .WithMessage("Parent ticket with id {PropertyValue} not exists")
             .When(x => x.ParentId.HasValue);
         
+        RuleFor(x => x.ParentId)
+            .MustAsync(async (parentId, cancellation) =>
+            {
+                var parentTicket = await ticketRepository.GetByIdAsync(parentId!.Value);
+                // If the parent ticket does not exist, the rule above already reports this.
+                return parentTicket == null || parentTicket.ParentId == null;
+            })
+            .WithMessage("Parent ticket with id {PropertyValue} is a subtask itself. A subtask cannot have a subtask.")
+            .When(x => x.ParentId.HasValue);
+        
         RuleForEach(x => x.Labels)
             .Must(label =>
                 !string.IsNullOrWhiteSpace(label.Title) || label.LabelId.HasValue)

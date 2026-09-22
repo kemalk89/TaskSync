@@ -112,6 +112,56 @@ public class CreateSubtaskTest : BaseIntegrationTest, IClassFixture<CreateProjec
     }
 
     [Fact]
+    public async Task CreateSubtask_ShouldReturn400_WhenParentTicketIsSubtask()
+    {
+        SetAuthenticatedUser();
+
+        // first, create a project
+        var createdProject = await _createProjectFixture.InitIfNotExistsAsync(
+            _client, new CreateProjectCommand { Title = "Test Project Title" });
+
+        // next, create a parent ticket
+        var responseCreateParent = await _client.PostAsJsonAsync("/api/ticket",
+            new CreateTicketCommand
+            {
+                Title = "Parent Ticket",
+                ProjectId = createdProject.Id
+            });
+        Assert.Equal(HttpStatusCode.Created, responseCreateParent.StatusCode);
+        var createdParent = await responseCreateParent.Content.ReadFromJsonAsync<CreateTicketResponse>();
+        Assert.NotNull(createdParent);
+
+        // next, create a subtask for the parent ticket
+        var responseCreateSubtask = await _client.PostAsJsonAsync(
+            $"/api/ticket/{createdParent.TicketId}/subtask",
+            new CreateTicketCommand
+            {
+                Title = "Child Subtask",
+                ProjectId = createdProject.Id
+            });
+        Assert.Equal(HttpStatusCode.Created, responseCreateSubtask.StatusCode);
+        var createdSubtask = await responseCreateSubtask.Content.ReadFromJsonAsync<CreateTicketResponse>();
+        Assert.NotNull(createdSubtask);
+
+        // now, try to create a subtask for the subtask, which must be rejected
+        var responseCreateSubSubtask = await _client.PostAsJsonAsync(
+            $"/api/ticket/{createdSubtask.TicketId}/subtask",
+            new CreateTicketCommand
+            {
+                Title = "Subtask of a subtask",
+                ProjectId = createdProject.Id
+            });
+
+        Assert.Equal(HttpStatusCode.BadRequest, responseCreateSubSubtask.StatusCode);
+
+        var errors = await responseCreateSubSubtask.Content.ReadFromJsonAsync<ErrorResponse>();
+        Assert.Equal(ResultCodes.ResultCodeValidationFailed, errors?.ErrorCode);
+        Assert.Contains(
+            $"Parent ticket with id {createdSubtask.TicketId} is a subtask itself. A subtask cannot have a subtask.",
+            errors?.ErrorDetails ?? []);
+    }
+
+    [Fact]
     public async Task CreateSubtask_ShouldReturn201_WhenValidRequest()
     {
         SetAuthenticatedUser();
