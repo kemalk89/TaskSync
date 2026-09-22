@@ -51,6 +51,18 @@ public class QueryProjectCommandHandler : ICommandHandler
         var result = await _projectRepository.GetLabelsAsync(projectId);
         return Result<List<ProjectLabelModel>>.Ok(result);
     }
+
+    public async Task<Result<List<ProjectMemberModel>>> GetProjectMembersAsync(int projectId, CancellationToken cancellationToken)
+    {
+        var project = await _projectRepository.GetByIdAsync(projectId);
+        if (project == null)
+        {
+            return Result<List<ProjectMemberModel>>.Fail(ResultCodes.ResultCodeResourceNotFound, $"Project not found. ID {projectId}");
+        }
+
+        var members = project.ProjectMembers.ToList();
+        return Result<List<ProjectMemberModel>>.Ok(members);
+    }
     
     public async Task<List<TicketModel>> GetBacklogTicketsAsync(int projectId, CancellationToken cancellationToken)
     {

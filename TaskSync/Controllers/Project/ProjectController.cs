@@ -287,6 +287,28 @@ public class ProjectController : ControllerBase
         };
     }
 
+    [HttpGet]
+    [Route("{projectId}/team")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<ProjectMemberResponse>>> GetTeamMembers(
+        [FromRoute] int projectId,
+        CancellationToken cancellationToken)
+    {
+        var result = await _queryProjectCommandHandler.GetProjectMembersAsync(projectId, cancellationToken);
+
+        if (result.Success)
+        {
+            return Ok(result.Value!.Select(m => new ProjectMemberResponse(m)).ToList());
+        }
+        
+        return result.Error switch
+        {
+            ResultCodes.ResultCodeValidationFailed => BadRequest(new ErrorResponse(result.Error, result.ErrorDetails)),
+            _ => throw new InvalidOperationException($"Unexpected result code: {result.Error}.")
+        };
+    }
+
     [HttpPost]
     [Route("{projectId}/team")]
     public async Task<ActionResult> AssignTeamMembers(
