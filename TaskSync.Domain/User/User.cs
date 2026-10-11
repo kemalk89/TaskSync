@@ -13,4 +13,5 @@ public class User
     /// The selected language of the user. Example values: "de" or "en"
     /// </summary>
     public string? SelectedLanguage { get; set; }
+    public string? PasswordHash { get; set; }
 }

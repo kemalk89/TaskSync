@@ -1,3 +1,5 @@
+using TaskSync.Domain.Shared;
+
 namespace TaskSync.Domain.User;
 
 public interface IUserRepository
@@ -8,6 +10,8 @@ public interface IUserRepository
     Task<User?> FindUserByEmailAsync(string email);
     Task<User?> FindUserByExternalUserIdAsync(string externalUserId);
     Task<User[]> FindUsersAsync(int pageNumber, int pageSize);
-    Task<int> SaveNewUserAsync(User user);
+    Task<int> SaveNewExternalUserAsync(User user);
+    Task<Result<int>> SaveNewUserAsync(User user, string password);
     Task<int> UpdateUserAsync(User user);
+    Task<Result<bool>> VerifyPasswordAsync(string email, string passwordHash, string password);
 }

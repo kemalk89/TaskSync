@@ -13,6 +13,7 @@ public class UserEntity : AuditedEntity
     /// The selected language of the user. Example values: "de" or "en"
     /// </summary>
     public string? SelectedLanguage { get; set; }
+    public string? PasswordHash { get; set; }
 
     public User ToUser()
     {
@@ -24,6 +25,7 @@ public class UserEntity : AuditedEntity
             Picture = Picture,
             ExternalUserId = ExternalUserId,
             SelectedLanguage = SelectedLanguage,
+            PasswordHash = PasswordHash,
             CreatedDate = CreatedDate,
             ModifiedDate = ModifiedDate
         };

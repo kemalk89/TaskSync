@@ -56,7 +56,7 @@ namespace TaskSync.Infrastructure.Migrations
                     ExternalUserId = table.Column<string>(type: "text", nullable: true),
                     Picture = table.Column<string>(type: "text", nullable: true),
                     SelectedLanguage = table.Column<string>(type: "text", nullable: true),
-                    HashedPassword = table.Column<byte[]>(type: "bytea", nullable: true),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
                     Salt = table.Column<byte[]>(type: "bytea", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -249,7 +249,7 @@ namespace TaskSync.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "CreatedBy", "CreatedDate", "Email", "ExternalUserId", "HashedPassword", "ModifiedDate", "Picture", "Salt", "SelectedLanguage", "Username" },
+                columns: new[] { "Id", "CreatedBy", "CreatedDate", "Email", "ExternalUserId", "ModifiedDate", "PasswordHash", "Picture", "Salt", "SelectedLanguage", "Username" },
                 values: new object[,]
                 {
                     { 1, 0, new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Kerem.Karacay@tasksync.test", null, null, null, "", null, null, "Kerem Karacay" },

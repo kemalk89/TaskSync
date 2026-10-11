@@ -30,9 +30,6 @@ public class DatabaseContext : DbContext
     {
         modelBuilder.Entity<UserEntity>(entity =>
         {
-            entity.Property<byte[]>("HashedPassword")
-                .HasColumnType("bytea");
-
             entity.Property<byte[]>("Salt")
                 .HasColumnType("bytea");
         });
@@ -127,13 +124,11 @@ public class DatabaseContext : DbContext
                 {
                     // Try to get current user by claim identity name (for external users)
                     var identityName = _httpContextAccessor.HttpContext?.User.Identity?.Name;
-                    if (identityName == null)
+                    if (identityName != null)
                     {
-                        throw new Exception("No authenticated user");
+                        userIdentifier = identityName;
+                        currentUser = await Users.FirstOrDefaultAsync(u => u.ExternalUserId == identityName, cancellationToken);
                     }
-
-                    userIdentifier = identityName;
-                    currentUser = await Users.FirstOrDefaultAsync(u => u.ExternalUserId == identityName, cancellationToken);
                 }
 
                 if (currentUser == null)
