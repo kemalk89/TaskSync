@@ -30,6 +30,8 @@ public class Result<T>
     
     public static Result<T> Ok(T value) => new (true, value, null);
 
+    public static Result<T> Fail() => new(false, default, null);
+    
     public static Result<T> Fail(string error) => new(false, default, error);
     
     public static Result<T> Fail(string error, string errorDetails, Dictionary<string, string>? errorPayload = null) 

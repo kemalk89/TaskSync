@@ -15,14 +15,18 @@ using System.Text;
 using FluentValidation;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 
+using TaskSync;
 using TaskSync.Auth.Auth0;
 using TaskSync.Common;
+using TaskSync.Domain.Auth;
 using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Project.QueryProject;
 using TaskSync.Domain.Sprint;
 using TaskSync.Extensions;
+using TaskSync.Infrastructure.Entities;
 
 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
 {
@@ -80,6 +84,8 @@ try
         });
     builder.Services.AddHealthChecks();
 
+    builder.Services.AddScoped<ApiKeyAuthFilter>();
+    
     builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
     builder.Services.AddScoped<ITicketRepository, TicketRepository>();
@@ -90,6 +96,10 @@ try
 
     builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+    builder.Services.AddScoped<ITokenService, TokenService>();
+    
+    builder.Services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
+    
     builder.Services.AddValidatorsFromAssemblyContaining<CreateProjectCommandValidator>();
     builder.Services.AddCommandHandlersFromAssemblyContaining<QueryProjectCommandHandler>();
     
@@ -109,6 +119,7 @@ try
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
+                ValidateLifetime = true,
                 ValidateAudience = false,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(bytes),
@@ -124,6 +135,7 @@ try
             {
                 NameClaimType = ClaimTypes.NameIdentifier,
                 ValidateIssuer = true,
+                ValidateLifetime = true,
                 ValidateAudience = true,
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = configuration["Auth:ValidIssuer"]

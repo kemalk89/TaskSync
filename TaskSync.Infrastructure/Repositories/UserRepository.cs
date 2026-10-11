@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using TaskSync.Domain.Shared;
 using TaskSync.Domain.User;
 using TaskSync.Infrastructure.Entities;
 
@@ -8,10 +10,12 @@ namespace TaskSync.Infrastructure.Repositories;
 public class UserRepository : IUserRepository
 {
     private readonly DatabaseContext _dbContext;
+    private readonly IPasswordHasher<UserEntity> _hasher;
 
-    public UserRepository(DatabaseContext dbContext)
+    public UserRepository(DatabaseContext dbContext, IPasswordHasher<UserEntity> hasher)
     {
         _dbContext = dbContext;
+        _hasher = hasher;
     }
     
     public Task<User[]> SearchUsersAsync(string searchText)
@@ -64,12 +68,44 @@ public class UserRepository : IUserRepository
         return users.ToArray();
     }
 
-    public async Task<int> SaveNewUserAsync(User user)
+    public async Task<Result<int>> SaveNewUserAsync(User user, string password)
+    {
+        var entity = new UserEntity
+        {
+            Email = user.Email, Username = user.Username, Picture = user.Picture,
+        };
+        
+        var passwordHash = _hasher.HashPassword(entity, password);
+        entity.PasswordHash = passwordHash;
+        
+        await _dbContext.Users.AddAsync(entity);
+        
+        await _dbContext.SaveChangesAsync();
+
+        return Result<int>.Ok(entity.Id);
+    }
+
+    public async Task<Result<bool>> VerifyPasswordAsync(string email, string passwordHash, string password)
+    {
+        var user = await FindByEmailAsync(email);
+        if (user == null)
+        {
+            return Result<bool>.Fail();
+        }
+
+        var result = _hasher.VerifyHashedPassword(user, passwordHash, password);
+        return result == PasswordVerificationResult.Success
+            ? Result<bool>.Ok(true)
+            : Result<bool>.Fail();
+    }
+
+    public async Task<int> SaveNewExternalUserAsync(User user)
     {
         var entity = new UserEntity
         {
             ExternalUserId = user.ExternalUserId, Email = user.Email, Username = user.Username, Picture = user.Picture,
         };
+        
         await _dbContext.Users.AddAsync(entity);
         
         await _dbContext.SaveChangesAsync();
@@ -103,7 +139,14 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> FindUserByEmailAsync(string email)
     {
-        var entity = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+        var entity = await FindByEmailAsync(email);
         return entity?.ToUser();
+    }
+
+    private async Task<UserEntity?> FindByEmailAsync(string email)
+    {
+        var entity = await _dbContext.Users.FirstOrDefaultAsync(u => 
+            !string.IsNullOrWhiteSpace(u.Email) && u.Email.ToLower() == email.ToLower());
+        return entity;
     }
 }

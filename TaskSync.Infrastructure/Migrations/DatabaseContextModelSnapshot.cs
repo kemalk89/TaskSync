@@ -474,11 +474,11 @@ namespace TaskSync.Infrastructure.Migrations
                     b.Property<string>("ExternalUserId")
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("HashedPassword")
-                        .HasColumnType("bytea");
-
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
 
                     b.Property<string>("Picture")
                         .HasColumnType("text");
