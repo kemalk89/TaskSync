@@ -1,8 +1,8 @@
 namespace TaskSync.Infrastructure.Entities;
 
-public abstract class AuditedEntity
+public abstract class AuditedEntity : IAuditedEntity
 {
-    public int CreatedBy { get; set; }
+    public string CreatedBy { get; set; } = string.Empty;
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset? ModifiedDate { get; set; }
 }

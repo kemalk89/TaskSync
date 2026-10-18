@@ -1,31 +1,32 @@
+using Microsoft.AspNetCore.Identity;
+
 using TaskSync.Domain.User;
 
 namespace TaskSync.Infrastructure.Entities;
 
-public class UserEntity : AuditedEntity
+public class UserEntity : IdentityUser, IAuditedEntity
 {
-    public int Id { get; set; }
-    public string Email { get; set; } = string.Empty;
-    public string? Username { get; set; }
     public string? ExternalUserId { get; set; }
     public string? Picture { get; set; }
     /// <summary>
     /// The selected language of the user. Example values: "de" or "en"
     /// </summary>
     public string? SelectedLanguage { get; set; }
-    public string? PasswordHash { get; set; }
+
+    public string CreatedBy { get; set; } = string.Empty;
+    public DateTimeOffset CreatedDate { get; set; }
+    public DateTimeOffset? ModifiedDate { get; set; }
 
     public User ToUser()
     {
         return new User
         {
             Id = Id,
-            Email = Email,
-            Username = Username,
+            Email = Email ?? string.Empty, 
+            Username = UserName,
             Picture = Picture,
             ExternalUserId = ExternalUserId,
             SelectedLanguage = SelectedLanguage,
-            PasswordHash = PasswordHash,
             CreatedDate = CreatedDate,
             ModifiedDate = ModifiedDate
         };
@@ -34,7 +35,7 @@ public class UserEntity : AuditedEntity
     public void Update(User user)
     {
         Email = user.Email;
-        Username = user.Username;
+        UserName = user.Username;
         Picture = user.Picture;
         ExternalUserId = user.ExternalUserId;
         SelectedLanguage = user.SelectedLanguage;

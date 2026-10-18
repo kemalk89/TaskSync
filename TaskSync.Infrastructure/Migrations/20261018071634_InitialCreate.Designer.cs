@@ -12,7 +12,7 @@ using TaskSync.Infrastructure;
 namespace TaskSync.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20261006185223_InitialCreate")]
+    [Migration("20261018071634_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,10 +20,142 @@ namespace TaskSync.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.4")
+                .HasAnnotation("ProductVersion", "10.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
 
             modelBuilder.Entity("TaskSync.Infrastructure.Entities.ProjectEntity", b =>
                 {
@@ -33,8 +165,9 @@ namespace TaskSync.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -60,7 +193,7 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedBy = 1,
+                            CreatedBy = "1",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"This is the description of the first project.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Title = "My First Project"
@@ -82,8 +215,8 @@ namespace TaskSync.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -99,21 +232,21 @@ namespace TaskSync.Infrastructure.Migrations
                             Id = 1,
                             ProjectId = 1,
                             Role = "Software Developer",
-                            UserId = 1
+                            UserId = "1"
                         },
                         new
                         {
                             Id = 2,
                             ProjectId = 1,
                             Role = "UI / UX",
-                            UserId = 2
+                            UserId = "2"
                         },
                         new
                         {
                             Id = 3,
                             ProjectId = 1,
                             Role = "ProjectManager",
-                            UserId = 3
+                            UserId = "3"
                         });
                 });
 
@@ -125,8 +258,9 @@ namespace TaskSync.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -160,7 +294,7 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedBy = 1,
+                            CreatedBy = "1",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 9, 10, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             EndDate = new DateTimeOffset(new DateTime(2026, 3, 23, 10, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsActive = false,
@@ -182,8 +316,9 @@ namespace TaskSync.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -212,11 +347,12 @@ namespace TaskSync.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AssigneeId")
-                        .HasColumnType("integer");
+                    b.Property<string>("AssigneeId")
+                        .HasColumnType("text");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -265,7 +401,7 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedBy = 0,
+                            CreatedBy = "",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 9, 9, 17, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Wenn der Benutzer ein Profilbild hochgeladen hat, wird weiterhin das alte angezeigt.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
@@ -277,7 +413,7 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedBy = 0,
+                            CreatedBy = "",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 2, 18, 10, 5, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Die Secrets laufen Ende Februar aus.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
@@ -289,7 +425,7 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedBy = 0,
+                            CreatedBy = "",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 14, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
@@ -301,7 +437,7 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedBy = 0,
+                            CreatedBy = "",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Required fields: username and password. API-KEY Protection des /signup endpoints.\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
@@ -313,7 +449,7 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedBy = 3,
+                            CreatedBy = "3",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Documentation\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
@@ -326,8 +462,8 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 6,
-                            AssigneeId = 1,
-                            CreatedBy = 3,
+                            AssigneeId = "1",
+                            CreatedBy = "3",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Repository\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
@@ -340,8 +476,8 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 7,
-                            AssigneeId = 1,
-                            CreatedBy = 3,
+                            AssigneeId = "1",
+                            CreatedBy = "3",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup database\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
@@ -354,7 +490,7 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 8,
-                            CreatedBy = 3,
+                            CreatedBy = "3",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Build Pipeline\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
@@ -367,8 +503,8 @@ namespace TaskSync.Infrastructure.Migrations
                         new
                         {
                             Id = 9,
-                            AssigneeId = 2,
-                            CreatedBy = 3,
+                            AssigneeId = "2",
+                            CreatedBy = "3",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 3, 10, 8, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "{\n  \"type\": \"doc\",\n  \"content\": [\n    {\n      \"type\": \"paragraph\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Setup Design System\"\n        }\n      ]\n    },\n    { \"type\": \"paragraph\" }\n  ]\n}",
                             Position = 0,
@@ -458,105 +594,186 @@ namespace TaskSync.Infrastructure.Migrations
 
             modelBuilder.Entity("TaskSync.Infrastructure.Entities.UserEntity", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ExternalUserId")
                         .HasColumnType("text");
 
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Picture")
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("Salt")
-                        .HasColumnType("bytea");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
 
                     b.Property<string>("SelectedLanguage")
                         .HasColumnType("text");
 
-                    b.Property<string>("Username")
-                        .HasColumnType("text");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            CreatedBy = 0,
+                            Id = "1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "",
+                            CreatedBy = "",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "Kerem.Karacay@tasksync.test",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
                             Picture = "",
-                            Username = "Kerem Karacay"
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "Kerem Karacay"
                         },
                         new
                         {
-                            Id = 2,
-                            CreatedBy = 0,
+                            Id = "2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "",
+                            CreatedBy = "",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "Deniz.Aslansu@tasksync.test",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
                             Picture = "",
-                            Username = "Deniz Aslansu"
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "Deniz Aslansu"
                         },
                         new
                         {
-                            Id = 3,
-                            CreatedBy = 0,
+                            Id = "3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "",
+                            CreatedBy = "",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "Ali.Balci@tasksync.test",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
                             Picture = "",
-                            Username = "Ali Balcı"
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "Ali Balcı"
                         },
                         new
                         {
-                            Id = 4,
-                            CreatedBy = 0,
+                            Id = "4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "",
+                            CreatedBy = "",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "Sven.Imker@tasksync.test",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
                             Picture = "",
-                            Username = "Sven Imker"
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "Sven Imker"
                         },
                         new
                         {
-                            Id = 5,
-                            CreatedBy = 0,
+                            Id = "5",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "",
+                            CreatedBy = "",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "Mina.Koch@tasksync.test",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
                             Picture = "",
-                            Username = "Mina Koch"
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "Mina Koch"
                         },
                         new
                         {
-                            Id = 6,
-                            CreatedBy = 0,
+                            Id = "6",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "",
+                            CreatedBy = "",
                             CreatedDate = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "IntegrationTests.User1@tasksync.test",
+                            EmailConfirmed = false,
                             ExternalUserId = "integration_tests|01",
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
                             Picture = "",
-                            Username = "Test User1"
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "Test User1"
                         });
                 });
 
@@ -573,6 +790,57 @@ namespace TaskSync.Infrastructure.Migrations
                     b.HasIndex("TicketEntityId");
 
                     b.ToTable("TicketLabelMapping");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("TaskSync.Infrastructure.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("TaskSync.Infrastructure.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TaskSync.Infrastructure.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("TaskSync.Infrastructure.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TaskSync.Infrastructure.Entities.ProjectMemberEntity", b =>

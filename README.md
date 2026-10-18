@@ -21,6 +21,7 @@ For the frontend, refer to the companion repository: https://github.com/kemalk89
 - EF Core 10 with PostgreSQL
 - Validation through FluentValidation
 - For security, JWT Bearer authentication is configured
+- Login / Registration is based on ASP.NET Core Identity
 - Testing is implemented using xUnit with Testcontainers for PostgreSQL
 
 # Development

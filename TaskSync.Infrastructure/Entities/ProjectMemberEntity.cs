@@ -9,7 +9,7 @@ public class ProjectMemberEntity
     public int Id { get; set; }
     
     public string Role { get; set; } = string.Empty;
-    public int UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
     [NotMapped]
     public User? User { get; set; }
     

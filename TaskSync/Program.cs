@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 using TaskSync.Domain.User;
 using TaskSync.Domain.Project;
@@ -10,7 +9,6 @@ using TaskSync.Infrastructure.Services;
 
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using System.Text;
 
 using FluentValidation;
 
@@ -21,7 +19,6 @@ using Microsoft.OpenApi.Models;
 using TaskSync;
 using TaskSync.Auth.Auth0;
 using TaskSync.Common;
-using TaskSync.Domain.Auth;
 using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Project.QueryProject;
 using TaskSync.Domain.Sprint;
@@ -82,6 +79,8 @@ try
                 }
             });
         });
+    
+    builder.Services.AddIdentityApiEndpoints<UserEntity>().AddEntityFrameworkStores<DatabaseContext>();
     builder.Services.AddHealthChecks();
 
     builder.Services.AddScoped<ApiKeyAuthFilter>();
@@ -96,8 +95,6 @@ try
 
     builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-    builder.Services.AddScoped<ITokenService, TokenService>();
-    
     builder.Services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
     
     builder.Services.AddValidatorsFromAssemblyContaining<CreateProjectCommandValidator>();
@@ -112,19 +109,10 @@ try
 
     builder.Services.AddHttpContextAccessor();
     builder.Services
-        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer("LocalAuth", options =>
+        .AddAuthentication(options =>
         {
-            byte[] bytes = Encoding.UTF8.GetBytes(configuration["LocalAuth:JwtSecret"]!);
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateLifetime = true,
-                ValidateAudience = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(bytes),
-                ValidIssuers = [configuration["LocalAuth:ValidIssuer"]!]
-            };
+            options.DefaultAuthenticateScheme = "AuthSchemeSelector";
+            options.DefaultChallengeScheme = "AuthSchemeSelector";
         })
         .AddJwtBearer("Auth0", options =>
         {
@@ -149,7 +137,7 @@ try
 
     builder.Services.AddAuthorization(options =>
     {
-        var authPolicy = new AuthorizationPolicyBuilder("Auth0", "LocalAuth")
+        var authPolicy = new AuthorizationPolicyBuilder("Auth0", IdentityConstants.BearerScheme)
             .RequireAuthenticatedUser()
             .Build();
         
@@ -185,6 +173,8 @@ try
         name: "default",
         pattern: "{controller}/{action=Index}/{id?}");
 
+    app.MapIdentityApi<UserEntity>();
+    
     app.UseExceptionHandler(
         exceptionHandlerApp => exceptionHandlerApp.Run(
             async context => await Results.Problem().ExecuteAsync(context)

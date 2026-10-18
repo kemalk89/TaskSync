@@ -9,7 +9,7 @@ public interface IUserService
 
     Task<PagedResult<User>> GetUsersAsync(int pageNumber, int pageSize);
     
-    Task<IEnumerable<User>> GetUsersAsync(int[] userIds);
+    Task<IEnumerable<User>> GetUsersAsync(string[] userIds);
     
     Task<User?> FindByExternalUserIdAsync(string? externalUserId);
 }

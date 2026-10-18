@@ -218,12 +218,12 @@ public class TicketRepository : ITicketRepository
             .Take(pageSize)
             .ToListAsync();
 
-        List<int> assigneeIds = [];
+        List<string> assigneeIds = [];
         foreach (var t in tickets)
         {
-            if (t.AssigneeId != null)
+            if (!string.IsNullOrWhiteSpace(t.AssigneeId))
             {
-                assigneeIds.Add(t.AssigneeId.Value);
+                assigneeIds.Add(t.AssigneeId);
             }
         }
 
@@ -309,7 +309,7 @@ public class TicketRepository : ITicketRepository
 
         if (filter.AssigneeIds.Count > 0)
         {
-            updatedQuery = updatedQuery.Where(t => t.AssigneeId.HasValue && filter.AssigneeIds.Contains(t.AssigneeId.Value));
+            updatedQuery = updatedQuery.Where(t => !string.IsNullOrWhiteSpace(t.AssigneeId) && filter.AssigneeIds.Contains(t.AssigneeId));
         }
 
         if (filter.OnlyBacklogTickets)

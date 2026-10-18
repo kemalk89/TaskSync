@@ -22,7 +22,7 @@ public class TicketEntity : AuditedEntity
 
     public ProjectEntity? Project { get; set; }
 
-    public int? AssigneeId { get; set; }
+    public string? AssigneeId { get; set; }
     public TicketEntity? Parent { get; set; }
     public ICollection<TicketEntity> SubTasks { get; set; } = [];
 

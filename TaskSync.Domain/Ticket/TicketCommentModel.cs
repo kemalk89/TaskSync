@@ -9,8 +9,8 @@ public class TicketCommentModel
     public bool IsDeleted { get; set; }
     
     public string Comment { get; set; } = string.Empty;
-    
-    public int CreatedById { get; set; }
+
+    public string CreatedById { get; set; } = string.Empty;
     
     public User.User? CreatedBy { get; set; }
 

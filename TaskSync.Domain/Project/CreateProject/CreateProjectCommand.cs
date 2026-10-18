@@ -8,5 +8,5 @@ public class CreateProjectCommand
 
     public ProjectVisibilityModel? Visibility { get; set; } = ProjectVisibilityModel.Everybody;
     
-    public int? ProjectManagerId { get; set; }
+    public string? ProjectManagerId { get; set; }
 }
