@@ -143,7 +143,7 @@ public class UpdateProjectTest : BaseIntegrationTest
 
         var cmd = new UpdateProjectCommand
         {
-            ProjectManagerId = 1
+            ProjectManagerId = "1"
         };
 
         var response = await _client.PatchAsJsonAsync($"/api/project/{projectId}", cmd);
@@ -167,7 +167,7 @@ public class UpdateProjectTest : BaseIntegrationTest
         {
             Title = "New Title",
             Description = "New Description",
-            ProjectManagerId = 1
+            ProjectManagerId = "1"
         };
 
         var response = await _client.PatchAsJsonAsync($"/api/project/{projectId}", cmd);
@@ -188,7 +188,7 @@ public class UpdateProjectTest : BaseIntegrationTest
         Assert.Equal("New Title", project.Title);
         Assert.Equal("New Description", project.Description);
         Assert.NotNull(project.ProjectMembers);
-        Assert.Contains(project.ProjectMembers, m => m.Role == "ProjectManager" && m.UserId == 1);
+        Assert.Contains(project.ProjectMembers, m => m.Role == "ProjectManager" && m.UserId == "1");
     }
 
     private async Task<int> CreateNewProjectAsync(string? title = null)

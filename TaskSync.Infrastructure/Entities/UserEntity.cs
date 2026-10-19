@@ -39,6 +39,6 @@ public class UserEntity : IdentityUser, IAuditedEntity
         Picture = user.Picture;
         ExternalUserId = user.ExternalUserId;
         SelectedLanguage = user.SelectedLanguage;
-        ModifiedDate = DateTimeOffset.Now;
+        ModifiedDate = DateTimeOffset.UtcNow;
     }
 }

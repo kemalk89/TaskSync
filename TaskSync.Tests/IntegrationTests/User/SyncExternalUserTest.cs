@@ -117,15 +117,15 @@ public class SyncExternalUserTest : BaseIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
         var entity = await dbContext.Users
-            .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            .FirstOrDefaultAsync(u => u.Email!.ToLower() == email.ToLower());
 
         if (entity == null) return null;
 
         return new Domain.User.User
         {
             Id = entity.Id,
-            Email = entity.Email,
-            Username = entity.Username,
+            Email = entity.Email ?? string.Empty,
+            Username = entity.UserName,
             Picture = entity.Picture,
             ExternalUserId = entity.ExternalUserId,
             SelectedLanguage = entity.SelectedLanguage,
@@ -140,14 +140,14 @@ public class SyncExternalUserTest : BaseIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
         var entities = await dbContext.Users
-            .Where(u => u.Email.ToLower() == email.ToLower())
+            .Where(u => u.Email!.ToLower() == email.ToLower())
             .ToListAsync();
 
         return [.. entities.Select(e => new Domain.User.User
         {
             Id = e.Id,
-            Email = e.Email,
-            Username = e.Username,
+            Email = e.Email ?? string.Empty,
+            Username = e.UserName,
             Picture = e.Picture,
             ExternalUserId = e.ExternalUserId,
             SelectedLanguage = e.SelectedLanguage,
@@ -164,10 +164,10 @@ public class SyncExternalUserTest : BaseIntegrationTest
         var entity = new UserEntity
         {
             Email = email,
-            Username = username,
+            UserName = username,
             Picture = picture,
             ExternalUserId = externalUserId,
-            CreatedDate = DateTimeOffset.Now
+            CreatedDate = DateTimeOffset.UtcNow
         };
 
         await dbContext.Users.AddAsync(entity);
@@ -180,7 +180,7 @@ public class SyncExternalUserTest : BaseIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
         var entity = await dbContext.Users
-            .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            .FirstOrDefaultAsync(u => u.Email!.ToLower() == email.ToLower());
 
         if (entity != null)
         {

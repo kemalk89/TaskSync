@@ -53,7 +53,12 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
             {
                 new(ClaimTypes.Name, authData.UserName)
             };
-
+            
+            if (!string.IsNullOrEmpty(authData.Email))
+            {
+                claims.Add(new Claim(ClaimTypes.Email, authData.Email));
+            }
+            
             // Add role claims
             foreach (var role in authData.Roles)
             {
@@ -80,4 +85,5 @@ public class TestAuthData
 {
     public string[] Roles { get; set; } = [];
     public string UserName { get; set; } = string.Empty;
+    public string? Email { get; set; }
 }

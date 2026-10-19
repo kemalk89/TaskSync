@@ -64,6 +64,12 @@ dotnet build TaskSync.sln
 dotnet test
 ```
 
+If you are using podman and tests are not starting due to `Failed to connect to Docker endpoint at 'unix:///var/run/docker.sock'`
+run this command (ensure to enable "Docker Compatibility" in podman desktop settings):
+```sh
+sudo ln -s /Users/<USERNAME>/.local/share/containers/podman/machine/podman.sock /var/run/docker.sock
+```
+
 ## Manual Testing with SwaggerUI
 ### Auth0
 Generate token:
