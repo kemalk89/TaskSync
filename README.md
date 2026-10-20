@@ -21,6 +21,7 @@ For the frontend, refer to the companion repository: https://github.com/kemalk89
 - EF Core 10 with PostgreSQL
 - Validation through FluentValidation
 - For security, JWT Bearer authentication is configured
+- Login / Registration is based on ASP.NET Core Identity
 - Testing is implemented using xUnit with Testcontainers for PostgreSQL
 
 # Development
@@ -61,6 +62,12 @@ dotnet build TaskSync.sln
 ## Unit Tests
 ```sh
 dotnet test
+```
+
+If you are using podman and tests are not starting due to `Failed to connect to Docker endpoint at 'unix:///var/run/docker.sock'`
+run this command (ensure to enable "Docker Compatibility" in podman desktop settings):
+```sh
+sudo ln -s /Users/<USERNAME>/.local/share/containers/podman/machine/podman.sock /var/run/docker.sock
 ```
 
 ## Manual Testing with SwaggerUI

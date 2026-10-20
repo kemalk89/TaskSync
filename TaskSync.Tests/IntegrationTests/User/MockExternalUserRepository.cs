@@ -33,7 +33,7 @@ public class MockExternalUserRepository : IExternalUserRepository
 
         var user = new Domain.User.User
         {
-            Id = 1,
+            Id = "1",
             Email = "Test.Tester@tasksync.test",
             Username = "testuser",
             Picture = "https://example.com/picture.jpg",

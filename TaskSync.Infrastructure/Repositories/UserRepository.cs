@@ -23,7 +23,7 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public async Task<User[]> FindUsersAsync(int[] userIds)
+    public async Task<User[]> FindUsersAsync(string[] userIds)
     {
         if (userIds.Length == 0)
         {
@@ -35,15 +35,15 @@ public class UserRepository : IUserRepository
         {
             Id = u.Id,
             ExternalUserId = u.ExternalUserId,
-            Username = u.Username,
-            Email = u.Email,
+            Username = u.UserName,
+            Email = u.Email ?? string.Empty,
             Picture = u.Picture
         });
 
         return users.ToArray();
     }
 
-    public async Task<User?> FindUserByIdAsync(int userId)
+    public async Task<User?> FindUserByIdAsync(string userId)
     {
         var entity = await _dbContext.Users.FindAsync(userId);
 
@@ -58,7 +58,7 @@ public class UserRepository : IUserRepository
         var skip = (pageNumber - 1) * pageSize;
         
         var userEntities = await _dbContext.Users
-            .OrderBy(u => u.Username)
+            .OrderBy(u => u.UserName)
             .Skip(skip)
             .Take(pageSize)
             .ToListAsync();
@@ -68,11 +68,11 @@ public class UserRepository : IUserRepository
         return users.ToArray();
     }
 
-    public async Task<Result<int>> SaveNewUserAsync(User user, string password)
+    public async Task<Result<string>> SaveNewUserAsync(User user, string password)
     {
         var entity = new UserEntity
         {
-            Email = user.Email, Username = user.Username, Picture = user.Picture,
+            Email = user.Email, UserName = user.Username, Picture = user.Picture,
         };
         
         var passwordHash = _hasher.HashPassword(entity, password);
@@ -82,7 +82,7 @@ public class UserRepository : IUserRepository
         
         await _dbContext.SaveChangesAsync();
 
-        return Result<int>.Ok(entity.Id);
+        return Result<string>.Ok(entity.Id);
     }
 
     public async Task<Result<bool>> VerifyPasswordAsync(string email, string passwordHash, string password)
@@ -99,11 +99,11 @@ public class UserRepository : IUserRepository
             : Result<bool>.Fail();
     }
 
-    public async Task<int> SaveNewExternalUserAsync(User user)
+    public async Task<string> SaveNewExternalUserAsync(User user)
     {
         var entity = new UserEntity
         {
-            ExternalUserId = user.ExternalUserId, Email = user.Email, Username = user.Username, Picture = user.Picture,
+            ExternalUserId = user.ExternalUserId, Email = user.Email, UserName = user.Username, Picture = user.Picture,
         };
         
         await _dbContext.Users.AddAsync(entity);
@@ -113,13 +113,13 @@ public class UserRepository : IUserRepository
         return entity.Id;
     }
 
-    public async Task<int> UpdateUserAsync(User user)
+    public async Task<string> UpdateUserAsync(User user)
     {
         var entity = await _dbContext.Users.FindAsync(user.Id);
 
         if (entity == null)
         {
-            return 0;
+            return string.Empty;
         }
         
         entity.Update(user);

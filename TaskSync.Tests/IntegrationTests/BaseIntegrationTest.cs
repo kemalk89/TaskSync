@@ -58,14 +58,16 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
     /// </summary>
     /// <param name="roles"></param>
     /// <param name="externalUserId"></param>
-    protected void SetAuthenticatedUser(string[]? roles = null, string externalUserId = "integration_tests|01")
+    /// <param name="email"></param>
+    protected void SetAuthenticatedUser(string[]? roles = null, string externalUserId = "integration_tests|01", string? email = "IntegrationTests.User1@tasksync.test")
     {
         roles ??= ["User"];
 
         var authData = new TestAuthData
         {
             Roles = roles,
-            UserName = externalUserId
+            UserName = externalUserId,
+            Email = email
         };
 
         var json = JsonSerializer.Serialize(authData);

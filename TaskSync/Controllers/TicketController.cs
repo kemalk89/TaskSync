@@ -62,7 +62,7 @@ public class TicketController : ControllerBase
             SearchText = searchText ?? string.Empty,
             StatusIds = Utils.ParseIntegerList(status),
             ProjectIds =  Utils.ParseIntegerList(projects),
-            AssigneeIds = Utils.ParseIntegerList(assignees)
+            AssigneeIds = Utils.ParseList(assignees)
         };
         PagedResult<TicketModel> pagedResult = await _queryTicketCommandHandler.GetTicketsAsync(
             pageNumber, pageSize, searchFilter, cancellationToken);

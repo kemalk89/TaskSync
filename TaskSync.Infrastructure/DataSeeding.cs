@@ -16,11 +16,12 @@ public class DataSeeding
     private readonly IHostEnvironment _env;
 
     private int TicketIdCounter = 0;
-    private const int USER_ID_KEREM = 1;
-    private const int USER_ID_DENIZ = 2;
-    private const int USER_ID_ALI = 3;
-    private const int USER_ID_SVEN = 4;
-    private const int USER_ID_MINA = 5;
+    private const string USER_ID_KEREM = "1";
+    private const string USER_ID_DENIZ = "2";
+    private const string USER_ID_ALI = "3";
+    private const string USER_ID_SVEN = "4";
+    private const string USER_ID_MINA = "5";
+    
     private const int STATUS_ID_TODO = 1;
     private const int STATUS_ID_IN_PROGRESS = 2;
     private const int STATUS_ID_DONE = 3;
@@ -44,7 +45,7 @@ public class DataSeeding
             Id = 1,
             Title = "My First Project",
             Description = GetDescription("This is the description of the first project."),
-            CreatedBy = 1,
+            CreatedBy = USER_ID_KEREM,
             CreatedDate = new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero)
         });
 
@@ -87,14 +88,14 @@ public class DataSeeding
     {
         var createdDate = new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = USER_ID_KEREM, Email = "Kerem.Karacay@tasksync.test", Username = "Kerem Karacay", Picture = "", CreatedDate = createdDate });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = USER_ID_DENIZ, Email = "Deniz.Aslansu@tasksync.test", Username = "Deniz Aslansu", Picture = "", CreatedDate = createdDate });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = USER_ID_ALI, Email = "Ali.Balci@tasksync.test", Username = "Ali Balcı", Picture = "", CreatedDate = createdDate });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = USER_ID_SVEN, Email = "Sven.Imker@tasksync.test", Username = "Sven Imker", Picture = "", CreatedDate = createdDate });
-        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = USER_ID_MINA, Email = "Mina.Koch@tasksync.test", Username = "Mina Koch", Picture = "", CreatedDate = createdDate });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = USER_ID_KEREM, Email = "Kerem.Karacay@tasksync.test", UserName = "Kerem Karacay", Picture = "", CreatedDate = createdDate, ConcurrencyStamp = "", SecurityStamp = ""});
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = USER_ID_DENIZ, Email = "Deniz.Aslansu@tasksync.test", UserName = "Deniz Aslansu", Picture = "", CreatedDate = createdDate, ConcurrencyStamp = "", SecurityStamp = "" });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = USER_ID_ALI, Email = "Ali.Balci@tasksync.test", UserName = "Ali Balcı", Picture = "", CreatedDate = createdDate, ConcurrencyStamp = "", SecurityStamp = "" });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = USER_ID_SVEN, Email = "Sven.Imker@tasksync.test", UserName = "Sven Imker", Picture = "", CreatedDate = createdDate, ConcurrencyStamp = "", SecurityStamp = "" });
+        modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = USER_ID_MINA, Email = "Mina.Koch@tasksync.test", UserName = "Mina Koch", Picture = "", CreatedDate = createdDate, ConcurrencyStamp = "", SecurityStamp = "" });
         if (_env.IsDevelopment())
         {
-            modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 6, Email = "IntegrationTests.User1@tasksync.test", Username = "Test User1", Picture = "", ExternalUserId = "integration_tests|01", CreatedDate = createdDate });
+            modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = "6", Email = "IntegrationTests.User1@tasksync.test", UserName = "Test User1", Picture = "", ExternalUserId = "integration_tests|01", CreatedDate = createdDate, ConcurrencyStamp = "", SecurityStamp = "" });
         }
     }
 
@@ -106,7 +107,7 @@ public class DataSeeding
             Type = TicketType.Bug,
             Title = "Profilbild wird nach dem Upload nicht aktualisiert",
             Description = GetDescription("Wenn der Benutzer ein Profilbild hochgeladen hat, wird weiterhin das alte angezeigt."),
-            CreatedBy = 0,
+            CreatedBy = string.Empty,
             ProjectId = projectId,
             StatusId = STATUS_ID_TODO,
             CreatedDate = new DateTimeOffset(2026, 3, 9, 9, 17, 0, TimeSpan.Zero)
@@ -118,7 +119,7 @@ public class DataSeeding
             Type = TicketType.Task,
             Title = "Secrets rotieren",
             Description = GetDescription("Die Secrets laufen Ende Februar aus."),
-            CreatedBy = 0,
+            CreatedBy = string.Empty,
             ProjectId = projectId,
             StatusId = STATUS_ID_TODO,
             CreatedDate = new DateTimeOffset(2026, 2, 18, 10, 5, 0, TimeSpan.Zero)
@@ -130,7 +131,7 @@ public class DataSeeding
             Type = TicketType.Story,
             Title = "Teammitglieder in Kommentaren erwähnen",
             Description = GetDescription(""),
-            CreatedBy = 0,
+            CreatedBy = string.Empty,
             ProjectId = projectId,
             StatusId = STATUS_ID_TODO,
             CreatedDate = new DateTimeOffset(2026, 3, 10, 14, 15, 0, TimeSpan.Zero)
@@ -142,7 +143,7 @@ public class DataSeeding
             Type = TicketType.Story,
             Title = "Signup Form",
             Description = GetDescription("Required fields: username and password. API-KEY Protection des /signup endpoints."),
-            CreatedBy = 0,
+            CreatedBy = string.Empty,
             ProjectId = projectId,
             StatusId = STATUS_ID_TODO,
             CreatedDate = new DateTimeOffset(2026, 3, 10, 8, 15, 0, TimeSpan.Zero)

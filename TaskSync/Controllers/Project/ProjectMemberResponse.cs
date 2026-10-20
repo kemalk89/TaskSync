@@ -5,7 +5,7 @@ namespace TaskSync.Controllers.Project;
 
 public class ProjectMemberResponse
 {
-    public int UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
     public User? User { get; set; }
 

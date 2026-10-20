@@ -2,7 +2,7 @@ namespace TaskSync.Domain.User;
 
 public class User
 {
-    public int Id { get; set; }
+    public string Id { get; set; } = string.Empty;
     public string? ExternalUserId { get; set; }
     public string? Username { get; set; }
     public string Email { get; set; } = string.Empty;
@@ -13,5 +13,4 @@ public class User
     /// The selected language of the user. Example values: "de" or "en"
     /// </summary>
     public string? SelectedLanguage { get; set; }
-    public string? PasswordHash { get; set; }
 }

@@ -152,7 +152,7 @@ public class GetTicketsByFilterTest : BaseIntegrationTest, IClassFixture<CreateP
         {
             Title = "Ticket for project 1",
             ProjectId = createdProject.Id,
-            Assignee = 1
+            Assignee = "1"
         };
         
         var responseCreateTicket = await _client.PostAsJsonAsync("/api/ticket", createTicketCommand);
@@ -194,14 +194,14 @@ public class GetTicketsByFilterTest : BaseIntegrationTest, IClassFixture<CreateP
         {
             Title = "Ticket 1, Project 1, Assignee 1",
             ProjectId = createdProject1.Id,
-            Assignee = 1 
+            Assignee = "1" 
         };
         
         var createTicketCommand2 = new CreateTicketCommand
         {
             Title = "Ticket 2, Project 2, Assignee 2",
             ProjectId = createdProject2.Id,
-            Assignee = 2
+            Assignee = "2"
         };
 
         var responseCreateTicket1 = await _client.PostAsJsonAsync("/api/ticket", createTicketCommand1);
@@ -222,12 +222,12 @@ public class GetTicketsByFilterTest : BaseIntegrationTest, IClassFixture<CreateP
         // Step 4: Assert
         Assert.NotNull(ticketsInProject1AndAssignee1);
         Assert.Contains(ticketsInProject1AndAssignee1.Items, t => t.Title == createTicketCommand1.Title);
-        Assert.All(ticketsInProject1AndAssignee1.Items, t => Assert.Equal(1, t.Assignee?.Id));
+        Assert.All(ticketsInProject1AndAssignee1.Items, t => Assert.Equal("1", t.Assignee?.Id));
         Assert.DoesNotContain(ticketsInProject1AndAssignee1.Items, t => t.Title == createTicketCommand2.Title);
 
         Assert.NotNull(ticketsInProject2AndAssignee2);
         Assert.Contains(ticketsInProject2AndAssignee2.Items, t => t.Title == createTicketCommand2.Title);
-        Assert.All(ticketsInProject2AndAssignee2.Items, t => Assert.Equal(2, t.Assignee?.Id));
+        Assert.All(ticketsInProject2AndAssignee2.Items, t => Assert.Equal("2", t.Assignee?.Id));
         Assert.DoesNotContain(ticketsInProject2AndAssignee2.Items, t => t.Title == createTicketCommand1.Title);
         
         Assert.NotNull(ticketsInProject1AndAssignee2);

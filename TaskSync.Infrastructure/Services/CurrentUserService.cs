@@ -33,23 +33,30 @@ public class CurrentUserService : ICurrentUserService
     
     public async Task<Result<User>> GetCurrentUserAsync()
     {
-        User? currentUser;
-        var issuer = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == "iss");
-        var issuerLocalAuth = _config["LocalAuth:ValidIssuer"];
-        if (!string.IsNullOrWhiteSpace(issuerLocalAuth) && issuerLocalAuth == issuer?.Value)
+        User? currentUser = null;
+        var identity = _httpContextAccessor.HttpContext?.User.Identity;
+        if (identity != null)
         {
-            var email = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
-            if (string.IsNullOrWhiteSpace(email?.Value))
-            {
-                return Result<User>.Fail(ResultCodes.ResultCodeGeneralProblem, "Claim 'email' not found");
-            }
+            var isTokenIssuerAuth0 =
+                _httpContextAccessor.HttpContext?.User.Claims
+                    .Select(x => x.Issuer == _config.GetValue<string>("Auth:ValidIssuer"))
+                    .FirstOrDefault();
 
-            currentUser = await _userRepository.FindUserByEmailAsync(email.Value);
-        }
-        else
-        {
-            var externalUserId = _httpContextAccessor.HttpContext?.User.Identity?.Name;
-            currentUser = await _userService.FindByExternalUserIdAsync(externalUserId);
+            if (isTokenIssuerAuth0 == true)
+            {
+                var externalUserId = _httpContextAccessor.HttpContext?.User.Identity?.Name;
+                currentUser = await _userService.FindByExternalUserIdAsync(externalUserId);
+            }
+            else
+            {
+                var email = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
+                if (string.IsNullOrWhiteSpace(email?.Value))
+                {
+                    return Result<User>.Fail(ResultCodes.ResultCodeGeneralProblem, "Claim 'email' not found");
+                }
+
+                currentUser = await _userRepository.FindUserByEmailAsync(email.Value);
+            }
         }
 
         if (currentUser == null)
@@ -79,7 +86,7 @@ public class CurrentUserService : ICurrentUserService
         
         user.SelectedLanguage = language;
         var userId = await _userRepository.UpdateUserAsync(user);
-        if (userId == 0)
+        if (string.IsNullOrWhiteSpace(userId))
         {
             _logger.LogWarning("Unable to change users language from '{OldLanguage}' to '{Language}'", oldLanguage, language);
             return Result<string>.Fail(

@@ -10,7 +10,7 @@ public class CreateTicketCommand
  
     public string? Description { get; set; }
 
-    public int? Assignee { get; set; }
+    public string? Assignee { get; set; }
     
     public int? ParentId { get; set; }
     

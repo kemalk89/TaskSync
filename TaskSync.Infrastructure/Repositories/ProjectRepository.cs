@@ -32,7 +32,7 @@ public class ProjectRepository : IProjectRepository
 
         if (command.ProjectManagerId != null)
         {
-            var projectManager = new ProjectMemberEntity { UserId = (int)command.ProjectManagerId, Role = "ProjectManager" };
+            var projectManager = new ProjectMemberEntity { UserId = command.ProjectManagerId, Role = "ProjectManager" };
             entity.ProjectMembers.Add(projectManager);
         }
         
@@ -141,7 +141,7 @@ public class ProjectRepository : IProjectRepository
             project.ProjectMembers.Add(new ProjectMemberEntity
             {
                 Role = "ProjectManager", 
-                UserId = (int) command.ProjectManagerId, 
+                UserId = command.ProjectManagerId, 
                 ProjectId = projectId
             });
         }

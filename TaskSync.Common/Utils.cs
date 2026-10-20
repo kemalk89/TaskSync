@@ -13,4 +13,15 @@ public class Utils
 
         return values ?? [];
     }
+    
+    public static List<string> ParseList(string? input)
+    {
+        var values = input?
+            .Split(",")?
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .Select(id => id)
+            .ToList();
+
+        return values ?? [];
+    }
 }

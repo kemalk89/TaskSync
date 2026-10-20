@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
@@ -6,9 +7,8 @@ using TaskSync.Infrastructure.Entities;
 
 namespace TaskSync.Infrastructure;
 
-public class DatabaseContext : DbContext
+public class DatabaseContext : IdentityDbContext<UserEntity>
 {
-    public DbSet<UserEntity> Users { get; set; }
     public DbSet<TicketEntity> Tickets { get; set; }
     public DbSet<TicketCommentEntity> TicketComments { get; set; }
     public DbSet<TicketStatusEntity> TicketStatus { get; set; }
@@ -28,12 +28,8 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<UserEntity>(entity =>
-        {
-            entity.Property<byte[]>("Salt")
-                .HasColumnType("bytea");
-        });
-
+        base.OnModelCreating(modelBuilder);
+        
         modelBuilder.Entity<ProjectEntity>()
             .HasMany<SprintEntity>()
             .WithOne()
@@ -106,7 +102,7 @@ public class DatabaseContext : DbContext
 
         foreach (var e in inserted)
         {
-            var audited = e as AuditedEntity;
+            var audited = e as IAuditedEntity;
             if (audited != null)
             {
                 UserEntity? currentUser = null;
@@ -115,10 +111,10 @@ public class DatabaseContext : DbContext
                 // Try to get current user by claim "id" (for local users)
                 var claimId = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == "id");
                 var userId = claimId?.Value;
-                if (userId != null && int.TryParse(userId, out int parsed))
+                if (!string.IsNullOrWhiteSpace(userId))
                 {
                     userIdentifier = userId;
-                    currentUser = await Users.FirstOrDefaultAsync(u => u.Id == parsed, cancellationToken);
+                    currentUser = await Users.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
                 }
                 else
                 {
@@ -141,8 +137,7 @@ public class DatabaseContext : DbContext
                 }
                 else
                 {
-                    var currentUserId = 0;
-                    currentUserId = currentUser.Id;
+                    var currentUserId = currentUser.Id;
                     audited.CreatedBy = currentUserId;
                 }
 
