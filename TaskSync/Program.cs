@@ -18,17 +18,11 @@ using Microsoft.OpenApi.Models;
 
 using TaskSync;
 using TaskSync.Auth.Auth0;
-using TaskSync.Common;
 using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Project.QueryProject;
 using TaskSync.Domain.Sprint;
 using TaskSync.Extensions;
 using TaskSync.Infrastructure.Entities;
-
-if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-{
-    DotEnv.Load(msg => Console.WriteLine(msg));   
-}
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())

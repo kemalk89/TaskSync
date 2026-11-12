@@ -6,6 +6,7 @@
     <IsPackable>false</IsPackable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>TaskSync</RootNamespace>
+    <UserSecretsId>8a54c15b-90ad-478a-881d-6d821062f9bc</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

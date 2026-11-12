@@ -24,12 +24,29 @@ For the frontend, refer to the companion repository: https://github.com/kemalk89
 - Login / Registration is based on ASP.NET Core Identity
 - Testing is implemented using xUnit with Testcontainers for PostgreSQL
 
-# Development
+# 💻 Development
 
-## How to run project
+### Secret Management
+Local secrets are managed with the [.NET User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows)
+feature. They are stored outside the repository and are only loaded when the app runs in the `Development` environment.
+
+Run the commands below to init the required secrets:
+
+```shell
+# The `UserSecretsId` is already defined in `TaskSync/TaskSync.csproj`, so `dotnet user-secrets init` is not required.
+# Store a secret:
+dotnet user-secrets set "Auth:MachineToMachineApplication:ClientId" "<CLIENT_ID>"
+dotnet user-secrets set "Auth:MachineToMachineApplication:ClientSecret" "<CLIENT_SECRET>"
+
+# List stored secrets
+dotnet user-secrets list
+```
+
+
+### How to run project
 For local development we need a developer certificate which can be setup with ``dotnet dev-certs https --trust``.
 
-1. Create `.env` file by duplicating `.env_template` located in project root
+1. Init secrets as defined above
 
 2. Start infrastructure (database etc) ``docker compose up -d``
 
@@ -40,7 +57,7 @@ For local development we need a developer certificate which can be setup with ``
     - Swagger-UI: https://localhost:7190/swagger/index.html
     - Database-Explorer: Use a tool like pgAdmin - username=postgres, pw=example, db=TaskSync
 
-## Run with Docker
+### Run with Docker
 ```shell
 docker compose up -d
 docker build -t tasksync -f Dockerfile_Local .
@@ -59,7 +76,7 @@ dotnet build TaskSync.sln
 ```
 
 # Testing
-## Unit Tests
+### Unit Tests
 ```sh
 dotnet test
 ```
@@ -70,8 +87,8 @@ run this command (ensure to enable "Docker Compatibility" in podman desktop sett
 sudo ln -s /Users/<USERNAME>/.local/share/containers/podman/machine/podman.sock /var/run/docker.sock
 ```
 
-## Manual Testing with SwaggerUI
-### Auth0
+### Manual Testing with SwaggerUI
+#### Auth0
 Generate token:
 ```sh
 curl --request POST \
@@ -86,9 +103,6 @@ curl --request POST \
 Copy the token and authorize in Swagger UI.
 
 # DevOps
-## Health Check Endpoint
+### Health Check Endpoint
 The application exposes a basic health check endpoint used for monitoring and readiness probes:
 ```GET /api/health```
-
-# Improvement Suggestions
-- Use [SecretManager for development](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows)

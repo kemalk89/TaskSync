@@ -5,6 +5,7 @@
       
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>  
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NuGetAuditLevel>high</NuGetAuditLevel>
   </PropertyGroup>
     
   <ItemGroup>
