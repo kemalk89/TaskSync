@@ -1,3 +1,5 @@
+using System.Security.Claims;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -109,7 +111,7 @@ public class DatabaseContext : IdentityDbContext<UserEntity>
                 string userIdentifier = string.Empty;
 
                 // Try to get current user by claim "id" (for local users)
-                var claimId = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == "id");
+                var claimId = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
                 var userId = claimId?.Value;
                 if (!string.IsNullOrWhiteSpace(userId))
                 {
