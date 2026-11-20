@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
 
 using Microsoft.AspNetCore.Authentication;
@@ -15,21 +14,27 @@ using TaskSync.Tests.IntegrationTests.User;
 
 namespace TaskSync.Tests.IntegrationTests;
 
+/// <summary>
+/// Base class for integration tests.
+/// </summary>
 public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
 {
     protected readonly HttpClient _client;
+    protected readonly TestJwtGenerator _testJwtGenerator;
     protected readonly IntegrationTestWebAppFactory _factory;
 
     public BaseIntegrationTest(IntegrationTestWebAppFactory factory)
     {
         _factory = factory;
-        _client = factory.WithWebHostBuilder(builder =>
+        
+        var customizedFactory = factory.WithWebHostBuilder(builder =>
         {
             builder.ConfigureTestServices(services =>
             {
                 // Remove the original implementation and add our mock
                 services.RemoveAll<IExternalUserRepository>();
                 services.AddSingleton<IExternalUserRepository>(new MockExternalUserRepository());
+                services.AddSingleton<TestJwtGenerator>();
 
                 services.Configure<AuthenticationOptions>(options =>
                 {
@@ -50,7 +55,11 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
                     options.DefaultPolicy = authPolicy;
                 });
             });
-        }).CreateClient();
+        });
+        
+        _client = customizedFactory.CreateClient();
+        _testJwtGenerator = customizedFactory.Services.GetRequiredService<TestJwtGenerator>();
+        
     }
 
     /// <summary>
@@ -63,16 +72,9 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
     {
         roles ??= ["User"];
 
-        var authData = new TestAuthData
-        {
-            Roles = roles,
-            UserName = externalUserId,
-            Email = email
-        };
-
-        var json = JsonSerializer.Serialize(authData);
-        var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", encoded);
+        var jwt = _testJwtGenerator.Generate(externalUserId, email, roles);
+        
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
     }
 
     protected async Task AssertEndpointsReturnUnauthorized((string Url, HttpMethod Method, object? Payload)[] endpoints)

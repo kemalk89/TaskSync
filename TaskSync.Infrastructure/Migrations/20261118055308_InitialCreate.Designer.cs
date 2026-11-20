@@ -12,7 +12,7 @@ using TaskSync.Infrastructure;
 namespace TaskSync.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20261018071634_InitialCreate")]
+    [Migration("20261118055308_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

@@ -14,11 +14,8 @@ using FluentValidation;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 
-using TaskSync;
 using TaskSync.Auth.Auth0;
 using TaskSync.Domain.Project.CreateProject;
 using TaskSync.Domain.Project.QueryProject;
@@ -79,8 +76,6 @@ try
     builder.Services.AddIdentityApiEndpoints<UserEntity>().AddEntityFrameworkStores<DatabaseContext>();
     builder.Services.AddHealthChecks();
 
-    builder.Services.AddScoped<ApiKeyAuthFilter>();
-    
     builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
     builder.Services.AddScoped<ITicketRepository, TicketRepository>();
@@ -110,7 +105,7 @@ try
             options.DefaultAuthenticateScheme = "DynamicAuthSchemeSelector";
             options.DefaultChallengeScheme = "DynamicAuthSchemeSelector";
         })
-        .AddJwtBearer("Auth0", options =>
+        .AddJwtBearer(AuthSchemeNameService.AuthSchemeNameAuth0, options =>
         {
             options.Authority = configuration["Auth:Authority"];
             options.Audience = configuration["Auth:Audience"];
@@ -135,38 +130,15 @@ try
             options.ForwardDefaultSelector = context =>
             {
                 Log.Debug("Dynamically forward to auth scheme based on the request...");
-                
-                string? authorization = context.Request.Headers[HeaderNames.Authorization];
-                if (!string.IsNullOrWhiteSpace(authorization))
-                {
-                    var token = authorization["Bearer ".Length..].Trim(); 
-                    var jwtHandler = new JsonWebTokenHandler();
-                    // JWT (e.g. Auth0) or opaque tokens (Core Identity)
-                    if(jwtHandler.CanReadToken(token))
-                    {
-                        // JWT case
-                        var issuer = jwtHandler.ReadJsonWebToken(token).Issuer;
-                        var configIssuerAuth0 = configuration.GetValue<string>("Auth:ValidIssuer");
-                        if (!string.IsNullOrWhiteSpace(configIssuerAuth0) && configIssuerAuth0 == issuer)
-                        {
-                            return "Auth0";
-                        }
-                    }
-                    else
-                    {
-                        // opaque tokens (Core Identity) case
-                        return IdentityConstants.BearerScheme;
-                    }
-                }
-
-                Log.Debug("Could not identify the auth scheme.");
-                return IdentityConstants.BearerScheme;
+                return AuthSchemeNameService.GetAuthSchemeNameByRequest(context, configuration);
             };
         });
 
     builder.Services.AddAuthorization(options =>
     {
-        var authPolicy = new AuthorizationPolicyBuilder("Auth0", IdentityConstants.BearerScheme)
+        var authPolicy = new AuthorizationPolicyBuilder(
+                AuthSchemeNameService.AuthSchemeNameAuth0, 
+                IdentityConstants.BearerScheme)
             .RequireAuthenticatedUser()
             .Build();
         

@@ -1,11 +1,13 @@
-using System.Security.Claims;
-
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 using TaskSync.Infrastructure.Entities;
+using TaskSync.Infrastructure.Services;
 
 namespace TaskSync.Infrastructure;
 
@@ -20,12 +22,22 @@ public class DatabaseContext : IdentityDbContext<UserEntity>
     public DbSet<SprintEntity> Sprints { get; set; }
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IHostEnvironment _env;
+    private readonly IConfiguration _config;
+    private readonly ILogger<DatabaseContext> _logger;
 
-    public DatabaseContext(DbContextOptions<DatabaseContext> options, IHttpContextAccessor httpContextAccessor, IHostEnvironment env)
+
+    public DatabaseContext(
+        DbContextOptions<DatabaseContext> options, 
+        IHttpContextAccessor httpContextAccessor, 
+        IHostEnvironment env, 
+        IConfiguration config, 
+        ILogger<DatabaseContext> logger)
         : base(options)
     {
         _httpContextAccessor = httpContextAccessor;
         _env = env;
+        _config = config;
+        _logger = logger;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -104,45 +116,10 @@ public class DatabaseContext : IdentityDbContext<UserEntity>
 
         foreach (var e in inserted)
         {
-            var audited = e as IAuditedEntity;
-            if (audited != null)
+            if (e is IAuditedEntity audited)
             {
-                UserEntity? currentUser = null;
-                string userIdentifier = string.Empty;
-
-                // Try to get current user by claim "id" (for local users)
-                var claimId = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
-                var userId = claimId?.Value;
-                if (!string.IsNullOrWhiteSpace(userId))
-                {
-                    userIdentifier = userId;
-                    currentUser = await Users.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
-                }
-                else
-                {
-                    // Try to get current user by claim identity name (for external users)
-                    var identityName = _httpContextAccessor.HttpContext?.User.Identity?.Name;
-                    if (identityName != null)
-                    {
-                        userIdentifier = identityName;
-                        currentUser = await Users.FirstOrDefaultAsync(u => u.ExternalUserId == identityName, cancellationToken);
-                    }
-                }
-
-                if (currentUser == null)
-                {
-                    // Throw an exception unless we're inserting a new User record - because in this case the user is not yet available in the users table!
-                    if (audited.GetType().Name != nameof(UserEntity))
-                    {
-                        throw new Exception($"No user found for identifier {userIdentifier}");
-                    }
-                }
-                else
-                {
-                    var currentUserId = currentUser.Id;
-                    audited.CreatedBy = currentUserId;
-                }
-
+                var currentUser = await TryGetCurrentUserAsync(audited, cancellationToken);
+                audited.CreatedBy = currentUser?.Id ?? string.Empty;
                 audited.CreatedDate = DateTimeOffset.UtcNow;
             }
         }
@@ -151,10 +128,55 @@ public class DatabaseContext : IdentityDbContext<UserEntity>
         {
             if (e is AuditedEntity audited)
             {
+                // TODO Add ModifiedBy here
                 audited.ModifiedDate = DateTimeOffset.UtcNow;
             }
         }
 
         return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task<UserEntity?> TryGetCurrentUserAsync(IAuditedEntity audited, CancellationToken cancellationToken)
+    {
+        UserEntity? currentUser = null;
+        if (_httpContextAccessor.HttpContext != null)
+        {
+            var authSchemeName =
+                AuthSchemeNameService.GetAuthSchemeNameByRequest(_httpContextAccessor.HttpContext,
+                    _config);
+            
+            var userId = _httpContextAccessor.HttpContext?.User.Identity?.Name;
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                _logger.LogInformation("Cannot read current user because no user id given");
+            }
+            else
+            {
+                if (authSchemeName == AuthSchemeNameService.AuthSchemeNameAuth0)
+                {
+                    currentUser = await Users.FirstOrDefaultAsync(u => u.ExternalUserId == userId, cancellationToken);
+                }
+                else if (authSchemeName == IdentityConstants.BearerScheme)
+                {
+                    currentUser = await Users.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+                }
+                
+                if (currentUser == null)
+                {
+                    _logger.LogInformation("No user found for id {UserId}", userId);
+                }
+            }
+        }
+
+        if (currentUser == null)
+        {
+            // Throw an exception unless we're inserting a new User record - because in this case the user is not yet available in the users table!
+            if (audited.GetType().Name != nameof(UserEntity))
+            {
+                throw new Exception("No user found");
+            }
+        }
+
+        return currentUser;
     }
 }
