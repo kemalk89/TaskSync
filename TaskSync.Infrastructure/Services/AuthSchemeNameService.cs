@@ -15,6 +15,13 @@ public class AuthSchemeNameService
     /// opaque token.
     /// If no Authorization header exists, this method will return null.
     /// If Authorization header exists but no Bearer format, this method will return null as well.
+    ///
+    /// This method is not responsible for validating tokens; it relies on the validations performed
+    /// by the configured authentication handlers, for example:
+    /// <list type="bullet">
+    /// <item>Auth0 JWT bearer authentication</item>
+    /// <item>ASP.NET Core Identity bearer authentication</item>
+    /// </list>
     /// </summary>
     public static string GetAuthSchemeNameByRequest(HttpContext context, IConfiguration config)
     {

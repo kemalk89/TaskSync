@@ -141,7 +141,7 @@ public class DatabaseContext : IdentityDbContext<UserEntity>
     private async Task<UserEntity?> TryGetCurrentUserAsync(IAuditedEntity audited, CancellationToken cancellationToken)
     {
         UserEntity? currentUser = null;
-        if (_httpContextAccessor.HttpContext != null)
+        if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext?.User.Identity != null)
         {
             var authSchemeName =
                 AuthSchemeNameService.GetAuthSchemeNameByRequest(_httpContextAccessor.HttpContext,

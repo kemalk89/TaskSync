@@ -35,18 +35,14 @@ public class CurrentUserService : ICurrentUserService
     {
         User? currentUser = null;
         var identity = _httpContextAccessor.HttpContext?.User.Identity;
-        if (identity != null)
+        if (identity != null && _httpContextAccessor.HttpContext != null)
         {
-            var isTokenIssuerAuth0 =
-                _httpContextAccessor.HttpContext?.User.Claims
-                    .Select(x => x.Issuer == _config.GetValue<string>("Auth:ValidIssuer"))
-                    .FirstOrDefault();
-
-            if (isTokenIssuerAuth0 == true)
+            var authSchemeName = AuthSchemeNameService.GetAuthSchemeNameByRequest(_httpContextAccessor.HttpContext, _config);
+            if (authSchemeName == AuthSchemeNameService.AuthSchemeNameAuth0)
             {
                 var externalUserId = _httpContextAccessor.HttpContext?.User.Identity?.Name;
                 currentUser = await _userService.FindByExternalUserIdAsync(externalUserId);
-            }
+            } 
             else
             {
                 var email = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
