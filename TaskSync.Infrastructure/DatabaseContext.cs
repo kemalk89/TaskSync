@@ -1,3 +1,5 @@
+using System.Security.Claims;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -27,10 +29,10 @@ public class DatabaseContext : IdentityDbContext<UserEntity>
 
 
     public DatabaseContext(
-        DbContextOptions<DatabaseContext> options, 
-        IHttpContextAccessor httpContextAccessor, 
-        IHostEnvironment env, 
-        IConfiguration config, 
+        DbContextOptions<DatabaseContext> options,
+        IHttpContextAccessor httpContextAccessor,
+        IHostEnvironment env,
+        IConfiguration config,
         ILogger<DatabaseContext> logger)
         : base(options)
     {
@@ -43,7 +45,7 @@ public class DatabaseContext : IdentityDbContext<UserEntity>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.Entity<ProjectEntity>()
             .HasMany<SprintEntity>()
             .WithOne()
@@ -144,26 +146,30 @@ public class DatabaseContext : IdentityDbContext<UserEntity>
             var authSchemeName =
                 AuthSchemeNameService.GetAuthSchemeNameByRequest(_httpContextAccessor.HttpContext,
                     _config);
-            
-            var userId = _httpContextAccessor.HttpContext?.User.Identity?.Name;
-            if (string.IsNullOrWhiteSpace(userId))
+
+            if (authSchemeName == AuthSchemeNameService.AuthSchemeNameAuth0)
             {
-                _logger.LogInformation("Cannot read current user because no user id given");
-            }
-            else
-            {
-                if (authSchemeName == AuthSchemeNameService.AuthSchemeNameAuth0)
+                var userId = _httpContextAccessor.HttpContext?.User.Identity?.Name;
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    _logger.LogWarning("Cannot read current user because no user id given. Auth Scheme: {authSchemeName}", authSchemeName);
+                }
+                else
                 {
                     currentUser = await Users.FirstOrDefaultAsync(u => u.ExternalUserId == userId, cancellationToken);
                 }
-                else if (authSchemeName == IdentityConstants.BearerScheme)
+            }
+            else if (authSchemeName == IdentityConstants.BearerScheme)
+            {
+                var claimId = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
+                var userId = claimId?.Value;
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    _logger.LogWarning("Cannot read current user because no user id given. Auth Scheme: {authSchemeName}", authSchemeName);
+                }
+                else
                 {
                     currentUser = await Users.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
-                }
-                
-                if (currentUser == null)
-                {
-                    _logger.LogInformation("No user found for id {UserId}", userId);
                 }
             }
         }
