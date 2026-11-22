@@ -1,3 +1,5 @@
+using System.Security.Claims;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,56 +42,41 @@ public class UserController : ControllerBase
     /// <summary>
     /// Will fetch external user and insert into this application's database. This endpoint should be called,
     /// for example, after a successful user login.
-    /// This method checks that users can only sync their own external accounts. For this check, the authenticated user
-    /// must have claim "email".
     /// </summary>
     [HttpPost]
     [Route("external")]
-    public async Task<ActionResult> SyncExternalUser([FromBody] SyncExternalUserRequest request)
+    public async Task<ActionResult> SyncExternalUser()
     {
-        // Input Validation
-        if (string.IsNullOrWhiteSpace(request.ExternalUserEmail) || string.IsNullOrWhiteSpace(request.ExternalUserId))
+        var currentUserNameIdentifier = _httpContextAccessor.HttpContext?.User.Claims
+            .FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrWhiteSpace(currentUserNameIdentifier))
         {
-            return BadRequest("Invalid email or user id");
-        }
-
-        var currentUserEmail = _httpContextAccessor.HttpContext?.User.Claims
-            .FirstOrDefault(claim => claim.Type == "email")?.Value;
-        if (string.IsNullOrWhiteSpace(currentUserEmail))
-        {
-            _logger.LogError("Current user has no claim 'email'. Cannot sync external user.");
-            return Conflict("No claim 'email' exists associated with authenticated user");
+            _logger.LogError("Current user has no claim '{NameIdentifier}'. Cannot sync external user.", ClaimTypes.NameIdentifier);
+            return Conflict("No claim '" + ClaimTypes.NameIdentifier + "' exists associated with authenticated user");
         }
         
-        if (currentUserEmail != request.ExternalUserEmail)
+        var userFromExternalIdP = await _externalUserRepository.FindUserByIdFromExternalSourceAsync(currentUserNameIdentifier);
+        if (userFromExternalIdP == null)
         {
-            _logger.LogError("Users can only sync their own accounts (current users email is not matching the provided external users email).");
-            return BadRequest("Users can only sync their own external accounts");
+            _logger.LogWarning("Unable to find current user in external data source");
+            return NotFound("Unable to find current user in external data source");
         }
         
-        var externalUser = await _externalUserRepository.FindUserByIdFromExternalSourceAsync(request.ExternalUserId);
-        if (externalUser == null)
-        {
-            _logger.LogWarning("External data source returned no user for ID: {id}", request.ExternalUserId);
-            return NotFound();
-        }
-
-        var user = await _userRepository.FindUserByEmailAsync(externalUser.Email);
+        var user = await _userRepository.FindUserByEmailAsync(userFromExternalIdP.Email);
         if (user == null)
         {
-            _logger.LogInformation("Adding new external user with ID: {id}", request.ExternalUserId);
-            await _userRepository.SaveNewExternalUserAsync(externalUser);
+            _logger.LogInformation("Adding new external user with ID: {id}", currentUserNameIdentifier);
+            await _userRepository.SaveNewExternalUserAsync(userFromExternalIdP);
             return StatusCode(201);
         }
 
-        _logger.LogDebug("Updating data of external user with ID: {id}", request.ExternalUserId);
+        _logger.LogDebug("Updating data of external user with ID: {id}", currentUserNameIdentifier);
 
         if (string.IsNullOrWhiteSpace(user.Username))
         {
-            user.Username = externalUser.Username;
+            user.Username = userFromExternalIdP.Username;
         }
 
-        user.ExternalUserId = request.ExternalUserId;
         await _userRepository.UpdateUserAsync(user);
 
         return Ok();

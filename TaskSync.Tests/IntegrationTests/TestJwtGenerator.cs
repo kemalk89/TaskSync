@@ -19,7 +19,12 @@ public class TestJwtGenerator
 
     public string Generate(string username, string? email, string[]? roles)
     {
-        var claims = new List<Claim> { new(ClaimTypes.Name, username) };
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, username),
+            // deprecated, should be removed
+            new(ClaimTypes.Name, username)
+        };
         
         if (!string.IsNullOrWhiteSpace(email))
         {

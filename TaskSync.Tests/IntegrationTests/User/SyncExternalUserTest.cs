@@ -1,12 +1,10 @@
 using System.Net;
-using System.Net.Http.Json;
 using System.Security.Claims;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-using TaskSync.Controllers.Request;
 using TaskSync.Infrastructure;
 using TaskSync.Infrastructure.Entities;
 
@@ -24,59 +22,10 @@ public class SyncExternalUserTest : BaseIntegrationTest
     public async Task SyncExternalUser_ShouldReturn401_WhenNoAuthProvided()
     {
         await AssertEndpointsReturnUnauthorized([
-            ("/api/user/external", HttpMethod.Post, new SyncExternalUserRequest())
+            ("/api/user/external", HttpMethod.Post, null)
         ]);
     }
     
-    [Fact]
-    public async Task SyncExternalUser_ShouldReturnBadRequest_OnInvalidRequestPayload()
-    {
-        SetAuthenticatedUser();
-
-        var request = new SyncExternalUserRequest();
-
-        var response = await _client.PostAsJsonAsync("/api/user/external", request);
-
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var body = await response.Content.ReadAsStringAsync();
-        Assert.Contains("Invalid email or user id", body);
-    }
-    
-    [Fact]
-    public async Task SyncExternalUser_ShouldReturnBadRequest_WhenTryingToSyncDifferentExternalUser()
-    {
-        SetAuthenticatedUser();
-
-        var request = new SyncExternalUserRequest
-        {
-            ExternalUserId = "user-a-id",
-            ExternalUserEmail = "User-b@tasksync.test"
-        };
-
-        var response = await _client.PostAsJsonAsync("/api/user/external", request);
-        
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        
-        var body = await response.Content.ReadAsStringAsync();
-        Assert.Contains("Users can only sync their own external accounts", body);
-    }
-    
-    [Fact]
-    public async Task SyncExternalUser_ShouldReturnNotFound_WhenExternalUserDoesNotExist()
-    {
-        SetAuthenticatedUser();
-
-        var request = new SyncExternalUserRequest
-        {
-            ExternalUserId = "non_existent_external_id",
-            ExternalUserEmail = DefaultExternalUserEmail
-        };
-
-        var response = await _client.PostAsJsonAsync("/api/user/external", request);
-
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-    }
-
     [Fact]
     public async Task SyncExternalUser_ShouldReturnCreated_WhenUserDoesNotExistLocally()
     {
@@ -86,13 +35,7 @@ public class SyncExternalUserTest : BaseIntegrationTest
         // Ensure no local user exists for the mock's email
         await DeleteUserByEmailAsync(MockEmail);
 
-        var request = new SyncExternalUserRequest
-        {
-            ExternalUserId = testExternalUserId,
-            ExternalUserEmail = MockEmail
-        };
-
-        var response = await _client.PostAsJsonAsync("/api/user/external", request);
+        var response = await _client.PostAsync("/api/user/external", null);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
@@ -113,13 +56,7 @@ public class SyncExternalUserTest : BaseIntegrationTest
         await DeleteUserByEmailAsync(MockEmail);
         await InsertUserAsync(MockEmail, "existing_user", null, externalUserId);
 
-        var request = new SyncExternalUserRequest
-        {
-            ExternalUserId = externalUserId,
-            ExternalUserEmail = MockEmail
-        };
-
-        var response = await _client.PostAsJsonAsync("/api/user/external", request);
+        var response = await _client.PostAsync("/api/user/external", null);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
