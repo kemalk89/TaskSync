@@ -3,4 +3,5 @@ namespace TaskSync.Controllers.Request;
 public class SyncExternalUserRequest
 {
     public string ExternalUserId { get; set; } = string.Empty;
+    public string ExternalUserEmail { get; set; } = string.Empty;
 }

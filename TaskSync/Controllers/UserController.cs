@@ -42,6 +42,19 @@ public class UserController : ControllerBase
     [Route("external")]
     public async Task<ActionResult> SyncExternalUser([FromBody] SyncExternalUserRequest request)
     {
+        // Input Validation
+        if (string.IsNullOrWhiteSpace(request.ExternalUserEmail) || string.IsNullOrWhiteSpace(request.ExternalUserId))
+        {
+            return BadRequest();
+        }
+        
+        var currentUser = await _currentUserService.GetCurrentUserAsync();
+        if (currentUser.Value?.Email != request.ExternalUserEmail)
+        {
+            _logger.LogError("Users can only sync their own accounts (current users email is not matching the provided external users email).");
+            return Conflict();
+        }
+        
         var externalUser = await _externalUserRepository.FindUserByIdFromExternalSourceAsync(request.ExternalUserId);
         if (externalUser == null)
         {
