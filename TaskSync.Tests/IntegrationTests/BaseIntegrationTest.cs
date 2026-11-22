@@ -23,6 +23,8 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
     protected readonly TestJwtGenerator _testJwtGenerator;
     protected readonly IntegrationTestWebAppFactory _factory;
 
+    protected const string DefaultExternalUserEmail = "IntegrationTests.User1@tasksync.test";
+
     public BaseIntegrationTest(IntegrationTestWebAppFactory factory)
     {
         _factory = factory;
@@ -68,7 +70,7 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
     /// <param name="roles"></param>
     /// <param name="externalUserId"></param>
     /// <param name="email"></param>
-    protected void SetAuthenticatedUser(string[]? roles = null, string externalUserId = "integration_tests|01", string? email = "IntegrationTests.User1@tasksync.test")
+    protected void SetAuthenticatedUser(string[]? roles = null, string externalUserId = "integration_tests|01", string? email = DefaultExternalUserEmail)
     {
         roles ??= ["User"];
 

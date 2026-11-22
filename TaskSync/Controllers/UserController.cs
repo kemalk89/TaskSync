@@ -19,24 +19,29 @@ public class UserController : ControllerBase
     private readonly IUserRepository _userRepository;
     private readonly IExternalUserRepository _externalUserRepository;
     private readonly ILogger<UserController> _logger;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public UserController(
         IUserService userService,
         IUserRepository userRepository,
         IExternalUserRepository externalUserRepository,
         ICurrentUserService currentUserService,
-        ILogger<UserController> logger)
+        ILogger<UserController> logger, 
+        IHttpContextAccessor httpContextAccessor)
     {
         _userService = userService;
         _userRepository = userRepository;
         _externalUserRepository = externalUserRepository;
         _currentUserService = currentUserService;
         _logger = logger;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     /// <summary>
     /// Will fetch external user and insert into this application's database. This endpoint should be called,
     /// for example, after a successful user login.
+    /// This method checks that users can only sync their own external accounts. For this check, the authenticated user
+    /// must have claim "email".
     /// </summary>
     [HttpPost]
     [Route("external")]
@@ -45,14 +50,21 @@ public class UserController : ControllerBase
         // Input Validation
         if (string.IsNullOrWhiteSpace(request.ExternalUserEmail) || string.IsNullOrWhiteSpace(request.ExternalUserId))
         {
-            return BadRequest();
+            return BadRequest("Invalid email or user id");
+        }
+
+        var currentUserEmail = _httpContextAccessor.HttpContext?.User.Claims
+            .FirstOrDefault(claim => claim.Type == "email")?.Value;
+        if (string.IsNullOrWhiteSpace(currentUserEmail))
+        {
+            _logger.LogError("Current user has no claim 'email'. Cannot sync external user.");
+            return Conflict("No claim 'email' exists associated with authenticated user");
         }
         
-        var currentUser = await _currentUserService.GetCurrentUserAsync();
-        if (currentUser.Value?.Email != request.ExternalUserEmail)
+        if (currentUserEmail != request.ExternalUserEmail)
         {
             _logger.LogError("Users can only sync their own accounts (current users email is not matching the provided external users email).");
-            return Conflict();
+            return BadRequest("Users can only sync their own external accounts");
         }
         
         var externalUser = await _externalUserRepository.FindUserByIdFromExternalSourceAsync(request.ExternalUserId);
