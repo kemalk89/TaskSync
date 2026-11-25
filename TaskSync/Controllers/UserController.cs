@@ -89,6 +89,7 @@ public class UserController : ControllerBase
         return users.Select(item => new UserResponse(item));
     }
 
+    [Authorize(Roles = "admin")]
     [HttpGet]
     public async Task<PagedResult<UserResponse>> GetUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
     {
@@ -124,5 +125,21 @@ public class UserController : ControllerBase
         var result = await _currentUserService.GetCurrentUserAsync();
 
         return Ok(result);
+    }
+
+    [Authorize(Roles = "admin")]
+    [HttpPost]
+    [Route("addRole")]
+    public async Task AddRole([FromBody] UserRoleRequest request)
+    {
+        throw new NotImplementedException();
+    }
+
+    [Authorize(Roles = "admin")]
+    [HttpDelete]
+    [Route("removeRole")]
+    public async Task RemoveRole([FromRoute] UserRoleRequest request)
+    {
+        throw new NotImplementedException();
     }
 }

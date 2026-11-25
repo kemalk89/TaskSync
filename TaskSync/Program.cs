@@ -22,6 +22,9 @@ using TaskSync.Domain.Project.QueryProject;
 using TaskSync.Domain.Sprint;
 using TaskSync.Extensions;
 using TaskSync.Infrastructure.Entities;
+using Microsoft.AspNetCore.Authentication;
+
+using TaskSync.Hooks;
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -72,9 +75,14 @@ try
                 }
             });
         });
-    
-    builder.Services.AddIdentityApiEndpoints<UserEntity>().AddEntityFrameworkStores<DatabaseContext>();
+
+    builder.Services
+    .AddIdentityApiEndpoints<UserEntity>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<DatabaseContext>();
     builder.Services.AddHealthChecks();
+
+    builder.Services.AddTransient<IClaimsTransformation, RoleClaimsTransformation>();
 
     builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 

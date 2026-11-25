@@ -30,22 +30,24 @@ public class CurrentUserService : ICurrentUserService
         _config = config;
         _logger = logger;
     }
-    
-    public async Task<Result<User>> GetCurrentUserAsync()
+
+    public async Task<Result<User>> GetCurrentUserAsync(ClaimsPrincipal principal)
     {
         User? currentUser = null;
-        var identity = _httpContextAccessor.HttpContext?.User.Identity;
-        if (identity != null && _httpContextAccessor.HttpContext != null)
+        if (_httpContextAccessor.HttpContext != null)
         {
-            var authSchemeName = AuthSchemeNameService.GetAuthSchemeNameByRequest(_httpContextAccessor.HttpContext, _config);
+            var authSchemeName = AuthSchemeNameService.GetAuthSchemeNameByRequest(_httpContextAccessor.HttpContext, _config);  
             if (authSchemeName == AuthSchemeNameService.AuthSchemeNameAuth0)
             {
-                var externalUserId = _httpContextAccessor.HttpContext?.User.Identity?.Name;
-                currentUser = await _userService.FindByExternalUserIdAsync(externalUserId);
+                var externalUserId = principal.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
+                if (externalUserId?.Value != null)
+                {
+                    currentUser = await _userService.FindByExternalUserIdAsync(externalUserId.Value);
+                }
             } 
             else
             {
-                var email = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
+                var email = principal.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
                 if (string.IsNullOrWhiteSpace(email?.Value))
                 {
                     return Result<User>.Fail(ResultCodes.ResultCodeGeneralProblem, "Claim 'email' not found");
@@ -61,6 +63,16 @@ public class CurrentUserService : ICurrentUserService
         }
         
         return Result<User>.Ok(currentUser);  
+    }
+    
+    public async Task<Result<User>> GetCurrentUserAsync()
+    {
+        if (_httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated == true)
+        {
+            return await GetCurrentUserAsync(_httpContextAccessor.HttpContext.User);
+        }
+
+        return Result<User>.Fail(ResultCodes.ResultCodeNoPermissions, "Not authenticated or no HTTP Context");  
     }
     
     public async Task<Result<string>> ChangeLanguageAsync(string language)

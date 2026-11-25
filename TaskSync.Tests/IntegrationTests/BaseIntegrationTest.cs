@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
+using TaskSync.Infrastructure;
 using TaskSync.Infrastructure.Repositories;
 using TaskSync.Tests.IntegrationTests.User;
 
@@ -109,5 +110,13 @@ public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
             .Select(e => e.ToString())
             .ToList()) ?? [];
         return errorList;
+    }
+    
+    protected async Task SeedAsync(params object[] entities)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+        db.AddRange(entities);
+        await db.SaveChangesAsync();
     }
 }

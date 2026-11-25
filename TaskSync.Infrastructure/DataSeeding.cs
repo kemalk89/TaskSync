@@ -1,4 +1,4 @@
-
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
@@ -35,6 +35,11 @@ public class DataSeeding
     {
         CreateDemoUsers(modelBuilder);
 
+        modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+        {
+            Id= "1", Name = "admin", NormalizedName = "ADMIN", ConcurrencyStamp = string.Empty
+        });
+        
         modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = STATUS_ID_TODO, Name = "Todo" });
         modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = STATUS_ID_IN_PROGRESS, Name = "In Progress" });
         modelBuilder.Entity<TicketStatusEntity>().HasData(new TicketStatusEntity { Id = STATUS_ID_DONE, Name = "Done" });
