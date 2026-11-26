@@ -89,7 +89,6 @@ public class UserController : ControllerBase
         return users.Select(item => new UserResponse(item));
     }
 
-    [Authorize(Roles = "admin")]
     [HttpGet]
     public async Task<PagedResult<UserResponse>> GetUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
     {
